@@ -1,0 +1,23 @@
+# Editor
+*.sublime*
+.vscode/settings.json
+
+# OSX
+*.DS_Store
+
+# NPM
+node_modules
+npm-debug.log
+
+# Build
+dist
+*.marko.js
+*.actual*
+*.tsbuildinfo
+
+# Logging
+*.log
+
+# Coverage
+coverage
+.nyc_output

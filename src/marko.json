@@ -1,0 +1,4 @@
+{
+  "migrate": "./migrate",
+  "translate": "./translate"
+}
