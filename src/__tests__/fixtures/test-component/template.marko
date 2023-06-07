@@ -1,0 +1,14 @@
+class {
+  onCreate() {
+    this.state = {
+      count: 0
+    };
+  }
+
+  handleClick() {
+    this.state.count++;
+  }
+}
+<button onClick("handleClick")>
+  Count: ${state.count}
+</button>
