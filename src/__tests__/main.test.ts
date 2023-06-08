@@ -5,19 +5,20 @@ import glob from "fast-glob";
 import snap from "mocha-snap";
 import * as compiler from "@marko/compiler";
 import register from "@marko/compiler/register";
-import createBrowser from "jsdom-context-require";
 import {
   type BoundFunctions,
   type queries,
   within,
 } from "@testing-library/dom";
-import createMutationTracker from "./utils/track-mutations";
+import createBrowser from "./utils/create-browser";
+import createTracker from "./utils/create-tracker";
+import initComponents from "./utils/init-components.marko";
 
 export type FixtureConfig = {
   input?: Record<string, unknown>;
   steps?: (
     | Record<string, unknown>
-    | ((helpers: BoundFunctions<typeof queries>) => void | Promise<void>)
+    | ((screen: BoundFunctions<typeof queries>) => void | Promise<void>)
   )[];
   skipCompileDOM?: boolean;
   skipCompileHTML?: boolean;
@@ -26,11 +27,6 @@ export type FixtureConfig = {
   skipHydrate?: boolean;
   hasCompileErrors?: boolean;
   hasRuntimeErrors?: boolean;
-};
-
-type Result = {
-  browser: ReturnType<typeof createBrowser>;
-  tracker: ReturnType<typeof createMutationTracker>;
 };
 
 const baseConfig: compiler.Config = {
@@ -90,101 +86,48 @@ describe("translator", () => {
         }
       })();
 
-      const snapMD = (fn: () => unknown) =>
-        (hasRuntimeErrors ? snap.catch : snap)(fn, {
-          ext: `.md`,
-          dir: fixtureDir,
-        });
-      const snapAllTemplates = async (compilerConfig: compiler.Config) => {
-        const additionalMarkoFiles = await glob(resolve("**/*.marko"));
-        const finalConfig: compiler.Config = {
-          ...compilerConfig,
-          resolveVirtualDependency(_filename, { code, virtualPath }) {
-            return `virtual:${virtualPath} ${code}`;
-          },
-        };
-        const errors: Error[] = [];
-        const targetSnap = hasCompileErrors ? snap.catch : snap;
-
-        for (const file of additionalMarkoFiles) {
-          try {
-            await targetSnap(() => compileCode(file, finalConfig), {
-              file: path.relative(fixtureDir, file).replace(".marko", ".js"),
-              dir: fixtureDir,
-            });
-          } catch (err) {
-            errors.push(err as Error);
-          }
-        }
-
-        switch (errors.length) {
-          case 0:
-            break;
-          case 1:
-            throw errors[0];
-          default:
-            throw new AggregateError(
-              errors,
-              `\n${errors.join("\n").replace(/^(?!\s*$)/gm, "\t")}`
-            );
-        }
-      };
-
-      let htmlResult: Result;
-      const renderHTML = async () => {
-        if (htmlResult) return htmlResult;
-
-        const browser = createBrowser({
-          dir: fixtureDir,
-          extensions: register({
-            ...domConfig,
-            extensions: {},
-          }),
-        });
-        const document = browser.window.document;
-        const tracker = createMutationTracker(browser.window, document.body);
-
-        try {
-          let buffer = "";
-          await (require(fixtureTemplateFile).default as Marko.Template).render(
-            input,
-            {
-              write(chunk: string) {
-                buffer += chunk;
-                tracker.log(`# Write\n${indent(chunk)}`);
-              },
-              end(chunk?: string) {
-                const parser = document.createElement("template");
-                if (chunk) {
-                  buffer += chunk;
-                  tracker.log(`# End\n${indent(chunk)}`);
-                }
-
-                parser.innerHTML = buffer;
-                document.body.appendChild(parser.content);
-                tracker.logUpdate(input);
-              },
-              emit(type: string, ...args: unknown[]) {
-                tracker.log(
-                  `# Emit ${type}${args.map((arg) => `\n${indent(arg)}`)}`
-                );
-              },
-            } as Writable & { flush(): void }
-          );
-
-          return (htmlResult = { browser, tracker });
-        } finally {
-          tracker.cleanup();
-        }
-      };
-
       describe("compile", () => {
         (skipCompileHTML ? it.skip : it)("html", () =>
-          snapAllTemplates(htmlConfig)
+          snapCompiledTemplates(htmlConfig)
         );
         (skipCompileDOM ? it.skip : it)("dom", () =>
-          snapAllTemplates(domConfig)
+          snapCompiledTemplates(domConfig)
         );
+
+        async function snapCompiledTemplates(compilerConfig: compiler.Config) {
+          const additionalMarkoFiles = await glob(resolve("**/*.marko"));
+          const finalConfig: compiler.Config = {
+            ...compilerConfig,
+            resolveVirtualDependency(_filename, { code, virtualPath }) {
+              return `virtual:${virtualPath} ${code}`;
+            },
+          };
+          const errors: Error[] = [];
+          const targetSnap = hasCompileErrors ? snap.catch : snap;
+
+          for (const file of additionalMarkoFiles) {
+            try {
+              await targetSnap(() => compileCode(file, finalConfig), {
+                file: path.relative(fixtureDir, file).replace(".marko", ".js"),
+                dir: fixtureDir,
+              });
+            } catch (err) {
+              errors.push(err as Error);
+            }
+          }
+
+          switch (errors.length) {
+            case 0:
+              break;
+            case 1:
+              throw errors[0];
+            default:
+              throw new AggregateError(
+                errors,
+                `\n${errors.join("\n").replace(/^(?!\s*$)/gm, "\t")}`
+              );
+          }
+        }
       });
 
       describe("render", () => {
@@ -204,36 +147,33 @@ describe("translator", () => {
 
             const { window } = browser;
             const { document } = window;
-            const template = browser.require(fixtureTemplateFile).default;
-            const container = Object.assign(document.createElement("div"), {
-              TEST_ROOT: true,
-            });
-            const helpers = within(container);
-            const tracker = createMutationTracker(browser.window, container);
-            document.body.appendChild(container);
+            const instance = browser
+              .require(fixtureTemplateFile)
+              .default.renderSync(input)
+              .appendTo(document.body)
+              .getComponent();
+            const screen = within(document.body);
+            const tracker = createTracker(browser.window, document.body);
 
             try {
-              const instance = template
-                .renderSync(input)
-                .appendTo(container)
-                .getComponent();
+              await browser.whenAsyncComplete();
               tracker.logUpdate(input);
 
               for (const update of steps) {
                 if (typeof update === "function") {
-                  await update(helpers);
+                  await update(screen);
                 } else {
                   instance.input = update;
                 }
 
-                await waitForBatch();
+                await browser.whenAsyncComplete();
                 tracker.logUpdate(update);
               }
 
               return tracker.getLogs();
             } finally {
               tracker.cleanup();
-              container.remove();
+              instance.destroy();
             }
           });
         });
@@ -243,19 +183,20 @@ describe("translator", () => {
             const { browser } = await renderHTML();
             const { window } = browser;
             const { document } = window;
-            const helpers = within(document.body);
-            const tracker = createMutationTracker(window, document.body);
+            (
+              (0, (window as any).eval)(
+                `require=>{${await compileCode(
+                  fixtureTemplateFile,
+                  hydrateConfig
+                )}}`
+              ) as any
+            )(browser.require);
+
+            const screen = within(document.body);
+            const tracker = createTracker(window, document.body);
 
             try {
-              (
-                (0, window.eval)(
-                  `require=>{${await compileCode(
-                    fixtureTemplateFile,
-                    hydrateConfig
-                  )}}`
-                ) as any
-              )(browser.require);
-
+              await browser.whenAsyncComplete();
               tracker.logUpdate(input);
 
               for (const update of steps) {
@@ -263,8 +204,8 @@ describe("translator", () => {
                 // this will be covered by the client tests
                 if (typeof update !== "function") break;
 
-                await update(helpers);
-                await waitForBatch();
+                await update(screen);
+                await browser.whenAsyncComplete();
                 tracker.logUpdate(update);
               }
 
@@ -274,7 +215,84 @@ describe("translator", () => {
             }
           });
         });
+
+        let htmlResult: {
+          browser: ReturnType<typeof createBrowser>;
+          tracker: ReturnType<typeof createTracker>;
+        };
+        async function renderHTML() {
+          if (htmlResult) return htmlResult;
+
+          const logs: string[] = [];
+          let buffer = "";
+          let html = "";
+          await initComponents.render(
+            {
+              template: require(fixtureTemplateFile).default,
+              templateInput: input,
+            },
+            {
+              write(chunk: string) {
+                buffer += chunk;
+                html += chunk;
+              },
+              flush() {
+                if (buffer) {
+                  logs.push(`# Write\n${indent(buffer)}`);
+                  buffer = "";
+                }
+              },
+              end(chunk?: string) {
+                if (chunk) {
+                  buffer += chunk;
+                  html += chunk;
+                }
+
+                this.flush();
+              },
+              emit(type: string, ...args: unknown[]) {
+                logs.push(
+                  `# Emit ${type}${args.map((arg) => `\n${indent(arg)}`)}`
+                );
+              },
+            } as Writable & { flush(): void }
+          );
+
+          const browser = createBrowser({
+            dir: fixtureDir,
+            extensions: register({
+              ...domConfig,
+              extensions: {},
+            }),
+          });
+
+          const { window } = browser;
+          const { document } = window;
+          document.write(
+            `<!DOCTYPE html><html><head></head><body>${html}</body></html>`
+          );
+          const tracker = createTracker(window, document.body);
+
+          for (const msg of logs) {
+            tracker.log(msg);
+          }
+
+          try {
+            await browser.whenAsyncComplete();
+            tracker.logUpdate(input);
+            return (htmlResult = { browser, tracker });
+          } finally {
+            tracker.cleanup();
+          }
+        }
       });
+
+      function snapMD(fn: () => unknown) {
+        return (hasRuntimeErrors ? snap.catch : snap)(fn, {
+          ext: `.md`,
+          dir: fixtureDir,
+        });
+      }
     });
   }
 });
@@ -285,8 +303,4 @@ async function compileCode(templateFile: string, config: compiler.Config) {
 
 function indent(data: unknown) {
   return String(data).replace(/^(?!\s*$)/gm, "  ");
-}
-
-function waitForBatch() {
-  return new Promise((resolve) => setImmediate(resolve));
 }

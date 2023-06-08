@@ -5,7 +5,16 @@
 </button>
 ```
 
+# Render
+screen.getByRole("button").click();
+
+```html
+<button>
+  Count: 1
+</button>
+```
+
 # Mutations
 ```
-inserted #text0, button1, #text2
+button1/#text1: "0" => "1"
 ```

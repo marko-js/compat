@@ -1,5 +1,5 @@
 import type { FixtureConfig } from "../../main.test";
 
 export default {
-  input: {},
+  steps: [(screen) => screen.getByRole("button").click()],
 } satisfies FixtureConfig;

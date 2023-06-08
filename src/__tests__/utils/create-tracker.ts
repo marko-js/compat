@@ -1,16 +1,55 @@
-import type { JSDOM } from "jsdom";
 import format, { plugins } from "pretty-format";
 
 const { DOMElement, DOMCollection } = plugins;
 
-export default function createMutationTracker(
-  window: JSDOM["window"],
+export default function createTracker(
+  window: Window & typeof globalThis,
   container: ParentNode
 ) {
   let currentRecords: MutationRecord[] | null = null;
-  const result: string[] = [];
+  const logs: string[] = [];
   const errors: Set<Error> = new Set();
-  const throwErrors = () => {
+
+  window.addEventListener("error", handleError);
+  window.addEventListener("unhandledrejection", handleRejection);
+  const observer = new window.MutationObserver(addRecords);
+  observer.observe(container, {
+    attributes: true,
+    attributeOldValue: true,
+    characterData: true,
+    characterDataOldValue: true,
+    childList: true,
+    subtree: true,
+  });
+
+  return {
+    log(message: string) {
+      logs.push(message);
+    },
+    logUpdate(update: unknown) {
+      throwErrors();
+      addRecords(observer.takeRecords());
+      logs.push(
+        getStatusString(
+          cloneAndNormalize(container),
+          currentRecords || [],
+          update
+        )
+      );
+      currentRecords = null;
+    },
+    getLogs() {
+      return logs.join("\n\n");
+    },
+    cleanup() {
+      window.removeEventListener("error", handleError);
+      window.removeEventListener("unhandledrejection", handleRejection);
+      observer.disconnect();
+      throwErrors();
+    },
+  };
+
+  function throwErrors() {
     switch (errors.size) {
       case 0:
         return;
@@ -23,62 +62,25 @@ export default function createMutationTracker(
           `\n${[...errors].join("\n").replace(/^(?!\s*$)/gm, "\t")}`
         );
     }
-  };
-  const handleError = (ev: ErrorEvent) => {
+  }
+
+  function handleError(ev: ErrorEvent) {
     errors.add(ev.error.detail || ev.error);
     ev.preventDefault();
-  };
-  const handleRejection = (ev: PromiseRejectionEvent) => {
+  }
+
+  function handleRejection(ev: PromiseRejectionEvent) {
     errors.add(ev.reason.detail || ev.reason);
     ev.preventDefault();
-  };
-  const tracker = {
-    log(message: string) {
-      result.push(message);
-    },
-    logUpdate(update: unknown) {
-      throwErrors();
-      if (currentRecords) {
-        currentRecords = currentRecords.concat(observer.takeRecords());
-      } else {
-        currentRecords = observer.takeRecords();
-      }
-      result.push(
-        getStatusString(cloneAndNormalize(container), currentRecords, update)
-      );
-      currentRecords = null;
-    },
-    getLogs() {
-      return result.join("\n\n");
-    },
-    cleanup() {
-      window.removeEventListener("error", handleError);
-      window.removeEventListener("unhandledrejection", handleRejection);
-      observer.disconnect();
-      throwErrors();
-    },
-  };
-  const observer = new window.MutationObserver((records) => {
+  }
+
+  function addRecords(records: MutationRecord[]) {
     if (currentRecords) {
       currentRecords = currentRecords.concat(records);
     } else {
       currentRecords = records;
-      tracker.logUpdate("ASYNC");
     }
-  });
-
-  window.addEventListener("error", handleError);
-  window.addEventListener("unhandledrejection", handleRejection);
-  observer.observe(container, {
-    attributes: true,
-    attributeOldValue: true,
-    characterData: true,
-    characterDataOldValue: true,
-    childList: true,
-    subtree: true,
-  });
-
-  return tracker;
+  }
 }
 
 function cloneAndNormalize(container: ParentNode) {
@@ -94,7 +96,10 @@ function cloneAndNormalize(container: ParentNode) {
   let nextNode = commentAndElementWalker.nextNode();
   while ((node = nextNode as Comment | Element)) {
     nextNode = commentAndElementWalker.nextNode();
-    if (isComment(node)) {
+    if (
+      isComment(node) ||
+      (node.tagName === "SCRIPT" && node.textContent?.includes("$MC"))
+    ) {
       node.remove();
     } else {
       const { id, attributes } = node;
@@ -169,7 +174,10 @@ function getStatusString(
       : typeof update === "function"
       ? `\n${update
           .toString()
-          .replace(/^.*?{\s*([\s\S]*?)\s*}.*?$/, "$1")
+          .replace(
+            /^.*?(?:{\s*([\s\S]*?);?\s*}.*?|=>\s*([\s\S]*?);?\s*)$/,
+            "$1$2;"
+          )
           .replace(/^ {4}/gm, "")}\n`
       : ` ${JSON.stringify(update)}`;
 
@@ -277,8 +285,8 @@ function getNodePath(node: Node) {
 
     if (
       !parentNode ||
-      (parentNode as any).TEST_ROOT ||
-      parentNode === parentNode.ownerDocument?.body
+      parentNode.nodeType !== 1 /* Node.ELEMENT_NODE */ ||
+      (parentNode as Element).tagName === "BODY"
     ) {
       break;
     }
