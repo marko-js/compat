@@ -35,29 +35,22 @@ const baseConfig: compiler.Config = {
     configFile: false,
   },
   writeVersionComment: false,
+  resolveVirtualDependency(_filename, { code, virtualPath }) {
+    return `virtual:${virtualPath} ${code}`;
+  },
 };
 
+const cwd = process.cwd();
+const migrateConfig: compiler.Config = { ...baseConfig, output: "migrate" };
 const htmlConfig: compiler.Config = { ...baseConfig, output: "html" };
 const domConfig: compiler.Config = { ...baseConfig, output: "dom" };
 const hydrateConfig: compiler.Config = {
   ...baseConfig,
   output: "hydrate",
   modules: "cjs",
-  resolveVirtualDependency(_from, { virtualPath }) {
-    return virtualPath;
-  },
 };
 
 register(htmlConfig);
-
-before(async () => {
-  // Ensure we never load the dist Marko tags during tests.
-  await fs.promises.mkdir(path.join(__dirname, "../../dist")).catch(() => {});
-  await fs.promises.writeFile(
-    path.join(__dirname, "../../dist/marko.json"),
-    "{}"
-  );
-});
 
 describe("translator", () => {
   const fixturesDir = path.join(__dirname, "fixtures");
@@ -66,6 +59,7 @@ describe("translator", () => {
 
     describe(entry, () => {
       const fixtureDir = path.join(fixturesDir, entry);
+      const relativeFixtureDir = path.relative(cwd, fixtureDir);
       const resolve = (file: string) => path.join(fixtureDir, file);
       const fixtureTemplateFile = resolve("./template.marko");
       const {
@@ -87,6 +81,9 @@ describe("translator", () => {
       })();
 
       describe("compile", () => {
+        (hasCompileErrors ? it.skip : it)("migrate", () =>
+          snapCompiledTemplates(migrateConfig)
+        );
         (skipCompileHTML ? it.skip : it)("html", () =>
           snapCompiledTemplates(htmlConfig)
         );
@@ -95,22 +92,23 @@ describe("translator", () => {
         );
 
         async function snapCompiledTemplates(compilerConfig: compiler.Config) {
-          const additionalMarkoFiles = await glob(resolve("**/*.marko"));
-          const finalConfig: compiler.Config = {
-            ...compilerConfig,
-            resolveVirtualDependency(_filename, { code, virtualPath }) {
-              return `virtual:${virtualPath} ${code}`;
-            },
-          };
           const errors: Error[] = [];
-          const targetSnap = hasCompileErrors ? snap.catch : snap;
 
-          for (const file of additionalMarkoFiles) {
+          for (const file of await glob(resolve("**/*.marko"))) {
             try {
-              await targetSnap(() => compileCode(file, finalConfig), {
-                file: path.relative(fixtureDir, file).replace(".marko", ".js"),
-                dir: fixtureDir,
-              });
+              await (hasCompileErrors ? snap.catch : snap)(
+                async () =>
+                  replaceFilePaths(await compileCode(file, compilerConfig)),
+                {
+                  file: path
+                    .relative(fixtureDir, file)
+                    .replace(
+                      ".marko",
+                      compilerConfig.output === "migrate" ? ".marko" : ".js"
+                    ),
+                  dir: fixtureDir,
+                }
+              );
             } catch (err) {
               errors.push(err as Error);
             }
@@ -184,12 +182,12 @@ describe("translator", () => {
             const { window } = browser;
             const { document } = window;
             (
-              (0, (window as any).eval)(
+              (0, window.eval)(
                 `require=>{${await compileCode(
                   fixtureTemplateFile,
                   hydrateConfig
                 )}}`
-              ) as any
+              ) as (require: typeof browser.require) => void
             )(browser.require);
 
             const screen = within(document.body);
@@ -216,6 +214,7 @@ describe("translator", () => {
           });
         });
 
+        // Hydration render will use the same browser instance as the HTML render.
         let htmlResult: {
           browser: ReturnType<typeof createBrowser>;
           tracker: ReturnType<typeof createTracker>;
@@ -288,10 +287,19 @@ describe("translator", () => {
       });
 
       function snapMD(fn: () => unknown) {
-        return (hasRuntimeErrors ? snap.catch : snap)(fn, {
-          ext: `.md`,
-          dir: fixtureDir,
-        });
+        return (hasRuntimeErrors ? snap.catch : snap)(
+          async () => replaceFilePaths(String(await fn())),
+          {
+            ext: `.md`,
+            dir: fixtureDir,
+          }
+        );
+      }
+
+      function replaceFilePaths(str: string) {
+        return str
+          .replaceAll(cwd, "<cwd>")
+          .replaceAll(relativeFixtureDir, "<fixture-dir>");
       }
     });
   }
