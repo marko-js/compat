@@ -94,7 +94,11 @@ describe("translator", () => {
         async function snapCompiledTemplates(compilerConfig: compiler.Config) {
           const errors: Error[] = [];
 
-          for (const file of await glob(resolve("**/*.marko"))) {
+          for (const file of await glob("**/*.marko", {
+            absolute: true,
+            cwd: fixtureDir,
+            ignore: ["**/__snapshots__"],
+          })) {
             try {
               await (hasCompileErrors ? snap.catch : snap)(
                 async () =>
