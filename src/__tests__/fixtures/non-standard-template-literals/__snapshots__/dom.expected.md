@@ -1,0 +1,52 @@
+# Render
+```html
+<div
+  data-other="2"
+  id="GENERATED-0"
+/>
+<div
+  id="a"
+>
+  ${STATIC}
+</div>
+<div
+  id="b"
+>
+  ${SCRIPLET}
+</div>
+<div
+  id="c"
+>
+  1
+</div>
+<div
+  id="d"
+>
+  abc}
+</div>
+<div
+  id="e"
+>
+  abc}
+</div>
+<div
+  id="f"
+>
+  abc}
+</div>
+<div
+  id="g"
+>
+  abcd}ef
+</div>
+<div
+  id="h"
+>
+  abc3
+</div>
+<div
+  id="i"
+>
+  abcdef
+</div>
+```

@@ -1,7 +1,33 @@
-import "${hi}";
-static console.log("${hi}");
-$ console.log("${hi}");
-<div class="${hi}" id=`${"${hi}"}`>
-  ${"${hi}"}
+static const fromStatic = "${STATIC}";
+$ const fromScriptlet = "${SCRIPLET}";
+$ const a = 1;
+$ const b = 2;
+$ const c = 3;
+<div class="${a}" id=`${"${a}"}` data-other="${b}"/>
+<div id="a">
+  ${fromStatic}
 </div>
-<div a="abc${\"}\"}" b="abc${'}'}" c="abc${`}`}" d="abc${`a${\"}\"}`}" e=`abc${hello}` f="abc${{x: 1}.v}asas"/>
+<div id="b">
+  ${fromScriptlet}
+</div>
+<div id="c">
+  ${"${a}"}
+</div>
+<div id="d">
+  ${"abc${\"}\"}"}
+</div>
+<div id="e">
+  ${"abc${'}'}"}
+</div>
+<div id="f">
+  ${"abc${`}`}"}
+</div>
+<div id="g">
+  ${"abc${`d${\"}\"}e`}f"}
+</div>
+<div id="h">
+  ${`abc${c}`}
+</div>
+<div id="i">
+  ${"abc${{x: 1}.missing}def"}
+</div>
