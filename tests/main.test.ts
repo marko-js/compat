@@ -63,9 +63,9 @@ const hydrateConfig: compiler.Config = {
 
 register(htmlConfig);
 
-for (const version of ["v4", "v3"]) {
-  describe(version, () => {
-    const fixturesDir = path.join(__dirname, "fixtures", version);
+for (const api of ["class", "widget"]) {
+  describe(api, () => {
+    const fixturesDir = path.join(__dirname, `fixtures-${api}`);
     for (const entry of fs.readdirSync(fixturesDir)) {
       if (entry.endsWith(".skip")) continue;
 

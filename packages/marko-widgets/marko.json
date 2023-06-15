@@ -1,0 +1,4 @@
+{
+  "taglib-id": "marko-widgets",
+  "taglib-imports": ["./src/marko.json", "@marko/compat-v4/marko.json"]
+}

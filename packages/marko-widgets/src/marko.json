@@ -1,0 +1,4 @@
+{
+  "migrate": "./migrate/index",
+  "tags-dir": "./components"
+}

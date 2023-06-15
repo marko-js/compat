@@ -4,6 +4,10 @@
   "allow-uncaught": true,
   "enable-source-maps": true,
   "require": ["tsx", "mocha-snap"],
-  "spec": "src/**/__tests__/*.test.ts",
-  "watchFiles": ["src/**/*.@(ts|marko)", "!**/__snapshots__/**"]
+  "spec": "tests/*.test.ts",
+  "watchFiles": [
+    "packages/*/src/**/*.@(ts|marko)",
+    "tests/**/*.@(ts|marko)",
+    "!**/__snapshots__/**"
+  ]
 }

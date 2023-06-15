@@ -4,54 +4,63 @@ import glob from "fast-glob";
 import { build, type BuildOptions } from "esbuild";
 import { fileURLToPath } from "url";
 
-const entryPoints = [];
-const absWorkingDir = fileURLToPath(new URL(".", import.meta.url));
-const srcdir = path.resolve(absWorkingDir, "src");
-const outdir = path.resolve(absWorkingDir, "dist");
-const pkg = JSON.parse(
-  await fs.promises.readFile(path.join(absWorkingDir, "package.json"), "utf8")
+const packagesDir = path.join(
+  fileURLToPath(new URL(".", import.meta.url)),
+  "packages"
 );
-const external = new Set([
-  ...Object.keys(pkg.dependencies || {}),
-  ...Object.keys(pkg.peerDependencies || {}),
-]);
 
-const files = glob.stream(["**", "!*.d.ts", "!**/__tests__"], {
-  cwd: srcdir,
-}) as AsyncIterable<string>;
+await Promise.all(
+  ["marko-widgets", "compat-v4"].map(async (pkgName) => {
+    const packageDir = path.resolve(packagesDir, pkgName);
+    const entryPoints = [];
+    const srcdir = path.resolve(packageDir, "src");
+    const outdir = path.resolve(packageDir, "dist");
+    const pkg = JSON.parse(
+      await fs.promises.readFile(path.join(packageDir, "package.json"), "utf8")
+    );
+    const external = new Set([
+      ...Object.keys(pkg.dependencies || {}),
+      ...Object.keys(pkg.peerDependencies || {}),
+    ]);
 
-for await (const file of files) {
-  if (path.extname(file) === ".ts") {
-    entryPoints.push(path.resolve(srcdir, file));
-  } else {
-    const outfile = path.join(outdir, file);
-    await fs.promises.mkdir(path.dirname(outfile), { recursive: true });
-    await fs.promises.copyFile(path.join(srcdir, file), outfile);
-  }
-}
+    const files = glob.stream(["**", "!*.d.ts"], {
+      cwd: srcdir,
+    }) as AsyncIterable<string>;
 
-const opts: BuildOptions = {
-  outdir,
-  entryPoints,
-  outbase: srcdir,
-  platform: "node",
-  target: ["es2019"],
-  define: {
-    "process.env.NODE_ENV": "'production'",
-  },
-};
+    for await (const file of files) {
+      if (path.extname(file) === ".ts") {
+        entryPoints.push(path.resolve(srcdir, file));
+      } else {
+        const outfile = path.join(outdir, file);
+        await fs.promises.mkdir(path.dirname(outfile), { recursive: true });
+        await fs.promises.copyFile(path.join(srcdir, file), outfile);
+      }
+    }
 
-await Promise.all([
-  build({
-    ...opts,
-    format: "cjs",
-  }),
-  build({
-    ...opts,
-    format: "esm",
-    bundle: true,
-    splitting: true,
-    outExtension: { ".js": ".mjs" },
-    external: [...external],
-  }),
-]);
+    const opts: BuildOptions = {
+      outdir,
+      entryPoints,
+      outbase: srcdir,
+      platform: "node",
+      target: ["es2019"],
+      define: {
+        "process.env.NODE_ENV": "'production'",
+      },
+    };
+
+    await Promise.all([
+      build({
+        ...opts,
+        format: "cjs",
+      }),
+      build({
+        ...opts,
+        format: "esm",
+        bundle: true,
+        splitting: true,
+        outExtension: { ".js": ".mjs" },
+        external: [...external],
+      }),
+    ]);
+  })
+);
