@@ -1,11 +1,18 @@
+import Component1 from "<component-1>";
+import Component2Template from "<component-2>";
+import _Component from "<component-3>";
+import Component4Template from "<component-4>";
+static const Component2 = "test";
+static const Component3 = "test";
+static const Component3Template = "test";
 export interface Input {
   show1: boolean;
   show2: boolean;
   show3: boolean;
+  show4: boolean;
 }
-<${input.show1 ? _component : null}/>
-<${input.show2 ? _component2 : null}/>
-<${input.show2 ? _component3 : null}/>
-import _component from "<component-1>";
-import _component2 from "<component-2>";
-import _component3 from "<component-3>";
+<${input.show1 ? Component1 : null}/>
+<${input.show2 ? Component2Template : null}/>
+<${input.show3 ? _Component : null}/>
+<${input.show4 ? Component4Template : null}/>
+-- Referenced Global ${typeof Component4 === "undefined"}
