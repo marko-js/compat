@@ -11,8 +11,24 @@ export interface Input {
   show3: boolean;
   show4: boolean;
 }
-<${input.show1 ? Component1 : null}/>
-<${input.show2 ? Component2Template : null}/>
-<${input.show3 ? _Component : null}/>
-<${input.show4 ? Component4Template : null}/>
+<div id="no-body">
+  <${input.show1 ? Component1 : null}/>
+  <${input.show2 ? Component2Template : null}/>
+  <${input.show3 ? _Component : null}/>
+  <${input.show4 ? Component4Template : null}/>
+</div>
+<div id="with-body">
+  <${input.show1 ? Component1 : null}>
+    Body 1
+  </>
+  <${input.show2 ? Component2Template : null}>
+    Body 2
+  </>
+  <${input.show3 ? _Component : null}>
+    Body 3
+  </>
+  <${input.show4 ? Component4Template : null}>
+    Body 4
+  </>
+</div>
 -- Referenced Global ${typeof Component4 === "undefined"}

@@ -1,7 +1,6 @@
 static const Component2 = "test";
 static const Component3 = "test";
 static const Component3Template = "test";
-
 export interface Input {
   show1: boolean;
   show2: boolean;
@@ -9,9 +8,26 @@ export interface Input {
   show4: boolean;
 }
 
-<component-1 body-only-if(input.show1)/>
-<component-2 body-only-if(input.show2)/>
-<component-3 body-only-if(input.show3)/>
-<component-4 body-only-if(input.show4)/>
+<div id="no-body">
+  <component-1 body-only-if(input.show1)/>
+  <component-2 body-only-if(input.show2)/>
+  <component-3 body-only-if(input.show3)/>
+  <component-4 body-only-if(input.show4)/>
+</div>
+
+<div id="with-body">
+  <component-1 body-only-if(input.show1)>
+    Body 1
+  </component-1>
+  <component-2 body-only-if(input.show2)>
+    Body 2
+  </component-2>
+  <component-3 body-only-if(input.show3)>
+    Body 3
+  </component-3>
+  <component-4 body-only-if(input.show4)>
+    Body 4
+  </component-4>
+</div>
 
 -- Referenced Global ${typeof Component4 === "undefined"}

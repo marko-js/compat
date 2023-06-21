@@ -1,1 +1,5 @@
--- 2
+export interface Input {
+  renderBody: Marko.Body;
+}
+-- Child 2
+<${input.renderBody}/>
