@@ -1,4 +1,3 @@
 {
-  "taglib-id": "@marko/compat-v4",
   "taglib-imports": ["./src/marko.json"]
 }

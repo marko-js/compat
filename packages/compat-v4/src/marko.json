@@ -1,4 +1,5 @@
 {
+  "taglib-id": "@marko/compat-v4",
   "migrate": "./migrate/index",
   "tags-dir": "./components"
 }

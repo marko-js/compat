@@ -1,4 +1,5 @@
 {
+  "taglib-id": "marko-widgets",
   "migrate": "./migrate/index",
   "tags-dir": "./components"
 }
