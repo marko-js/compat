@@ -47,7 +47,9 @@ export default {
               t.isBooleanLiteral(value) &&
                 value.value === true &&
                 /^[+-]{2,}|[+-]{2,}$/.test(name)
-                ? parseExpression(attr.hub.file, name, node.start || undefined)
+                ? node.start != null && node.end != null
+                  ? parseExpression(attr.hub.file, name, node.start, node.end!)
+                  : parseExpression(attr.hub.file, name)
                 : t.assignmentExpression("=", t.identifier(name), value)
             )
           );

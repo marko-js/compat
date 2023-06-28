@@ -4,7 +4,7 @@ import { diagnosticDeprecate, parseExpression } from "@marko/babel-utils";
 export default {
   MarkoAttribute(attr) {
     const {
-      node: { name, value, start },
+      node: { name, value, start, end },
     } = attr;
     if (
       /^\$\{.*}$/m.test(name) &&
@@ -17,11 +17,14 @@ export default {
         fix() {
           attr.replaceWith(
             t.markoSpreadAttribute(
-              parseExpression(
-                attr.hub.file,
-                name.slice(2, -1),
-                start ? start + 2 : undefined
-              )
+              start != null && end != null
+                ? parseExpression(
+                    attr.hub.file,
+                    name.slice(2, -1),
+                    start + 2,
+                    end - 1
+                  )
+                : parseExpression(attr.hub.file, name.slice(2, -1))
             )
           );
         },

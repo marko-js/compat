@@ -25,7 +25,7 @@ export function parseNonStandardTemplateLiteral(
   const { file } = string.hub;
   const { value } = string.node;
   const { length } = value;
-  const valueStart = string.node.start ? string.node.start + 1 : null;
+  const valueStart = string.node.start == null ? null : string.node.start + 1;
   let elements: undefined | t.TemplateElement[];
   let expressions: undefined | t.Expression[];
   let lastEndBracket = 0;
@@ -52,11 +52,15 @@ export function parseNonStandardTemplateLiteral(
 
           i = bracketEnd - 1;
           lastEndBracket = bracketEnd;
-          const expr = parseExpression(
-            file,
-            value.slice(bracketStart, i),
-            valueStart == null ? undefined : valueStart + bracketStart
-          );
+          const expr =
+            valueStart != null
+              ? parseExpression(
+                  file,
+                  value.slice(bracketStart, i),
+                  valueStart + bracketStart,
+                  valueStart + i
+                )
+              : parseExpression(file, value.slice(bracketStart, i));
 
           if (elements) {
             elements.push(el);
