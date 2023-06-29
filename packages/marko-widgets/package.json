@@ -27,7 +27,7 @@
     "!**/*.tsbuildinfo"
   ],
   "dependencies": {
-    "@marko/babel-utils": "^6.0.0",
+    "@marko/babel-utils": "^6.1.0",
     "@marko/compat-v4": "^0.0.0",
     "raptor-dom": "^1.1.1",
     "raptor-renderer": "^1.5.0"

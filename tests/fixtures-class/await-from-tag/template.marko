@@ -1,0 +1,25 @@
+<await(value from Promise.resolve("a"))>
+  ${value}
+</await>
+
+<await(value from Promise.resolve("b"))
+  placeholder="b placeholder"
+  error-message="b error"
+>
+  ${value}
+</await>
+
+<await(value from Promise.resolve("c"))
+    placeholder="c placeholder"
+    error-message="c error"
+    timeout-message="c timeout"
+>
+  ${value}
+</await>
+
+<await(value from Promise.resolve("d"))>
+  ${value}
+  <await-placeholder>d placeholder</await-placeholder>
+  <await-error>d error</await-error>
+  <await-timeout>d timeout</await-timeout>
+</await>

@@ -25,7 +25,7 @@
     "!**/*.tsbuildinfo"
   ],
   "dependencies": {
-    "@marko/babel-utils": "^6.0.0"
+    "@marko/babel-utils": "^6.1.0"
   },
   "peerDependencies": {
     "@marko/compiler": "^5",

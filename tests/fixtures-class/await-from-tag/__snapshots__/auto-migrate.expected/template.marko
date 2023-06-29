@@ -1,0 +1,48 @@
+<await(Promise.resolve("a"))>
+  <@then|value|>
+    ${value}
+  </@then>
+</await>
+<await(Promise.resolve("b"))>
+  <@then|value|>
+    ${value}
+  </@then>
+  <@placeholder>
+    ${"b placeholder"}
+  </@placeholder>
+  <@catch>
+    ${"b error"}
+  </@catch>
+</await>
+<await(Promise.resolve("c"))>
+  <@then|value|>
+    ${value}
+  </@then>
+  <@placeholder>
+    ${"c placeholder"}
+  </@placeholder>
+  <@catch|err|>
+    <if(err.name === "TimeoutError")>
+      ${"c timeout"}
+    </if>
+    <else>
+      ${"c error"}
+    </else>
+  </@catch>
+</await>
+<await(Promise.resolve("d"))>
+  <@then|value|>
+    ${value}
+  </@then>
+  <@placeholder>
+    d placeholder
+  </@placeholder>
+  <@catch|err|>
+    <if(err.name === "TimeoutError")>
+      d timeout
+    </if>
+    <else>
+      d error
+    </else>
+  </@catch>
+</await>

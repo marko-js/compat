@@ -24,7 +24,7 @@
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.2",
-    "@marko/compiler": "^5.29.0",
+    "@marko/compiler": "^5.30.1",
     "@testing-library/dom": "^9.3.1",
     "@types/mocha": "^10.0.1",
     "@types/node": "^20.3.2",
@@ -41,7 +41,7 @@
     "happy-dom": "^9.20.3",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
-    "marko": "^5.27.0",
+    "marko": "^5.28.1",
     "mocha": "^10.2.0",
     "mocha-snap": "^5.0.0",
     "prettier": "^2.8.8",
@@ -51,6 +51,6 @@
     "resolve.exports": "^2.0.2",
     "sort-package-json": "^2.4.1",
     "tsx": "^3.12.7",
-    "typescript": "^5.1.5"
+    "typescript": "^5.1.6"
   }
 }

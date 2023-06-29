@@ -1,5 +1,0 @@
-{
-  "deprecated": true,
-  "migrate": "./migrate",
-  "translate": "../error-translator"
-}
