@@ -141,9 +141,7 @@ export default {
           );
         }
 
-        tag.node.arguments = [providerExpression];
-
-        const rootChildren: t.MarkoTagBody["body"] = (tag.node.body.body = []);
+        const rootChildren: t.MarkoTagBody["body"] = [];
 
         if (thenChildren.length) {
           rootChildren.push(
@@ -206,6 +204,15 @@ export default {
             )
           );
         }
+
+        tag.replaceWith(
+          t.markoTag(
+            t.stringLiteral("await"),
+            tag.node.attributes,
+            t.markoTagBody(rootChildren),
+            [providerExpression]
+          )
+        );
       },
     });
   },

@@ -140,7 +140,8 @@ export default {
         if (providerMethod) {
           providerExpression = t.memberExpression(
             providerExpression,
-            providerMethod
+            providerMethod,
+            !t.isIdentifier(providerMethod)
           );
         }
 
@@ -162,9 +163,7 @@ export default {
           );
         }
 
-        tag.node.name = t.stringLiteral("await");
-        tag.node.arguments = [providerExpression!];
-        const rootChildren: t.MarkoTagBody["body"] = (tag.node.body.body = []);
+        const rootChildren: t.MarkoTagBody["body"] = [];
 
         if (thenChildren.length) {
           rootChildren.push(
@@ -227,7 +226,15 @@ export default {
             )
           );
         }
-        tag.visit();
+
+        tag.replaceWith(
+          t.markoTag(
+            t.stringLiteral("await"),
+            tag.node.attributes,
+            t.markoTagBody(rootChildren),
+            [providerExpression]
+          )
+        );
       },
     });
   },

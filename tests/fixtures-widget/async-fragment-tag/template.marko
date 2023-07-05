@@ -1,0 +1,70 @@
+static function cbTick(cb, value) {
+  queueMicrotask(() => cb(null, value));
+}
+
+<async-fragment var="value" data-provider=Promise.resolve("a") timeout=10000>
+  ${value}
+</async-fragment>
+
+<async-fragment var="value" data-provider=Promise.resolve("b")
+  placeholder="b placeholder"
+  error-message="b error"
+>
+  ${value}
+</async-fragment>
+
+<async-fragment var="value" data-provider=Promise.resolve("c")
+    placeholder="c placeholder"
+    error-message="c error"
+    timeout-message="c timeout"
+>
+  ${value}
+</async-fragment>
+
+<async-fragment var="value" data-provider=Promise.resolve("d")>
+  ${value}
+  <async-fragment-placeholder>d placeholder</async-fragment-placeholder>
+  <async-fragment-error>d error</async-fragment-error>
+  <async-fragment-timeout>d timeout</async-fragment-timeout>
+</async-fragment>
+
+<async-fragment var="value" data-provider={ x(cb) { cbTick(cb, "e"); } } method="x">
+  ${value}
+  <async-fragment-placeholder>e placeholder</async-fragment-placeholder>
+  <async-fragment-error>e error</async-fragment-error>
+  <async-fragment-timeout>e timeout</async-fragment-timeout>
+</async-fragment>
+
+<async-fragment var="value" data-provider={ x(cb) { cbTick(cb, this) } } method="x" scope="f">
+  ${value}
+  <async-fragment-placeholder>f placeholder</async-fragment-placeholder>
+  <async-fragment-error>f error</async-fragment-error>
+  <async-fragment-timeout>f timeout</async-fragment-timeout>
+</async-fragment>
+
+<async-fragment var="value" data-provider=(data, cb) => { cbTick(cb, data) } arg="g">
+  ${value}
+  <async-fragment-placeholder>g placeholder</async-fragment-placeholder>
+  <async-fragment-error>g error</async-fragment-error>
+  <async-fragment-timeout>g timeout</async-fragment-timeout>
+</async-fragment>
+
+<async-fragment var="value" data-provider=Promise.resolve("h")>
+  ${value}
+  <async-fragment-placeholder>h placeholder</async-fragment-placeholder>
+  <async-fragment-timeout>h timeout</async-fragment-timeout>
+</async-fragment>
+
+<async-fragment var="value" data-provider=(data, cb) => { cbTick(cb, JSON.stringify(data)) } arg-a="a" arg-b="b">
+  ${value}
+  <async-fragment-placeholder>g placeholder</async-fragment-placeholder>
+  <async-fragment-error>g error</async-fragment-error>
+  <async-fragment-timeout>g timeout</async-fragment-timeout>
+</async-fragment>
+
+<async-fragment var="value" data-provider=(data, cb) => { cbTick(cb, JSON.stringify(data)) } arg={ a: "a" } arg-b="b" arg-c="c">
+  ${value}
+  <async-fragment-placeholder>g placeholder</async-fragment-placeholder>
+  <async-fragment-error>g error</async-fragment-error>
+  <async-fragment-timeout>g timeout</async-fragment-timeout>
+</async-fragment>

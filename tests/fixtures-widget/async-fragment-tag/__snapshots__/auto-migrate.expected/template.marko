@@ -1,0 +1,167 @@
+static function cbTick(cb, value) {
+  queueMicrotask(() => cb(null, value));
+}
+<await(Promise.resolve("a")) timeout=10000>
+  <@then|value|>
+    ${value}
+  </@then>
+</await>
+<await(Promise.resolve("b"))>
+  <@then|value|>
+    ${value}
+  </@then>
+  <@placeholder>
+    ${"b placeholder"}
+  </@placeholder>
+  <@catch>
+    ${"b error"}
+  </@catch>
+</await>
+<await(Promise.resolve("c"))>
+  <@then|value|>
+    ${value}
+  </@then>
+  <@placeholder>
+    ${"c placeholder"}
+  </@placeholder>
+  <@catch|err|>
+    <if(err.name === "TimeoutError")>
+      ${"c timeout"}
+    </if>
+    <else>
+      ${"c error"}
+    </else>
+  </@catch>
+</await>
+<await(Promise.resolve("d"))>
+  <@then|value|>
+    ${value}
+  </@then>
+  <@placeholder>
+    d placeholder
+  </@placeholder>
+  <@catch|err|>
+    <if(err.name === "TimeoutError")>
+      d timeout
+    </if>
+    <else>
+      d error
+    </else>
+  </@catch>
+</await>
+<await({
+  x(cb) {
+    cbTick(cb, "e");
+  }
+}["x"])>
+  <@then|value|>
+    ${value}
+  </@then>
+  <@placeholder>
+    e placeholder
+  </@placeholder>
+  <@catch|err|>
+    <if(err.name === "TimeoutError")>
+      e timeout
+    </if>
+    <else>
+      e error
+    </else>
+  </@catch>
+</await>
+<await({
+  x(cb) {
+    cbTick(cb, this);
+  }
+}["x"].bind("f"))>
+  <@then|value|>
+    ${value}
+  </@then>
+  <@placeholder>
+    f placeholder
+  </@placeholder>
+  <@catch|err|>
+    <if(err.name === "TimeoutError")>
+      f timeout
+    </if>
+    <else>
+      f error
+    </else>
+  </@catch>
+</await>
+<await(((data, cb) => {
+  cbTick(cb, data);
+}).bind(null, "g"))>
+  <@then|value|>
+    ${value}
+  </@then>
+  <@placeholder>
+    g placeholder
+  </@placeholder>
+  <@catch|err|>
+    <if(err.name === "TimeoutError")>
+      g timeout
+    </if>
+    <else>
+      g error
+    </else>
+  </@catch>
+</await>
+<await(Promise.resolve("h"))>
+  <@then|value|>
+    ${value}
+  </@then>
+  <@placeholder>
+    h placeholder
+  </@placeholder>
+  <@catch|err|>
+    <if(err.name === "TimeoutError")>
+      h timeout
+    </if>
+  </@catch>
+</await>
+<await(((data, cb) => {
+  cbTick(cb, JSON.stringify(data));
+}).bind(null, {
+  "a": "a",
+  "b": "b"
+}))>
+  <@then|value|>
+    ${value}
+  </@then>
+  <@placeholder>
+    g placeholder
+  </@placeholder>
+  <@catch|err|>
+    <if(err.name === "TimeoutError")>
+      g timeout
+    </if>
+    <else>
+      g error
+    </else>
+  </@catch>
+</await>
+<await(((data, cb) => {
+  cbTick(cb, JSON.stringify(data));
+}).bind(null, {
+  ...{
+    a: "a"
+  },
+  "b": "b",
+  "c": "c"
+}))>
+  <@then|value|>
+    ${value}
+  </@then>
+  <@placeholder>
+    g placeholder
+  </@placeholder>
+  <@catch|err|>
+    <if(err.name === "TimeoutError")>
+      g timeout
+    </if>
+    <else>
+      g error
+    </else>
+  </@catch>
+</await>
