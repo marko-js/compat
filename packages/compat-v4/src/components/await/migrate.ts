@@ -3,14 +3,11 @@ import {
   diagnosticDeprecate,
   diagnosticError,
   getLocRange,
-  getTagDef,
   parseExpression,
 } from "@marko/babel-utils";
 
 export default {
   enter(tag: t.NodePath<t.MarkoTag>) {
-    const def = getTagDef(tag);
-    def;
     const firstArg = tag.node.arguments?.[0];
     if (firstArg?.type !== "MarkoParseError") return;
     const match = /^\s*([$a-zA-Z_][0-9a-zA-Z_$]*)\s+from\s+/.exec(
@@ -119,7 +116,8 @@ export default {
         if (providerMethod) {
           providerExpression = t.memberExpression(
             providerExpression,
-            providerMethod
+            providerMethod,
+            !t.isIdentifier(providerMethod)
           );
         }
 

@@ -23,3 +23,14 @@
   <await-error>d error</await-error>
   <await-timeout>d timeout</await-timeout>
 </await>
+
+<await(value from { x(cb) {
+  queueMicrotask(() => {
+    cb(null, "d")
+  });
+} }) method="x">
+  ${value}
+  <await-placeholder>d placeholder</await-placeholder>
+  <await-error>d error</await-error>
+  <await-timeout>d timeout</await-timeout>
+</await>

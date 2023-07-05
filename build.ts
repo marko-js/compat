@@ -1,15 +1,11 @@
 import fs from "fs";
 import path from "path";
 import glob from "fast-glob";
-import { build, type BuildOptions } from "esbuild";
-import { fileURLToPath } from "url";
+import { type BuildOptions, build } from "esbuild";
 
-const packagesDir = path.join(
-  fileURLToPath(new URL(".", import.meta.url)),
-  "packages"
-);
+const packagesDir = path.join(__dirname, "packages");
 
-await Promise.all(
+Promise.all(
   ["marko-widgets", "compat-v4"].map(async (pkgName) => {
     const packageDir = path.resolve(packagesDir, pkgName);
     const entryPoints = [];
@@ -63,4 +59,7 @@ await Promise.all(
       }),
     ]);
   })
-);
+).catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

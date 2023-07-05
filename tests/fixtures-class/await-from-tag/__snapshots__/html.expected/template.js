@@ -93,6 +93,38 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
       [Symbol.iterator]: _marko_self_iterator
     }
   }, out, _componentDef, "3");
+  _marko_tag(_await, {
+    "_provider": {
+      x(cb) {
+        queueMicrotask(() => {
+          cb(null, "d");
+        });
+      }
+    }["x"],
+    "_name": "{\n  x(cb) {\n    queueMicrotask(() => {\n      cb(null, \"d\");\n    });\n  }\n}[\"x\"]",
+    "then": {
+      "renderBody": (out, value) => {
+        out.w(_marko_escapeXml(value));
+      },
+      [Symbol.iterator]: _marko_self_iterator
+    },
+    "placeholder": {
+      "renderBody": out => {
+        out.w("d placeholder");
+      },
+      [Symbol.iterator]: _marko_self_iterator
+    },
+    "catch": {
+      "renderBody": (out, err) => {
+        if (err.name === "TimeoutError") {
+          out.w("d timeout");
+        } else {
+          out.w("d error");
+        }
+      },
+      [Symbol.iterator]: _marko_self_iterator
+    }
+  }, out, _componentDef, "4");
 }, {
   t: _marko_componentType,
   i: true,

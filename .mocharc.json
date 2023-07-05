@@ -3,7 +3,7 @@
   "timeout": 5000,
   "allow-uncaught": true,
   "enable-source-maps": true,
-  "require": ["tsx", "mocha-snap"],
+  "require": ["./ts-load", "mocha-snap"],
   "spec": "tests/*.test.ts",
   "watchFiles": [
     "packages/*/src/**/*.@(ts|marko)",

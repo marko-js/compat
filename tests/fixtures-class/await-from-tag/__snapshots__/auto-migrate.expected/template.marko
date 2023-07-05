@@ -46,3 +46,25 @@
     </else>
   </@catch>
 </await>
+<await({
+  x(cb) {
+    queueMicrotask(() => {
+      cb(null, "d");
+    });
+  }
+}["x"])>
+  <@then|value|>
+    ${value}
+  </@then>
+  <@placeholder>
+    d placeholder
+  </@placeholder>
+  <@catch|err|>
+    <if(err.name === "TimeoutError")>
+      d timeout
+    </if>
+    <else>
+      d error
+    </else>
+  </@catch>
+</await>
