@@ -1,0 +1,1 @@
+tests/fixtures-class/await-modern-syntax-error/template.marko:1:15: Unexpected token, expected ","

@@ -1,4 +1,8 @@
-<await(value from Promise.resolve("a"))>
+static function cbTick(cb, value) {
+  queueMicrotask(() => cb(null, value));
+}
+
+<await(value from Promise.resolve("a")) timeout=10000>
   ${value}
 </await>
 
@@ -24,13 +28,49 @@
   <await-timeout>d timeout</await-timeout>
 </await>
 
-<await(value from { x(cb) {
-  queueMicrotask(() => {
-    cb(null, "d")
-  });
-} }) method="x">
+<await(value from { x(cb) { cbTick(cb, "e"); } }) method="x">
   ${value}
-  <await-placeholder>d placeholder</await-placeholder>
-  <await-error>d error</await-error>
-  <await-timeout>d timeout</await-timeout>
+  <await-placeholder>e placeholder</await-placeholder>
+  <await-error>e error</await-error>
+  <await-timeout>e timeout</await-timeout>
 </await>
+
+<await(value from { x(cb) { cbTick(cb, this) } }) method="x" scope="f">
+  ${value}
+  <await-placeholder>f placeholder</await-placeholder>
+  <await-error>f error</await-error>
+  <await-timeout>f timeout</await-timeout>
+</await>
+
+<await(value from (data, cb) => { cbTick(cb, data) }) arg="g">
+  ${value}
+  <await-placeholder>g placeholder</await-placeholder>
+  <await-error>g error</await-error>
+  <await-timeout>g timeout</await-timeout>
+</await>
+
+<await(value from Promise.resolve("h"))>
+  ${value}
+  <await-placeholder>h placeholder</await-placeholder>
+  <await-timeout>h timeout</await-timeout>
+</await>
+
+<await(value from (data, cb) => { cbTick(cb, JSON.stringify(data)) }) arg-a="a" arg-b="b">
+  ${value}
+  <await-placeholder>g placeholder</await-placeholder>
+  <await-error>g error</await-error>
+  <await-timeout>g timeout</await-timeout>
+</await>
+
+<await(value from (data, cb) => { cbTick(cb, JSON.stringify(data)) }) arg={ a: "a" } arg-b="b" arg-c="c">
+  ${value}
+  <await-placeholder>g placeholder</await-placeholder>
+  <await-error>g error</await-error>
+  <await-timeout>g timeout</await-timeout>
+</await>
+
+// Ensure that the non deprecated version works.
+<await(Promise.resolve("MODERN"))>
+  <@then|value|>${value}</>
+</await>
+

@@ -236,7 +236,7 @@ for (const api of ["class", "widget"]) {
                   ).code
                 ),
               {
-                file: outputFile,
+                file: hasCompileErrors ? `${outputFile}.error.txt` : outputFile,
                 dir: fixtureDir,
               }
             );

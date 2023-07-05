@@ -1,0 +1,1 @@
+tests/fixtures-class/await-from-tag-spread-error/template.marko:1:41: Spread attributes are not supported in legacy <await(x from y)> tags.
