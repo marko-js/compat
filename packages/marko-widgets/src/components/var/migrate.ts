@@ -6,6 +6,9 @@ export default {
     if (!tag.node.attributes.length) {
       diagnosticError(tag, {
         label: "The <var> tag requires a value.",
+        fix() {
+          tag.remove();
+        },
       });
       return;
     }
@@ -22,8 +25,10 @@ export default {
           if (t.isMarkoSpreadAttribute(node)) {
             diagnosticError(attr, {
               label: "Spread attributes are not supported in <var> tags.",
+              fix() {
+                attr.remove();
+              },
             });
-            attr.remove();
             continue;
           }
 

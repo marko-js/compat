@@ -25,6 +25,9 @@ export default {
           if (attr.isMarkoSpreadAttribute()) {
             diagnosticError(attr, {
               label: "Spread attributes are not supported on <async-fragment>.",
+              fix() {
+                attr.remove();
+              },
             });
             return;
           }
@@ -85,6 +88,9 @@ export default {
           diagnosticError(tag, {
             label:
               'Invalid <async-fragment> tag. "var" must be a string literal that is a valid javascript identifier. Example; <async-fragment data-provider=data.userInfo var="userInfo" />',
+            fix() {
+              tag.remove();
+            },
           });
           return;
         }
@@ -93,6 +99,9 @@ export default {
           diagnosticError(tag, {
             label:
               'Invalid <async-fragment> tag. "data-provider" attribute is missing. Example; <async-fragment data-provider=data.userInfo var="userInfo" />',
+            fix() {
+              tag.remove();
+            },
           });
           return;
         }

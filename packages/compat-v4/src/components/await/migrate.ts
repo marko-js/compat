@@ -48,8 +48,10 @@ export default {
             diagnosticError(attr, {
               label:
                 "Spread attributes are not supported in legacy <await(x from y)> tags.",
+              fix() {
+                attr.remove();
+              },
             });
-            attr.remove();
             continue;
           }
 
