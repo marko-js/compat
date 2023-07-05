@@ -1,0 +1,13 @@
+-- Before outside
+<div class="outer">
+  Before 
+  Before inside 
+  <await(Promise.resolve("a")) timeout=10000>
+    <@then|value|>
+      ${value}
+    </@then>
+  </await>
+   After inside
+   After
+</div>
+-- After outside

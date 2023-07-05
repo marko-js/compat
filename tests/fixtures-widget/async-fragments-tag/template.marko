@@ -1,0 +1,13 @@
+-- Before outside
+<div.outer>
+  Before
+  <async-fragments>
+    Before inside
+    <async-fragment var="value" data-provider=Promise.resolve("a") timeout=10000>
+      ${value}
+    </async-fragment>
+    After inside
+  </async-fragments>
+  After
+</div>
+-- After outside
