@@ -1,0 +1,7 @@
+tests/fixtures-class/unless-tag-errors/template.marko:1:2: The <unless> tag requires a condition argument.
+
+tests/fixtures-class/unless-tag-errors/template.marko:5:2: The <unless> tag requires a condition argument.
+
+tests/fixtures-class/unless-tag-errors/template.marko:5:2: The <unless> tag does not support a tag variable.
+
+tests/fixtures-class/unless-tag-errors/template.marko:9:2: The <unless> tag does not support any attributes.

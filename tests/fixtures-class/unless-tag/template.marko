@@ -1,0 +1,25 @@
+$ const falseCondition = false;
+$ const trueCondition = true;
+
+<unless(falseCondition)>
+  should show a
+</>
+
+<unless(trueCondition, falseCondition)>
+  should show b
+</>
+
+<unless(trueCondition)>
+  SHOULD NOT SHOW!
+</>
+
+<unless(falseCondition, trueCondition)>
+  SHOULD NOT SHOW
+</>
+
+<unless(trueCondition)>
+  SHOULD NOT SHOW!
+</>
+<else>
+  should show c
+</else>
