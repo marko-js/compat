@@ -1,0 +1,40 @@
+<macro|{
+  firstName,
+  lastName
+}| name="test">
+  <div>
+    ${firstName} ${lastName}
+  </div>
+</macro>
+<test firstName="John"/>
+<test firstName="John" lastName="Smith"/>
+<test firstName="John" lastName="Smith"/>
+<macro|{
+  renderBody
+}| name="test2">
+  <div>
+    <${renderBody}/>
+  </div>
+</macro>
+<test2>
+  Hello
+</test2>
+<macro|{
+  renderBody
+}| name="test3">
+  <div>
+    <${renderBody}/>
+  </div>
+</macro>
+<macro|{
+  renderBody
+}| name="test4">
+  <div>
+    $ renderBody(out);
+  </div>
+</macro>
+<test3>
+  <test4>
+    Hello
+  </test4>
+</test3>
