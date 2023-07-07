@@ -50,14 +50,14 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     renderBody
   }) {
     out.be("div", null, "13", _component, null, 0);
-    renderBody(out);
+    _marko_dynamic_tag(out, renderBody, null, null, null, null, _componentDef, "14");
     out.ee();
   }
   _marko_dynamic_tag(out, _test3, null, out => {
     _marko_dynamic_tag(out, _test4, null, out => {
       out.t("Hello", _component);
-    }, null, null, _componentDef, "15");
-  }, null, null, _componentDef, "14");
+    }, null, null, _componentDef, "16");
+  }, null, null, _componentDef, "15");
 }, {
   t: _marko_componentType,
   i: true,

@@ -1,0 +1,60 @@
+<${input}/>
+<${input.renderThing}/>
+<${input}(attrs)/>
+<${renderBody}/>
+<${input.template}({
+  x: 1
+})/>
+<${input.template}({
+  y() {}
+})/>
+<${{
+  render: input.barRenderer
+}}/>
+<${{
+  render: state.barRenderer
+}}/>
+<${{
+  render: input.barRenderer
+}}/>
+<${{
+  render: x.barRenderer
+}}/>
+<${out => input.barRenderer({}, true, out)}/>
+<if(x)>
+  <${renderA}/>
+</if>
+<else>
+  <if(y)>
+    <${renderB}/>
+  </if>
+  <else>
+    <${renderC}/>
+  </else>
+</else>
+<if(x)>
+  <${renderA}/>
+</if>
+<else>
+  <if(y)>
+    <${renderB}/>
+  </if>
+  <else>
+    <${renderC}/>
+  </else>
+</else>
+<if(x)>
+  <${render}/>
+</if>
+<if(!x)>
+  <${render}/>
+</if>
+$ let i = 0;
+<while(i < 10)>
+  <${input.items[i]}/>
+  $ i++;
+</while>
+$ let j = 10;
+<while(j--)>
+  <${input}/>
+</while>
