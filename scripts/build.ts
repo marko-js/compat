@@ -3,7 +3,7 @@ import path from "path";
 import glob from "fast-glob";
 import { type BuildOptions, build } from "esbuild";
 
-const packagesDir = path.join(__dirname, "packages");
+const packagesDir = path.join(__dirname, "../packages");
 
 Promise.all(
   ["marko-widgets", "compat-v4"].map(async (pkgName) => {
