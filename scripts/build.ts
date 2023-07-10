@@ -12,7 +12,7 @@ Promise.all(
     const srcdir = path.resolve(packageDir, "src");
     const outdir = path.resolve(packageDir, "dist");
     const pkg = JSON.parse(
-      await fs.promises.readFile(path.join(packageDir, "package.json"), "utf8")
+      await fs.promises.readFile(path.join(packageDir, "package.json"), "utf8"),
     );
     const external = new Set([
       ...Object.keys(pkg.dependencies || {}),
@@ -58,7 +58,7 @@ Promise.all(
         external: [...external],
       }),
     ]);
-  })
+  }),
 ).catch((err) => {
   console.error(err);
   process.exit(1);

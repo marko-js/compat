@@ -47,21 +47,21 @@ export default {
     const callIdentifier = t.identifier(functionAttr.node.name);
     const callExpression = t.callExpression(
       callIdentifier,
-      functionAttr.node.arguments
+      functionAttr.node.arguments,
     );
     if (start != null) {
       withLoc(
         file,
         callIdentifier,
         start,
-        start + functionAttr.node.name.length
+        start + functionAttr.node.name.length,
       );
 
       withLoc(file, callExpression, start, functionAttr.node.end!);
     }
 
     tag.replaceWith(
-      t.markoScriptlet([t.expressionStatement(callExpression)], false)
+      t.markoScriptlet([t.expressionStatement(callExpression)], false),
     );
   },
 };
@@ -70,7 +70,7 @@ function withLoc<T extends t.Node>(
   file: t.BabelFile,
   node: T,
   start: number,
-  end: number
+  end: number,
 ): T {
   node.loc = getLocRange(file, start, end);
   node.start = start;
@@ -79,7 +79,7 @@ function withLoc<T extends t.Node>(
 }
 
 function isDefaultAttributeValue(
-  node: t.MarkoAttribute | t.MarkoSpreadAttribute
+  node: t.MarkoAttribute | t.MarkoSpreadAttribute,
 ): node is t.MarkoAttribute {
   return (
     node.type === "MarkoAttribute" &&

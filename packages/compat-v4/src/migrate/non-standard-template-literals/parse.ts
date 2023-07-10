@@ -20,7 +20,7 @@ const enum CODE {
 }
 
 export function parseNonStandardTemplateLiteral(
-  string: t.NodePath<t.StringLiteral>
+  string: t.NodePath<t.StringLiteral>,
 ) {
   const { file } = string.hub;
   const { value } = string.node;
@@ -42,12 +42,12 @@ export function parseNonStandardTemplateLiteral(
             value,
             bracketStart,
             length,
-            CODE.CLOSE_CURLY_BRACE
+            CODE.CLOSE_CURLY_BRACE,
           );
           if (bracketEnd === -1) return;
           const el = t.templateElement(
             { raw: value.slice(lastEndBracket, i) },
-            false
+            false,
           );
 
           i = bracketEnd - 1;
@@ -58,7 +58,7 @@ export function parseNonStandardTemplateLiteral(
                   file,
                   value.slice(bracketStart, i),
                   valueStart + bracketStart,
-                  valueStart + i
+                  valueStart + i,
                 )
               : parseExpression(file, value.slice(bracketStart, i));
 
@@ -76,7 +76,7 @@ export function parseNonStandardTemplateLiteral(
 
   if (elements) {
     elements.push(
-      t.templateElement({ raw: value.slice(lastEndBracket) }, true)
+      t.templateElement({ raw: value.slice(lastEndBracket) }, true),
     );
     return t.templateLiteral(elements, expressions!);
   }

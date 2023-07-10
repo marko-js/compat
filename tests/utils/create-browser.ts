@@ -27,8 +27,6 @@ export default function createBrowser({
       ]
     : Object.keys(require.extensions);
 
-  patchPostMessage(window);
-
   return {
     ...window.happyDOM,
     window: window as unknown as Window & typeof globalThis,
@@ -51,13 +49,13 @@ export default function createBrowser({
 function pathFilter(
   pkg: Record<string, unknown>,
   _file: string,
-  relativePath: string
+  relativePath: string,
 ) {
   if (pkg.exports) {
     return resolveExports.resolve(
       pkg,
       relativePath === exportsMainFile ? "." : relativePath,
-      resolveExportsOptions
+      resolveExportsOptions,
     )?.[0] as string;
   }
 
@@ -65,7 +63,7 @@ function pathFilter(
 }
 
 function packageFilter<T extends { main?: unknown; exports?: unknown }>(
-  pkg: T
+  pkg: T,
 ) {
   if (pkg.exports) {
     // defers to the "exports" field.
@@ -73,30 +71,4 @@ function packageFilter<T extends { main?: unknown; exports?: unknown }>(
   }
 
   return pkg;
-}
-
-function patchPostMessage(window: HappyDOM) {
-  let isSyncPostMessage = false;
-  const onMessage = () => (isSyncPostMessage = true);
-  window.addEventListener("message", onMessage);
-  window.postMessage("");
-  window.removeEventListener("message", onMessage);
-
-  if (isSyncPostMessage) {
-    const {
-      postMessage,
-      happyDOM: { asyncTaskManager },
-    } = window;
-    window.postMessage = (...args) => {
-      const immediateId = setImmediate(() => {
-        asyncTaskManager.endTask(taskId);
-        postMessage.apply(window, args);
-      });
-      const taskId = asyncTaskManager.startTask(() =>
-        clearImmediate(immediateId)
-      );
-    };
-  } else {
-    throw new Error("postMessage is no longer needs patching");
-  }
 }

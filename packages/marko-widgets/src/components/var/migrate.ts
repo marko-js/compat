@@ -43,7 +43,7 @@ export default {
           statements.push(
             t.variableDeclaration("var", [
               t.variableDeclarator(t.identifier(node.name), node.value),
-            ])
+            ]),
           );
         }
 
@@ -51,11 +51,11 @@ export default {
           tag.replaceWith(
             t.markoScriptlet([
               t.ifStatement(condition, t.blockStatement(statements)),
-            ])
+            ]),
           );
         } else {
           tag.replaceWithMultiple(
-            statements.map((it) => t.markoScriptlet([it]))
+            statements.map((it) => t.markoScriptlet([it])),
           );
         }
       },

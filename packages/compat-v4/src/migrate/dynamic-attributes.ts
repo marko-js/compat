@@ -22,10 +22,10 @@ export default {
                     attr.hub.file,
                     name.slice(2, -1),
                     start + 2,
-                    end - 1
+                    end - 1,
                   )
-                : parseExpression(attr.hub.file, name.slice(2, -1))
-            )
+                : parseExpression(attr.hub.file, name.slice(2, -1)),
+            ),
           );
         },
       });

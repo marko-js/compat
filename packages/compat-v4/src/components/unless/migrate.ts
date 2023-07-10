@@ -57,9 +57,9 @@ export default {
                   "!",
                   args.length === 1
                     ? (args[0] as t.Expression)
-                    : t.sequenceExpression(args as t.Expression[])
+                    : t.sequenceExpression(args as t.Expression[]),
                 ),
-          ])
+          ]),
         );
       },
     });

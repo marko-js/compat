@@ -31,7 +31,7 @@ export default {
     }
 
     tag.replaceWith(
-      t.markoTag(t.identifier("renderBody"), [], t.markoTagBody())
+      t.markoTag(t.identifier("renderBody"), [], t.markoTagBody()),
     );
   },
 };

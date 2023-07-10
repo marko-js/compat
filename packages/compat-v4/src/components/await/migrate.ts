@@ -11,7 +11,7 @@ export default {
     const firstArg = tag.node.arguments?.[0];
     if (firstArg?.type !== "MarkoParseError") return;
     const match = /^\s*([$a-zA-Z_][0-9a-zA-Z_$]*)\s+from\s+/.exec(
-      firstArg.source
+      firstArg.source,
     );
     if (!match) return;
 
@@ -26,7 +26,7 @@ export default {
           tag.hub.file,
           t.identifier(identifierName),
           start,
-          start + identifierName.length
+          start + identifierName.length,
         );
         const thenChildren: t.MarkoTagBody["body"] = [];
         const placeholderChildren: t.MarkoTagBody["body"] = [];
@@ -36,7 +36,7 @@ export default {
           tag.hub.file,
           firstArg.source.slice(fromStart),
           start + fromStart,
-          firstArg.end!
+          firstArg.end!,
         );
         let providerMethod: t.Expression | undefined;
         let providerScope: t.Expression | undefined;
@@ -79,7 +79,7 @@ export default {
               if (name.startsWith("arg-")) {
                 const prop = t.objectProperty(
                   t.stringLiteral(name.slice(4)),
-                  value
+                  value,
                 );
                 if (providerArgProps) {
                   providerArgProps.push(prop);
@@ -119,7 +119,7 @@ export default {
           providerExpression = t.memberExpression(
             providerExpression,
             providerMethod,
-            !t.isIdentifier(providerMethod)
+            !t.isIdentifier(providerMethod),
           );
         }
 
@@ -137,7 +137,7 @@ export default {
         if (providerArgs || providerScope) {
           providerExpression = t.callExpression(
             t.memberExpression(providerExpression, t.identifier("bind")),
-            [providerScope || t.nullLiteral()].concat(providerArgs || [])
+            [providerScope || t.nullLiteral()].concat(providerArgs || []),
           );
         }
 
@@ -148,8 +148,8 @@ export default {
             t.markoTag(
               t.stringLiteral("@then"),
               [],
-              t.markoTagBody(thenChildren, [valueIdentifier])
-            )
+              t.markoTagBody(thenChildren, [valueIdentifier]),
+            ),
           );
         }
 
@@ -158,8 +158,8 @@ export default {
             t.markoTag(
               t.stringLiteral("@placeholder"),
               [],
-              t.markoTagBody(placeholderChildren)
-            )
+              t.markoTagBody(placeholderChildren),
+            ),
           );
         }
 
@@ -172,9 +172,9 @@ export default {
               t.binaryExpression(
                 "===",
                 t.memberExpression(t.identifier("err"), t.identifier("name")),
-                t.stringLiteral("TimeoutError")
+                t.stringLiteral("TimeoutError"),
               ),
-            ]
+            ],
           );
           rootChildren.push(
             t.markoTag(
@@ -187,21 +187,21 @@ export default {
                       t.markoTag(
                         t.stringLiteral("else"),
                         [],
-                        t.markoTagBody(errorChildren)
+                        t.markoTagBody(errorChildren),
                       ),
                     ]
                   : [timeoutConditionTag],
-                [t.identifier("err")]
-              )
-            )
+                [t.identifier("err")],
+              ),
+            ),
           );
         } else if (errorChildren.length) {
           rootChildren.push(
             t.markoTag(
               t.stringLiteral("@catch"),
               [],
-              t.markoTagBody(errorChildren)
-            )
+              t.markoTagBody(errorChildren),
+            ),
           );
         }
 
@@ -210,8 +210,8 @@ export default {
             t.stringLiteral("await"),
             tag.node.attributes,
             t.markoTagBody(rootChildren),
-            [providerExpression]
-          )
+            [providerExpression],
+          ),
         );
       },
     });
@@ -222,7 +222,7 @@ function withLoc<T extends t.Node>(
   file: t.BabelFile,
   node: T,
   start: number,
-  end: number
+  end: number,
 ): T {
   node.loc = getLocRange(file, start, end);
   node.start = start;

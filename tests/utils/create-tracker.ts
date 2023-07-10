@@ -4,7 +4,7 @@ const { DOMElement, DOMCollection } = plugins;
 
 export default function createTracker(
   window: Window & typeof globalThis,
-  container: ParentNode
+  container: ParentNode,
 ) {
   let currentRecords: MutationRecord[] | null = null;
   const logs: string[] = [];
@@ -33,8 +33,8 @@ export default function createTracker(
         getStatusString(
           cloneAndNormalize(container),
           currentRecords || [],
-          update
-        )
+          update,
+        ),
       );
       currentRecords = null;
     },
@@ -59,7 +59,7 @@ export default function createTracker(
       default:
         throw new AggregateError(
           errors,
-          `\n${[...errors].join("\n").replace(/^(?!\s*$)/gm, "\t")}`
+          `\n${[...errors].join("\n").replace(/^(?!\s*$)/gm, "\t")}`,
         );
     }
   }
@@ -89,7 +89,7 @@ function cloneAndNormalize(container: ParentNode) {
   const document = isDocument(container) ? container : container.ownerDocument!;
   const commentAndElementWalker = document.createTreeWalker(
     clone,
-    1 /** SHOW_ELEMENT */ | 128 /** SHOW_COMMENT */
+    1 /** SHOW_ELEMENT */ | 128 /** SHOW_COMMENT */,
   );
 
   let node: Comment | Element;
@@ -127,7 +127,7 @@ function cloneAndNormalize(container: ParentNode) {
   if (idMap.size) {
     const elementWalker = document.createTreeWalker(
       clone,
-      1 /** SHOW_ELEMENT */
+      1 /** SHOW_ELEMENT */,
     );
 
     nextNode = elementWalker.nextNode();
@@ -165,7 +165,7 @@ function cloneAndNormalize(container: ParentNode) {
 function getStatusString(
   container: Node,
   records: MutationRecord[],
-  update: unknown
+  update: unknown,
 ) {
   const updateString =
     update == null ||
@@ -176,7 +176,7 @@ function getStatusString(
           .toString()
           .replace(
             /^.*?(?:{\s*([\s\S]*?);?\s*}.*?|=>\s*([\s\S]*?);?\s*)$/,
-            "$1$2;"
+            "$1$2;",
           )
           .replace(/^ {4}/gm, "")}\n`
       : ` ${JSON.stringify(update)}`;
@@ -185,7 +185,7 @@ function getStatusString(
     .map((child) =>
       format(child, {
         plugins: [DOMElement, DOMCollection],
-      }).trim()
+      }).trim(),
     )
     .filter(Boolean)
     .join("\n")
@@ -210,10 +210,10 @@ function formatMutationRecord(record: MutationRecord) {
     case "attributes": {
       const { attributeName } = record;
       const newValue = (target as HTMLElement).getAttribute(
-        attributeName as string
+        attributeName as string,
       );
       return `${getNodePath(target)}: attr(${attributeName}) ${JSON.stringify(
-        oldValue
+        oldValue,
       )} => ${JSON.stringify(newValue)}`;
     }
 
@@ -233,7 +233,7 @@ function formatMutationRecord(record: MutationRecord) {
       }
 
       return `${getNodePath(target)}: ${JSON.stringify(
-        oldValue || ""
+        oldValue || "",
       )} => ${JSON.stringify(target.nodeValue || "")}`;
     }
 
@@ -251,13 +251,13 @@ function formatMutationRecord(record: MutationRecord) {
         details.push(
           `removed ${Array.from(removedNodes)
             .map(getNodePath)
-            .join(", ")} ${position} ${getNodePath(relativeNode)}`
+            .join(", ")} ${position} ${getNodePath(relativeNode)}`,
         );
       }
 
       if (addedNodes.length) {
         details.push(
-          `inserted ${Array.from(addedNodes).map(getNodePath).join(", ")}`
+          `inserted ${Array.from(addedNodes).map(getNodePath).join(", ")}`,
         );
       }
 

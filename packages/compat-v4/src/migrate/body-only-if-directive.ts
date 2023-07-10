@@ -67,7 +67,7 @@ export default {
 
       nameExpression = importCustomTag(
         tag as t.NodePath<t.MarkoTag & { name: t.StringLiteral }>,
-        tagFile
+        tagFile,
       );
     }
 
@@ -77,7 +77,7 @@ export default {
       fix() {
         tag.set(
           "name",
-          t.conditionalExpression(arg, nameExpression, t.nullLiteral())
+          t.conditionalExpression(arg, nameExpression, t.nullLiteral()),
         );
         attr.remove();
       },

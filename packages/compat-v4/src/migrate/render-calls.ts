@@ -26,11 +26,11 @@ export default {
 } satisfies t.Visitor;
 
 function renderCallToDynamicTag(
-  callExpression: t.CallExpression
+  callExpression: t.CallExpression,
 ): false | t.MarkoTag {
   const { callee, arguments: args } = callExpression;
   const outIndex = args.findIndex(
-    (arg) => arg.type === "Identifier" && arg.name === "out"
+    (arg) => arg.type === "Identifier" && arg.name === "out",
   );
 
   if (outIndex === -1) return false;
@@ -91,7 +91,7 @@ function renderCallToDynamicTag(
 
 function replaceRenderCallExpression(
   node: t.Expression,
-  body: t.MarkoTagBody["body"]
+  body: t.MarkoTagBody["body"],
 ): boolean {
   switch (node.type) {
     case "CallExpression": {
@@ -117,11 +117,11 @@ function replaceRenderCallExpression(
                 ? t.binaryExpression(
                     "===",
                     node.left,
-                    t.unaryExpression("void", t.numericLiteral(0))
+                    t.unaryExpression("void", t.numericLiteral(0)),
                   )
                 : node.left,
-            ]
-          )
+            ],
+          ),
         );
 
         return true;
@@ -143,9 +143,9 @@ function replaceRenderCallExpression(
             t.markoTagBody(
               consequentBody.length
                 ? consequentBody
-                : [t.markoScriptlet([t.expressionStatement(node.consequent)])]
+                : [t.markoScriptlet([t.expressionStatement(node.consequent)])],
             ),
-            [node.test]
+            [node.test],
           ),
           t.markoTag(
             t.stringLiteral("else"),
@@ -153,9 +153,9 @@ function replaceRenderCallExpression(
             t.markoTagBody(
               alternateBody.length
                 ? alternateBody
-                : [t.markoScriptlet([t.expressionStatement(node.alternate)])]
-            )
-          )
+                : [t.markoScriptlet([t.expressionStatement(node.alternate)])],
+            ),
+          ),
         );
 
         return true;
@@ -170,7 +170,7 @@ function replaceRenderCallExpression(
 
 function replaceRenderCallStatements(
   node: t.Statement,
-  body: t.MarkoTagBody["body"]
+  body: t.MarkoTagBody["body"],
 ): boolean {
   switch (node.type) {
     case "ExpressionStatement":
@@ -202,10 +202,10 @@ function replaceRenderCallStatements(
             t.markoTagBody(
               consequentBody.length
                 ? consequentBody
-                : [t.markoScriptlet([node.consequent])]
+                : [t.markoScriptlet([node.consequent])],
             ),
-            [node.test]
-          )
+            [node.test],
+          ),
         );
 
         if (node.alternate) {
@@ -216,9 +216,9 @@ function replaceRenderCallStatements(
               t.markoTagBody(
                 alternateBody.length
                   ? alternateBody
-                  : [t.markoScriptlet([node.alternate])]
-              )
-            )
+                  : [t.markoScriptlet([node.alternate])],
+              ),
+            ),
           );
         }
 
@@ -237,8 +237,8 @@ function replaceRenderCallStatements(
               [t.markoAttribute("of", node.right)],
               t.markoTagBody(forBody, [
                 node.left.declarations[0].id as t.Identifier,
-              ])
-            )
+              ]),
+            ),
           );
           return true;
         }
@@ -256,8 +256,8 @@ function replaceRenderCallStatements(
               [t.markoAttribute("in", node.right)],
               t.markoTagBody(forBody, [
                 node.left.declarations[0].id as t.Identifier,
-              ])
-            )
+              ]),
+            ),
           );
           return true;
         }
@@ -273,7 +273,7 @@ function replaceRenderCallStatements(
             t.isStatement(node.update)
               ? node.update
               : t.expressionStatement(node.update as t.Expression),
-          ])
+          ]),
         );
         body.push(
           t.markoScriptlet([
@@ -283,7 +283,7 @@ function replaceRenderCallStatements(
           ]),
           t.markoTag(t.stringLiteral("while"), [], t.markoTagBody(forBody), [
             node.test || t.booleanLiteral(true),
-          ])
+          ]),
         );
         return true;
       }
@@ -296,7 +296,7 @@ function replaceRenderCallStatements(
         body.push(
           t.markoTag(t.stringLiteral("while"), [], t.markoTagBody(whileBody), [
             node.test,
-          ])
+          ]),
         );
         return true;
       }
@@ -310,7 +310,7 @@ function replaceRenderCallStatements(
 
 function isIdentifierOrStringNamed(
   expr: t.MemberExpression["property"],
-  name: string
+  name: string,
 ) {
   return (
     (expr.type === "Identifier" && expr.name === name) ||

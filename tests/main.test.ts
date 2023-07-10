@@ -96,7 +96,7 @@ for (const api of ["class", "widget"]) {
         describe("compile", () => {
           const testMigrate = hasCompileErrors ? it.skip : it;
           testMigrate("auto-migrate", () =>
-            snapCompiledTemplates(migrateConfig)
+            snapCompiledTemplates(migrateConfig),
           );
 
           if (migrations.length) {
@@ -126,27 +126,27 @@ for (const api of ["class", "widget"]) {
                     const answer = answers[answerIndex];
                     assert(
                       fix,
-                      "Unexpected answer to a diagnostic without a fix."
+                      "Unexpected answer to a diagnostic without a fix.",
                     );
 
                     if (answer !== undefined) {
                       if (fix === true) {
                         assert(
                           typeof answer === "undefined",
-                          "Unexpected non undefined answer to a default applied fix."
+                          "Unexpected non undefined answer to a default applied fix.",
                         );
                       } else {
                         switch (fix.type) {
                           case "confirm":
                             assert(
                               typeof answer === "boolean",
-                              "Unexpected non boolean answer to a confirm fix."
+                              "Unexpected non boolean answer to a confirm fix.",
                             );
                             break;
                           case "select":
                             assert(
                               typeof answer === "string",
-                              "Unexpected non string answer to a select fix."
+                              "Unexpected non string answer to a select fix.",
                             );
                             break;
                         }
@@ -163,27 +163,27 @@ for (const api of ["class", "widget"]) {
                     totalAnswersForLabel &&
                       Math.max(
                         ...Object.keys(migration[label]).map((n) =>
-                          parseInt(n, 10)
-                        )
+                          parseInt(n, 10),
+                        ),
                       ) < totalAnswersForLabel,
-                    `Missing diagnostic with label "${label}"`
+                    `Missing diagnostic with label "${label}"`,
                   );
                 }
 
                 await snapCompiledTemplate(
                   fixtureTemplateFile,
                   path.relative(fixtureDir, fixtureTemplateFile),
-                  { ...migrateConfig, applyFixes }
+                  { ...migrateConfig, applyFixes },
                 );
               });
             }
           }
 
           (skipCompileHTML ? it.skip : it)("html", () =>
-            snapCompiledTemplates(htmlConfig)
+            snapCompiledTemplates(htmlConfig),
           );
           (skipCompileDOM ? it.skip : it)("dom", () =>
-            snapCompiledTemplates(domConfig)
+            snapCompiledTemplates(domConfig),
           );
 
           async function snapCompiledTemplates(config: compiler.Config) {
@@ -201,9 +201,9 @@ for (const api of ["class", "widget"]) {
                     .relative(fixtureDir, file)
                     .replace(
                       ".marko",
-                      config.output === "migrate" ? ".marko" : ".js"
+                      config.output === "migrate" ? ".marko" : ".js",
                     ),
-                  config
+                  config,
                 );
               } catch (err) {
                 errors.push(err as Error);
@@ -218,7 +218,7 @@ for (const api of ["class", "widget"]) {
               default:
                 throw new AggregateError(
                   errors,
-                  `\n${errors.join("\n").replace(/^(?!\s*$)/gm, "\t")}`
+                  `\n${errors.join("\n").replace(/^(?!\s*$)/gm, "\t")}`,
                 );
             }
           }
@@ -226,19 +226,17 @@ for (const api of ["class", "widget"]) {
           async function snapCompiledTemplate(
             inputFile: string,
             outputFile: string,
-            config: compiler.Config
+            config: compiler.Config,
           ) {
             await (hasCompileErrors ? snap.catch : snap)(
               async () =>
                 replaceFilePaths(
-                  (
-                    await compiler.compileFile(inputFile, config)
-                  ).code
+                  (await compiler.compileFile(inputFile, config)).code,
                 ),
               {
                 file: hasCompileErrors ? `${outputFile}.error.txt` : outputFile,
                 dir: fixtureDir,
-              }
+              },
             );
           }
         });
@@ -302,10 +300,10 @@ for (const api of ["class", "widget"]) {
                     (
                       await compiler.compileFile(
                         fixtureTemplateFile,
-                        hydrateConfig
+                        hydrateConfig,
                       )
                     ).code
-                  }}`
+                  }}`,
                 ) as (require: typeof browser.require) => void
               )(browser.require);
 
@@ -370,10 +368,10 @@ for (const api of ["class", "widget"]) {
                 },
                 emit(type: string, ...args: unknown[]) {
                   logs.push(
-                    `# Emit ${type}${args.map((arg) => `\n${indent(arg)}`)}`
+                    `# Emit ${type}${args.map((arg) => `\n${indent(arg)}`)}`,
                   );
                 },
-              } as Writable & { flush(): void }
+              } as Writable & { flush(): void },
             );
 
             const browser = createBrowser({
@@ -387,7 +385,7 @@ for (const api of ["class", "widget"]) {
             const { window } = browser;
             const { document } = window;
             document.write(
-              `<!DOCTYPE html><html><head></head><body>${html}</body></html>`
+              `<!DOCTYPE html><html><head></head><body>${html}</body></html>`,
             );
             const tracker = createTracker(window, document.body);
 
@@ -411,7 +409,7 @@ for (const api of ["class", "widget"]) {
             {
               ext: `.md`,
               dir: fixtureDir,
-            }
+            },
           );
         }
 

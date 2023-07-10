@@ -55,8 +55,8 @@ export default {
                 ? node.start != null && node.end != null
                   ? parseExpression(attr.hub.file, name, node.start, node.end!)
                   : parseExpression(attr.hub.file, name)
-                : t.assignmentExpression("=", t.identifier(name), value)
-            )
+                : t.assignmentExpression("=", t.identifier(name), value),
+            ),
           );
         }
 
@@ -64,11 +64,11 @@ export default {
           tag.replaceWith(
             t.markoScriptlet([
               t.ifStatement(condition, t.blockStatement(statements)),
-            ])
+            ]),
           );
         } else {
           tag.replaceWithMultiple(
-            statements.map((it) => t.markoScriptlet([it]))
+            statements.map((it) => t.markoScriptlet([it])),
           );
         }
       },

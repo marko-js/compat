@@ -27,8 +27,8 @@ export default {
             t.stringLiteral("if"),
             [],
             t.markoTagBody([tag.node]),
-            args
-          )
+            args,
+          ),
         );
       },
     });

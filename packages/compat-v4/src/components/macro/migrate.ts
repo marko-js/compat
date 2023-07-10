@@ -105,13 +105,13 @@ export default {
                 ? [
                     t.objectPattern(
                       params.map((param) =>
-                        t.objectProperty(param, param, false, true)
-                      )
+                        t.objectProperty(param, param, false, true),
+                      ),
                     ),
                   ]
-                : []
-            )
-          )
+                : [],
+            ),
+          ),
         );
       },
     });
@@ -119,7 +119,7 @@ export default {
 };
 
 function* getAllTags(
-  body: (t.Program["body"] | t.MarkoTag["body"]["body"])[number][]
+  body: (t.Program["body"] | t.MarkoTag["body"]["body"])[number][],
 ): Generator<t.MarkoTag> {
   for (const child of body) {
     if (child.type === "MarkoTag") {
@@ -147,7 +147,7 @@ function* getAllNodes(node: t.Node | null | void): Generator<t.Node> {
 }
 
 function isDefaultAttributeValue(
-  node: t.MarkoAttribute | t.MarkoSpreadAttribute
+  node: t.MarkoAttribute | t.MarkoSpreadAttribute,
 ): node is t.MarkoAttribute {
   return (
     node.type === "MarkoAttribute" &&

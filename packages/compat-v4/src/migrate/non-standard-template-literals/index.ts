@@ -63,10 +63,10 @@ function StringLiteral(string: t.NodePath<t.StringLiteral>) {
                       : t.logicalExpression(
                           "??",
                           expr as t.Expression,
-                          t.stringLiteral("")
+                          t.stringLiteral(""),
                         );
-                  })
-                )
+                  }),
+                ),
               );
             }
           },

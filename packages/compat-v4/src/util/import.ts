@@ -3,7 +3,7 @@ import { resolveRelativePath } from "@marko/babel-utils";
 
 export function importCustomTag(
   tag: t.NodePath<t.MarkoTag & { name: t.StringLiteral }>,
-  tagFile: string
+  tagFile: string,
 ) {
   const {
     node,
@@ -33,7 +33,7 @@ export function importCustomTag(
           identifierName = generateTagImportName(tag);
           child.pushContainer(
             "specifiers",
-            t.importDefaultSpecifier(t.identifier(identifierName))
+            t.importDefaultSpecifier(t.identifier(identifierName)),
           );
         }
 
@@ -46,7 +46,7 @@ export function importCustomTag(
     identifierName = generateTagImportName(tag);
     const newImport = t.importDeclaration(
       [t.importDefaultSpecifier(t.identifier(identifierName))],
-      t.stringLiteral(shorthandImport)
+      t.stringLiteral(shorthandImport),
     );
 
     if (lastImport) {
@@ -60,7 +60,7 @@ export function importCustomTag(
 }
 
 function generateTagImportName(
-  tag: t.NodePath<t.MarkoTag & { name: t.StringLiteral }>
+  tag: t.NodePath<t.MarkoTag & { name: t.StringLiteral }>,
 ) {
   let identifierName = tag.node.name.value
     .replace(/(?<=^|-)[a-z]/g, toUpperCase)
