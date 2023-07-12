@@ -1,0 +1,369 @@
+$ const colorsArray = ["red", "green", "blue"];
+$ const colorCodes = {
+  red: "FF0000",
+  green: "00FF00",
+  blue: "0000FF"
+};
+$ const listSize = 3;
+static function noop() {}
+static function evenItemsIterator(items, cb) {
+  for (let i = 0; i < items.length; i++) {
+    if (i % 2 === 0) {
+      cb(items[i]);
+    }
+  }
+}
+<div class="array">
+  <for|color| of=colorsArray>
+    <div>
+      <li>
+        ${color}
+      </li>
+    </div>
+  </for>
+</div>
+<div class="array-iterator">
+  <for|color| of=(() => {
+    const _result = [];
+    evenItemsIterator(colorsArray, _result.push.bind(_result));
+    return _result;
+  })()>
+    <div>
+      <li>
+        ${color}
+      </li>
+    </div>
+  </for>
+</div>
+<div class="array-separator">
+  <for|color, _index| of=colorsArray>
+    ${_index ? ", " : ""}
+    <div>
+      <li>
+        ${color}
+      </li>
+    </div>
+  </for>
+</div>
+<div class="array-status-var">
+  <for|color, _index2, _all| of=colorsArray>
+    $ const loop = {
+      getIndex() {
+        return _index2;
+      },
+      getLength() {
+        return _all.length;
+      },
+      isFirst() {
+        return _index2 === 0;
+      },
+      isLast() {
+        return _index2 === _all.length - 1;
+      }
+    };
+    <div>
+      ${color}${loop.getIndex() + 1}) of ${loop.getLength()}
+      <if(loop.isFirst())>
+        <div on-click(loop.getIndex() === 0 && "handleClick")>
+           - FIRST
+        </div>
+      </if>
+      <if(loop.isLast())>
+         - LAST
+      </if>
+      <if(!loop.isLast())>
+         - NOT LAST
+      </if>
+    </div>
+  </for>
+</div>
+<div class="array-iterator-and-status-var">
+  <for|color, _index3| of=(() => {
+    const _result2 = [];
+    evenItemsIterator(colorsArray, _result2.push.bind(_result2));
+    return _result2;
+  })()>
+    ${_index3 ? ", " : ""}
+    <div>
+      <li>
+        ${color}
+      </li>
+    </div>
+  </for>
+</div>
+<div class="array-status-var-and-iterator">
+  <for|color, _index4, _all2| of=(() => {
+    const _result3 = [];
+    evenItemsIterator(colorsArray, _result3.push.bind(_result3));
+    return _result3;
+  })()>
+    $ const loop = {
+      getIndex() {
+        return _index4;
+      },
+      getLength() {
+        return _all2.length;
+      },
+      isFirst() {
+        return _index4 === 0;
+      },
+      isLast() {
+        return _index4 === _all2.length - 1;
+      }
+    };
+    <div>
+      ${color}${loop.getIndex() + 1}) of ${loop.getLength()}
+      <if(loop.isFirst())>
+         - FIRST
+      </if>
+      <if(loop.isLast())>
+         - LAST
+      </if>
+    </div>
+  </for>
+</div>
+<div class="array-status-var-and-separator">
+  <for|color, _index5, _all3| of=colorsArray>
+    $ const loop = {
+      getIndex() {
+        return _index5;
+      },
+      getLength() {
+        return _all3.length;
+      },
+      isFirst() {
+        return _index5 === 0;
+      },
+      isLast() {
+        return _index5 === _all3.length - 1;
+      }
+    };
+    ${_index5 ? ", " : ""}
+    <div>
+      ${color}${loop.getIndex() + 1}) of ${loop.getLength()}
+      <if(loop.isFirst())>
+         - FIRST
+      </if>
+      <if(loop.isLast())>
+         - LAST
+      </if>
+    </div>
+  </for>
+</div>
+<div class="array-status-var-and-iterator-and-separator">
+  <for|color, _index6, _all4| of=(() => {
+    const _result4 = [];
+    evenItemsIterator(colorsArray, _result4.push.bind(_result4));
+    return _result4;
+  })()>
+    $ const loop = {
+      getIndex() {
+        return _index6;
+      },
+      getLength() {
+        return _all4.length;
+      },
+      isFirst() {
+        return _index6 === 0;
+      },
+      isLast() {
+        return _index6 === _all4.length - 1;
+      }
+    };
+    ${_index6 ? ", " : ""}
+    <div>
+      ${color}${loop.getIndex() + 1}) of ${loop.getLength()}
+      <if(loop.isFirst())>
+         - FIRST
+      </if>
+      <if(loop.isLast())>
+         - LAST
+      </if>
+    </div>
+  </for>
+</div>
+<div class="props">
+  <for|color, code| in=colorCodes>
+    <div>
+      <li>
+        ${color}: #${code}
+      </li>
+    </div>
+  </for>
+</div>
+<div class="props-separator">
+  <for|[color, code], _index7| of=Object.entries(colorCodes)>
+    ${_index7 ? ", " : ""}
+    <div>
+      <li>
+        ${color}: #${code}
+      </li>
+    </div>
+  </for>
+</div>
+<div class="props-status-var">
+  <for|[color, code], _index8, _all5| of=Object.entries(colorCodes)>
+    $ const loop = {
+      getIndex() {
+        return _index8;
+      },
+      getLength() {
+        return _all5.length;
+      },
+      isFirst() {
+        return _index8 === 0;
+      },
+      isLast() {
+        return _index8 === _all5.length - 1;
+      }
+    };
+    <div>
+      <li>
+        ${color}: #${code}
+      </li>
+      ${loop.getIndex() + 1}) of ${loop.getLength()}
+      <if(loop.isFirst())>
+         - FIRST
+      </if>
+      <if(loop.isLast())>
+         - LAST
+      </if>
+    </div>
+  </for>
+</div>
+<div class="props-status-var-and-separator">
+  <for|[color, code], _index9, _all6| of=Object.entries(colorCodes)>
+    $ const loop = {
+      getIndex() {
+        return _index9;
+      },
+      getLength() {
+        return _all6.length;
+      },
+      isFirst() {
+        return _index9 === 0;
+      },
+      isLast() {
+        return _index9 === _all6.length - 1;
+      }
+    };
+    ${_index9 ? ", " : ""}
+    <div>
+      <li>
+        ${color}: #${code}
+      </li>
+      ${loop.getIndex() + 1}) of ${loop.getLength()}
+      <if(loop.isFirst())>
+         - FIRST
+      </if>
+      <if(loop.isLast())>
+         - LAST
+      </if>
+    </div>
+  </for>
+</div>
+<div class="range">
+  <for|i| from=0 to=10>
+    <div>
+      <li>
+        ${i}
+      </li>
+    </div>
+  </for>
+</div>
+<div class="statement-basic-increment">
+  <for|i| from=0 to=(colorsArray.length - 1)>
+    <div>
+      ${i}
+    </div>
+  </for>
+</div>
+<div class="statement-basic-increment-by-2">
+  <for|i| from=0 to=listSize step=2>
+    <div>
+      ${i}
+    </div>
+  </for>
+</div>
+<div class="statement-missing-declaration">
+  $ let i;
+  <for|i| from=0 to=listSize step=2>
+    <div>
+      ${i}
+    </div>
+  </for>
+</div>
+<div class="statement-backwards-test">
+  $ var i = 0;
+  <while(colorsArray.length >= i)>
+    <div>
+      ${i}
+    </div>
+    $ i++;
+  </while>
+</div>
+<div class="statement-iterate-backwards">
+  $ var i = colorsArray.length;
+  <while(i >= 0)>
+    <div>
+      ${i}
+    </div>
+    $ i--;
+  </while>
+</div>
+<div class="statement-iterate-backwards-by-2">
+  $ var i = listSize;
+  <while(i > 0)>
+    <div>
+      ${i}
+    </div>
+    $ i -= 2;
+  </while>
+</div>
+<div class="statement-multi-declaration">
+  $ var i = 0,
+    x = 2;
+  <while(i < listSize)>
+    <div>
+      ${i} ${x}
+    </div>
+    $ i++;
+  </while>
+</div>
+<div class="statement-init-expression">
+  $ let i = 0;
+  $ noop();
+  <while(i < listSize)>
+    <div>
+      ${i}
+    </div>
+    $ i++;
+  </while>
+</div>
+<div class="statement-test-expression">
+  $ var i = 0;
+  <while(noop())>
+    <div>
+      ${i}
+    </div>
+    $ i++;
+  </while>
+</div>
+<div class="statement-update-expression">
+  $ var i = 0;
+  <while(i < listSize)>
+    <div>
+      $ i++;
+      ${i}
+    </div>
+    $ noop();
+  </while>
+</div>
+<div class="statement-update-only">
+  $ let i = listSize;
+  <while(i--)>
+    <div>
+      ${i}
+    </div>
+  </while>
+</div>

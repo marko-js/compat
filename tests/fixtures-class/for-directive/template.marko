@@ -1,0 +1,159 @@
+$ const colorsArray = ["red", "green", "blue"];
+$ const colorCodes = {
+    red: "FF0000",
+    green: "00FF00",
+    blue: "0000FF"
+};
+$ const listSize = 3;
+static function noop() {}
+static function evenItemsIterator(items, cb) {
+    for (let i = 0; i < items.length; i++) {
+        if (i % 2 === 0) {
+            cb(items[i]);
+        }
+    }
+}
+
+.array
+    <div for(color in colorsArray)>
+        <li>${color}</li>
+    </div>
+
+.array-iterator
+    <div for(color in colorsArray | iterator=evenItemsIterator)>
+        <li>${color}</li>
+    </div>
+
+.array-separator
+    <div for(color in colorsArray | separator=", ")>
+        <li>${color}</li>
+    </div>
+
+.array-status-var
+    <div for(color in colorsArray | status-var=loop)>
+        ${color}
+        ${loop.getIndex()+1}) of ${loop.getLength()}
+        <div if(loop.isFirst()) on-click(loop.getIndex() === 0 && "handleClick")> - FIRST</div>
+        <if(loop.isLast())> - LAST</if>
+        <if(!loop.isLast())> - NOT LAST</if>
+    </div>
+
+.array-iterator-and-status-var
+    <div for(color in colorsArray | iterator=evenItemsIterator separator=", ")>
+        <li>${color}</li>
+    </div>
+
+.array-status-var-and-iterator
+    <div for(color in colorsArray | status-var=loop iterator=evenItemsIterator)>
+        ${color}
+        ${loop.getIndex()+1}) of ${loop.getLength()}
+        <if(loop.isFirst())> - FIRST</if>
+        <if(loop.isLast())> - LAST</if>
+    </div>
+
+.array-status-var-and-separator
+    <div for(color in colorsArray | status-var=loop separator=", ")>
+        ${color}
+        ${loop.getIndex()+1}) of ${loop.getLength()}
+        <if(loop.isFirst())> - FIRST</if>
+        <if(loop.isLast())> - LAST</if>
+    </div>
+
+.array-status-var-and-iterator-and-separator
+    <div for(color in colorsArray | status-var=loop iterator=evenItemsIterator separator=", ")>
+        ${color}
+        ${loop.getIndex()+1}) of ${loop.getLength()}
+        <if(loop.isFirst())> - FIRST</if>
+        <if(loop.isLast())> - LAST</if>
+    </div>
+
+
+.props
+    <div for(color, code in colorCodes)>
+        <li>${color}: #${code}</li>
+    </div>
+
+.props-separator
+    <div for(color, code in colorCodes | separator=", ")>
+        <li>${color}: #${code}</li>
+    </div>
+
+.props-status-var
+    <div for(color, code in colorCodes | status-var=loop)>
+        <li>${color}: #${code}</li>
+        ${loop.getIndex()+1}) of ${loop.getLength()}
+        <if(loop.isFirst())> - FIRST</if>
+        <if(loop.isLast())> - LAST</if>
+    </div>
+
+.props-status-var-and-separator
+    <div for(color, code in colorCodes | status-var=loop separator=", ")>
+        <li>${color}: #${code}</li>
+        ${loop.getIndex()+1}) of ${loop.getLength()}
+        <if(loop.isFirst())> - FIRST</if>
+        <if(loop.isLast())> - LAST</if>
+    </div>
+
+.range
+    <div for(i from 0 to 10)>
+        <li>${i}</li>
+    </div>
+
+.statement-basic-increment
+    <div for(let i = 0; i < colorsArray.length; i++)>
+        ${i}
+    </div>
+
+.statement-basic-increment-by-2
+    <div for(let i = 0; i <= listSize; i += 2)>
+        ${i}
+    </div>
+
+.statement-missing-declaration
+    $ let i;
+    <div for(i = 0; i <= listSize; i += 2)>
+        ${i}
+    </div>
+
+.statement-backwards-test
+    <div for(var i = 0; colorsArray.length >= i; i++)>
+        ${i}
+    </div>
+
+.statement-iterate-backwards
+    <div for(var i = colorsArray.length; i >= 0; i--)>
+        ${i}
+    </div>
+
+.statement-iterate-backwards-by-2
+    <div for(var i = listSize; i > 0; i -= 2)>
+        ${i}
+    </div>
+
+.statement-multi-declaration
+    <div for(var i = 0, x = 2; i < listSize; i++)>
+        ${i} ${x}
+    </div>
+
+.statement-init-expression
+    $ let i = 0;
+    <div for(noop(); i < listSize; i++)>
+        ${i}
+    </div>
+
+.statement-test-expression
+    <div for(var i = 0; noop(); i++)>
+        ${i}
+    </div>
+
+.statement-update-expression
+    <div for(var i = 0; i < listSize; noop())>
+        $ i++;
+        ${i}
+    </div>
+
+.statement-update-only
+    $ let i = listSize;
+    <div for(;i--;)>
+        ${i}
+    </div>
