@@ -2,7 +2,6 @@
   "$schema": "https://json.schemastore.org/mocharc",
   "timeout": 5000,
   "allow-uncaught": true,
-  "enable-source-maps": true,
   "require": ["~ts", "mocha-snap"],
   "spec": "tests/*.test.ts",
   "watchFiles": [

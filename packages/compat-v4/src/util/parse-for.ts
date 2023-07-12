@@ -1,6 +1,6 @@
 import { Tokenizer } from "./tokenizer";
 
-export const enum ForType {
+export enum ForType {
   Init,
   In,
   From,
@@ -23,6 +23,7 @@ const enum PartType {
 interface Range {
   start: number;
   end: number;
+  value: string;
 }
 interface ForState {
   type: ForType | undefined;
@@ -148,7 +149,35 @@ const forTokenizer = new Tokenizer<ForState>([
   },
 ]);
 
-export function parseFor(source: string) {
+export function parseFor(source: string):
+  | undefined
+  | {
+      type: ForType.In;
+      id: Range;
+      in: Range;
+      statusVar: Range | undefined;
+      separator: Range | undefined;
+      iterator: Range | undefined;
+    }
+  | {
+      type: ForType.From;
+      id: Range;
+      from: Range;
+      to: Range | undefined;
+      step: Range | undefined;
+      statusVar: Range | undefined;
+      separator: Range | undefined;
+      iterator: Range | undefined;
+    }
+  | {
+      type: ForType.Init;
+      init: Range;
+      test: Range;
+      update: Range | undefined;
+      statusVar: Range | undefined;
+      separator: Range | undefined;
+      iterator: Range | undefined;
+    } {
   const state: ForState = {
     type: undefined,
     source,
@@ -179,7 +208,8 @@ export function parseFor(source: string) {
         in: state.inPart!,
         statusVar: state.statusVarPart,
         separator: state.separatorPart,
-      };
+        iterator: state.iteratorPart,
+      } as const;
     case ForType.From:
       return {
         type: ForType.From,
@@ -189,7 +219,8 @@ export function parseFor(source: string) {
         step: state.stepPart,
         statusVar: state.statusVarPart,
         separator: state.separatorPart,
-      };
+        iterator: state.iteratorPart,
+      } as const;
     case ForType.Init:
       if (!state.testPart) break;
       return {
@@ -197,7 +228,10 @@ export function parseFor(source: string) {
         init: state.initPart!,
         test: state.testPart,
         update: state.updatePart,
-      };
+        statusVar: state.statusVarPart,
+        separator: state.separatorPart,
+        iterator: state.iteratorPart,
+      } as const;
   }
 }
 
@@ -211,39 +245,47 @@ function endPart(
   state.partStart = nextStart;
   state.partType = nextType;
 
+  if (partType === undefined) return;
+
+  const part: Range = {
+    start,
+    end,
+    value: state.source.slice(start, end),
+  };
+
   switch (partType) {
     case PartType.Id:
-      state.idPart = { start, end };
+      state.idPart = part;
       break;
     case PartType.From:
-      state.fromPart = { start, end };
+      state.fromPart = part;
       break;
     case PartType.To:
-      state.toPart = { start, end };
+      state.toPart = part;
       break;
     case PartType.In:
-      state.inPart = { start, end };
+      state.inPart = part;
       break;
     case PartType.Step:
-      state.stepPart = { start, end };
+      state.stepPart = part;
       break;
     case PartType.Init:
-      state.initPart = { start, end };
+      state.initPart = part;
       break;
     case PartType.Test:
-      state.testPart = { start, end };
+      state.testPart = part;
       break;
     case PartType.Update:
-      state.updatePart = { start, end };
+      state.updatePart = part;
       break;
     case PartType.StatusVar:
-      state.statusVarPart = { start, end };
+      state.statusVarPart = part;
       break;
     case PartType.Separator:
-      state.separatorPart = { start, end };
+      state.separatorPart = part;
       break;
     case PartType.Iterator:
-      state.iteratorPart = { start, end };
+      state.iteratorPart = part;
       break;
   }
 }

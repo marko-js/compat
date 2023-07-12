@@ -1,0 +1,98 @@
+$ const colorsArray = ["red", "green", "blue"];
+$ const colorCodes = {
+    red: "FF0000",
+    green: "00FF00",
+    blue: "0000FF"
+};
+static function evenItemsIterator(items, cb) {
+    for (let i = 0; i < items.length; i++) {
+        if (i % 2 === 0) {
+            cb(items[i]);
+        }
+    }
+}
+
+<!-- Array -->
+<for(color in colorsArray)>
+    <li>${color}</li>
+</for>
+
+<!-- Array | iterator -->
+<for(color in colorsArray | iterator=evenItemsIterator)>
+    <li>${color}</li>
+</for>
+
+<!-- Array | separator -->
+<for(color in colorsArray | separator=", ")>
+    <li>${color}</li>
+</for>
+
+<!-- Array | status-var -->
+<for(color in colorsArray | status-var=loop)>
+    ${color}
+    ${loop.getIndex()+1}) of ${loop.getLength()}
+    <div if(loop.isFirst()) on-click(loop.getIndex() === 0 && "handleClick")> - FIRST</div>
+    <if(loop.isLast())> - LAST</if>
+    <if(!loop.isLast())> - NOT LAST</if>
+</for>
+
+<!-- Array | iterator separator -->
+<for(color in colorsArray | iterator=evenItemsIterator separator=", ")>
+    <li>${color}</li>
+</for>
+
+<!-- Array | status-var iterator -->
+<for(color in colorsArray | status-var=loop iterator=evenItemsIterator)>
+    ${color}
+    ${loop.getIndex()+1}) of ${loop.getLength()}
+    <if(loop.isFirst())> - FIRST</if>
+    <if(loop.isLast())> - LAST</if>
+</for>
+
+<!-- Array | status-var separator -->
+<for(color in colorsArray | status-var=loop separator=", ")>
+    ${color}
+    ${loop.getIndex()+1}) of ${loop.getLength()}
+    <if(loop.isFirst())> - FIRST</if>
+    <if(loop.isLast())> - LAST</if>
+</for>
+
+<!-- Array | status-var iterator separator -->
+<for(color in colorsArray | status-var=loop iterator=evenItemsIterator separator=", ")>
+    ${color}
+    ${loop.getIndex()+1}) of ${loop.getLength()}
+    <if(loop.isFirst())> - FIRST</if>
+    <if(loop.isLast())> - LAST</if>
+</for>
+
+
+<!-- Properties -->
+<for(color, code in colorCodes)>
+    <li>${color}: #${code}</li>
+</for>
+
+<!-- Properties | separator -->
+<for(color, code in colorCodes | separator=", ")>
+    <li>${color}: #${code}</li>
+</for>
+
+<!-- Properties | status-var -->
+<for(color, code in colorCodes | status-var=loop)>
+    <li>${color}: #${code}</li>
+    ${loop.getIndex()+1}) of ${loop.getLength()}
+    <if(loop.isFirst())> - FIRST</if>
+    <if(loop.isLast())> - LAST</if>
+</for>
+
+<!-- Properties | status-var separator -->
+<for(color, code in colorCodes | status-var=loop separator=", ")>
+    <li>${color}: #${code}</li>
+    ${loop.getIndex()+1}) of ${loop.getLength()}
+    <if(loop.isFirst())> - FIRST</if>
+    <if(loop.isLast())> - LAST</if>
+</for>
+
+<!-- Range -->
+<for(i from 0 to 10)>
+    <li>${i}</li>
+</for>
