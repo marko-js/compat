@@ -5,6 +5,7 @@ import {
   getLocRange,
   parseExpression,
   parseParams,
+  parseStatements,
 } from "@marko/babel-utils";
 import { ForType, parseFor } from "../../util/parse-for";
 
@@ -27,20 +28,26 @@ export default {
     switch (parsed.type) {
       case ForType.In: {
         const { scope } = tag.get("body");
-        let params = parseParams(
-          file,
-          parsed.id.value,
-          parsed.id.start + start,
-          parsed.id.end + start,
+        let params = (
+          parsed.id.value
+            ? parseParams(
+                file,
+                parsed.id.value,
+                parsed.id.start + start,
+                parsed.id.end + start,
+              )
+            : []
         ) as t.MarkoTagBody["params"];
-        let inExpression = parseExpression(
-          file,
-          parsed.in.value,
-          parsed.in.start + start,
-          parsed.in.end + start,
-        );
+        let inExpression = parsed.in.value
+          ? parseExpression(
+              file,
+              parsed.in.value,
+              parsed.in.start + start,
+              parsed.in.end + start,
+            )
+          : null;
 
-        if (params.length === 0 || params.length > 2) {
+        if (inExpression === null || params.length === 0 || params.length > 2) {
           diagnosticError(tag, {
             label: "Invalid <for> arguments.",
             loc: args[0].loc || false,
@@ -50,7 +57,7 @@ export default {
         }
 
         const iteratorExpression =
-          parsed.iterator &&
+          parsed.iterator?.value &&
           parseExpression(
             file,
             parsed.iterator.value,
@@ -59,7 +66,7 @@ export default {
           );
 
         const sepExpression =
-          parsed.separator &&
+          parsed.separator?.value &&
           parseExpression(
             file,
             parsed.separator.value,
@@ -67,7 +74,7 @@ export default {
             parsed.separator.end + start,
           );
         const statusExpression =
-          parsed.statusVar &&
+          parsed.statusVar?.value &&
           parseExpression(
             file,
             parsed.statusVar.value,
@@ -103,7 +110,7 @@ export default {
                     ]),
                     t.expressionStatement(
                       t.callExpression(iteratorExpression, [
-                        inExpression,
+                        inExpression!,
                         t.callExpression(
                           t.memberExpression(
                             t.memberExpression(resultId, t.identifier("push")),
@@ -129,7 +136,7 @@ export default {
                     t.identifier("Object"),
                     t.identifier("entries"),
                   ),
-                  [inExpression],
+                  [inExpression!],
                 );
               }
 
@@ -223,7 +230,7 @@ export default {
             tag.replaceWith(
               t.markoTag(
                 t.stringLiteral("for"),
-                [t.markoAttribute(valueAttr, inExpression)],
+                [t.markoAttribute(valueAttr, inExpression!)],
                 t.markoTagBody(node.body.body, params),
               ),
             );
@@ -247,11 +254,15 @@ export default {
           return;
         }
 
-        const params = parseParams(
-          file,
-          parsed.id.value,
-          parsed.id.start + start,
-          parsed.id.end + start,
+        const params = (
+          parsed.id.value
+            ? parseParams(
+                file,
+                parsed.id.value,
+                parsed.id.start + start,
+                parsed.id.end + start,
+              )
+            : []
         ) as t.MarkoTagBody["params"];
 
         if (params.length !== 1) {
@@ -263,19 +274,23 @@ export default {
           return;
         }
 
-        const attrs = [
-          t.markoAttribute(
-            "from",
-            parseExpression(
-              file,
-              parsed.from.value,
-              parsed.from.start + start,
-              parsed.from.end + start,
-            ),
-          ),
-        ];
+        const attrs: t.MarkoAttribute[] = [];
 
-        if (parsed.to) {
+        if (parsed.from?.value) {
+          attrs.push(
+            t.markoAttribute(
+              "from",
+              parseExpression(
+                file,
+                parsed.from.value,
+                parsed.from.start + start,
+                parsed.from.end + start,
+              ),
+            ),
+          );
+        }
+
+        if (parsed.to?.value) {
           attrs.push(
             t.markoAttribute(
               "to",
@@ -289,7 +304,7 @@ export default {
           );
         }
 
-        if (parsed.step) {
+        if (parsed.step?.value) {
           attrs.push(
             t.markoAttribute(
               "step",
@@ -335,11 +350,200 @@ export default {
           node.arguments = [];
           return;
         }
+
+        const initLoop = parsed.init.value
+          ? parseStatements(
+              file,
+              `for(${parsed.init.value};;);`,
+              start + parsed.init.start,
+              start + parsed.init.end,
+              4,
+            )[0]
+          : null;
+
+        const initNode =
+          initLoop?.type === "ForStatement" ? initLoop.init : initLoop;
+
+        const testNode = parsed.test.value
+          ? parseExpression(
+              file,
+              parsed.test.value,
+              parsed.test.start + start,
+              parsed.test.end + start,
+            )
+          : null;
+
+        const updateNode =
+          parsed.update?.value &&
+          parseExpression(
+            file,
+            parsed.update.value,
+            parsed.update.start + start,
+            parsed.update.end + start,
+          );
+
+        const forRange =
+          initNode &&
+          testNode &&
+          updateNode &&
+          forInitToRange(initNode, testNode, updateNode);
+
+        diagnosticDeprecate(tag, {
+          label: `The "<for(init; test; update)>" syntax has been deprecated, checkout the modern syntax here: https://github.com/marko-js/marko/wiki/Deprecation:-legacy-for`,
+          fix() {
+            if (forRange) {
+              const attrs: t.MarkoAttribute[] = [
+                t.markoAttribute("from", forRange.from),
+                t.markoAttribute("to", forRange.to),
+              ];
+
+              if (
+                forRange.step &&
+                !(
+                  forRange.step.type === "NumericLiteral" &&
+                  forRange.step.value === 1
+                )
+              ) {
+                attrs.push(t.markoAttribute("step", forRange.step));
+              }
+
+              t.markoAttribute("from", forRange.from),
+                t.markoAttribute("to", forRange.to),
+                tag.replaceWith(
+                  t.markoTag(
+                    t.stringLiteral("for"),
+                    attrs,
+                    t.markoTagBody(node.body.body, [forRange.varName]),
+                  ),
+                );
+            } else {
+              const whileTag = t.markoTag(
+                t.stringLiteral("while"),
+                [],
+                updateNode
+                  ? t.markoTagBody(
+                      node.body.body.concat(
+                        t.markoScriptlet([t.expressionStatement(updateNode)]),
+                      ),
+                    )
+                  : node.body,
+                [testNode || t.booleanLiteral(true)],
+              );
+
+              if (initNode) {
+                tag.replaceWithMultiple([
+                  t.markoScriptlet([
+                    t.isStatement(initNode)
+                      ? initNode
+                      : t.expressionStatement(initNode),
+                  ]),
+                  whileTag,
+                ]);
+              } else {
+                tag.replaceWith(whileTag);
+              }
+            }
+          },
+        });
+
         break;
       }
     }
   },
 };
+
+function forInitToRange(
+  init: t.Node,
+  test: t.Expression,
+  update: t.Expression,
+) {
+  if (test.type !== "BinaryExpression") {
+    return;
+  }
+
+  let varName: t.LVal | null = null;
+  let from: t.Expression | null = null;
+
+  if (
+    init.type === "VariableDeclaration" &&
+    (init.kind === "var" || init.kind === "let") &&
+    init.declarations.length === 1
+  ) {
+    const declarator = init.declarations[0];
+    varName = declarator.id;
+    from = declarator.init;
+  } else if (init.type === "AssignmentExpression" && init.operator === "=") {
+    varName = init.left;
+    from = init.right;
+  } else {
+    return;
+  }
+
+  if (!from) {
+    return;
+  }
+
+  if (varName.type !== "Identifier") {
+    return;
+  }
+
+  let step: t.Expression | null = null;
+  if (
+    update.type === "UpdateExpression" &&
+    isIdentifierNamed(update.argument, varName.name)
+  ) {
+    step = t.numericLiteral(update.operator === "++" ? 1 : -1);
+  } else if (
+    update.type === "AssignmentExpression" &&
+    isIdentifierNamed(update.left, varName.name)
+  ) {
+    if (update.operator === "-=") {
+      step = update.right;
+
+      if (step.type === "NumericLiteral") {
+        step = t.numericLiteral(step.value * -1);
+      } else {
+        step = t.binaryExpression("*", step, t.numericLiteral(-1));
+      }
+    } else if (update.operator === "+=") {
+      step = update.right;
+    } else {
+      return;
+    }
+  } else {
+    return;
+  }
+
+  let to: t.Expression | null = null;
+  if (isIdentifierNamed(test.left, varName.name)) {
+    to = test.right;
+  } else if (isIdentifierNamed(test.right, varName.name)) {
+    to = test.left as t.Expression;
+  } else {
+    return;
+  }
+
+  if (test.operator === "<") {
+    if (to.type === "NumericLiteral") {
+      to = t.numericLiteral(to.value - 1);
+    } else {
+      to = t.binaryExpression("-", to, t.numericLiteral(1));
+    }
+  } else if (test.operator !== "<=") {
+    return;
+  }
+
+  return {
+    varName: varName,
+    from: from,
+    to: to,
+    step: step,
+  };
+}
+
+function isIdentifierNamed(node: t.Node, name: string) {
+  return node.type === "Identifier" && node.name === name;
+}
 
 function generateSafeIdentifier(scope: t.Scope, name: string) {
   return scope.generateUidIdentifier(name);
