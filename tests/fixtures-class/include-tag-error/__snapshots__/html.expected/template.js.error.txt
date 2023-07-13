@@ -1,0 +1,7 @@
+tests/fixtures-class/include-tag-error/template.marko:2:3: The <include(...)> tag must have an argument: <include("./target.marko")/> or <include(input.renderBody)/>
+
+tests/fixtures-class/include-tag-error/template.marko:4:3: The <include(...)> tag must have an argument: <include("./target.marko")/> or <include(input.renderBody)/>
+
+tests/fixtures-class/include-tag-error/template.marko:6:12: The <include> tag does not support spread arguments.
+
+tests/fixtures-class/include-tag-error/template.marko:8:3: The <include> tag only supports 2 arguments.

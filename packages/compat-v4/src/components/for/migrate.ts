@@ -52,7 +52,7 @@ export default {
             label: "Invalid <for> arguments.",
             loc: args[0].loc || false,
           });
-          node.arguments = [];
+          node.arguments = null;
           return;
         }
 
@@ -88,7 +88,7 @@ export default {
               label: "Invalid <for> status variable.",
               loc: statusExpression.loc || false,
             });
-            node.arguments = [];
+            node.arguments = null;
             return;
           }
         }
@@ -250,7 +250,7 @@ export default {
               start + invalidPart.end,
             ),
           });
-          node.arguments = [];
+          node.arguments = null;
           return;
         }
 
@@ -270,7 +270,7 @@ export default {
             label: "Invalid <for(x from y)> arguments.",
             loc: args[0].loc || false,
           });
-          node.arguments = [];
+          node.arguments = null;
           return;
         }
 
@@ -347,7 +347,7 @@ export default {
               start + invalidPart.end,
             ),
           });
-          node.arguments = [];
+          node.arguments = null;
           return;
         }
 

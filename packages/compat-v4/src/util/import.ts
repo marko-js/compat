@@ -30,7 +30,7 @@ export function importCustomTag(
         }
 
         if (!identifierName) {
-          identifierName = generateTagImportName(tag);
+          identifierName = generateTemplateImportName(tag, tag.node.name.value);
           child.pushContainer(
             "specifiers",
             t.importDefaultSpecifier(t.identifier(identifierName)),
@@ -43,7 +43,7 @@ export function importCustomTag(
   }
 
   if (!identifierName) {
-    identifierName = generateTagImportName(tag);
+    identifierName = generateTemplateImportName(tag, tag.node.name.value);
     const newImport = t.importDeclaration(
       [t.importDefaultSpecifier(t.identifier(identifierName))],
       t.stringLiteral(shorthandImport),
@@ -59,23 +59,79 @@ export function importCustomTag(
   return t.identifier(identifierName);
 }
 
-function generateTagImportName(
-  tag: t.NodePath<t.MarkoTag & { name: t.StringLiteral }>,
-) {
-  let identifierName = tag.node.name.value
-    .replace(/(?<=^|-)[a-z]/g, toUpperCase)
-    .replace(/[^a-zA-Z0-9_$]/g, "");
+export function importTemplateAtPath(ref: t.NodePath<any>, request: string) {
+  const {
+    hub: { file },
+  } = ref;
+  const program = file.path;
+  let identifierName = generateTemplateImportName(
+    ref,
+    /\/([^/]+?)(?:\/(?:index|template|renderer))?(?:\..*)?$/.exec(
+      request,
+    )?.[1] || "",
+  );
+  let lastImport: t.NodePath<t.ImportDeclaration> | undefined;
+  let wasImported = false;
+
+  for (const child of program.get("body")) {
+    if (child.isImportDeclaration()) {
+      const { source } = child.node;
+      lastImport = child;
+
+      if (source.value === request) {
+        for (const specifier of child.node.specifiers) {
+          if (specifier.type === "ImportDefaultSpecifier") {
+            identifierName = specifier.local.name;
+            wasImported = true;
+            break;
+          }
+        }
+
+        if (!wasImported) {
+          wasImported = true;
+          child.pushContainer(
+            "specifiers",
+            t.importDefaultSpecifier(t.identifier(identifierName)),
+          );
+        }
+
+        break;
+      }
+    }
+  }
+
+  if (!wasImported) {
+    const newImport = t.importDeclaration(
+      [t.importDefaultSpecifier(t.identifier(identifierName))],
+      t.stringLiteral(request),
+    );
+
+    if (lastImport) {
+      lastImport.insertAfter(newImport);
+    } else {
+      program.unshiftContainer("body", newImport);
+    }
+  }
+
+  return t.identifier(identifierName);
+}
+
+function generateTemplateImportName(ref: t.NodePath<any>, name: string) {
+  let identifierName =
+    name
+      .replace(/(?<=^|-)[a-z]/g, toUpperCase)
+      .replace(/^[^$A-Z_]|[^0-9A-Z_$]/gi, "") || "_";
   if (
-    tag.scope.hasBinding(identifierName) ||
-    tag.scope.hasGlobal(identifierName)
+    ref.scope.hasBinding(identifierName) ||
+    ref.scope.hasGlobal(identifierName)
   ) {
     const suffixedIdentifierName = `${identifierName}Template`;
 
     if (
-      tag.scope.hasBinding(suffixedIdentifierName) ||
-      tag.scope.hasGlobal(suffixedIdentifierName)
+      ref.scope.hasBinding(suffixedIdentifierName) ||
+      ref.scope.hasGlobal(suffixedIdentifierName)
     ) {
-      identifierName = tag.scope.generateUid(identifierName);
+      identifierName = ref.scope.generateUid(identifierName);
     } else {
       identifierName = suffixedIdentifierName;
     }

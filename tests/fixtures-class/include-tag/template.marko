@@ -1,0 +1,32 @@
+.a
+  <include("./test.marko")/>
+.b
+  <include("./nested/index.marko")/>
+.c
+  <include("./nested/thing.marko")/>
+.d
+  <include("./components/test.marko")/>
+.e
+  <include("./test.marko", { value: 1 })/>
+.f
+  <include("./nested/index.marko", { value: 1 })/>
+.g
+  <include("./nested/thing.marko", { value: 1 })/>
+.h
+  <include("./components/test.marko", { value: 1 })/>
+.i
+  <include(null)/>
+.j
+  <include(false)/>
+
+import Test from "./test.marko";
+.k
+  <include(Test)/>
+
+.l
+  <include("./test.marko")>
+    template.marko renderbody
+  </include>
+
+.m
+  <include(Test, { value: 1 })/>

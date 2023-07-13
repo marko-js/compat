@@ -1,0 +1,44 @@
+<div class="a">
+  <${Test}/>
+</div>
+<div class="b">
+  <${Nested}/>
+</div>
+<div class="c">
+  <${Thing}/>
+</div>
+<div class="d">
+  <test/>
+</div>
+<div class="e">
+  <${Test} value=1/>
+</div>
+<div class="f">
+  <${Nested} value=1/>
+</div>
+<div class="g">
+  <${Thing} value=1/>
+</div>
+<div class="h">
+  <test value=1/>
+</div>
+<div class="i">
+  <${null}/>
+</div>
+<div class="j">
+  <${false}/>
+</div>
+import Test from "./test.marko";
+import Nested from "./nested/index.marko";
+import Thing from "./nested/thing.marko";
+<div class="k">
+  <${Test}/>
+</div>
+<div class="l">
+  <${Test}>
+    template.marko renderbody
+  </>
+</div>
+<div class="m">
+  <${Test} value=1/>
+</div>
