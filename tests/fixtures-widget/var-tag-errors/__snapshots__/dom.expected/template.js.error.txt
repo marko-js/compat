@@ -1,0 +1,3 @@
+tests/fixtures-widget/var-tag-errors/template.marko:2:3: The <var> tag requires a value.
+
+tests/fixtures-widget/var-tag-errors/template.marko:4:8: Spread attributes are not supported in <var> tags.
