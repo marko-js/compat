@@ -67,6 +67,41 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     "value": 1
   }, out, _componentDef, "25");
   out.w("</div>");
+  out.w("<div class=n>");
+  var obj = {
+    value: 1
+  };
+  _marko_tag(Test, obj, out, _componentDef, "27");
+  out.w("</div>");
+  out.w("<div class=o>");
+  var obj = {
+    value: 1
+  };
+  _marko_tag(Test, {
+    "someMethod": function () {
+      return 1;
+    },
+    get someGetter() {
+      return 1;
+    },
+    [1 + 1]: 2,
+    set someSetter(value) {},
+    "someAsyncMethod": async function () {
+      return 1;
+    },
+    "someGeneratorMethod": function* () {
+      yield 1;
+    },
+    ...obj,
+    "anotherValue": 1
+  }, out, _componentDef, "29");
+  out.w("</div>");
+  out.w("<div class=p>");
+  _marko_tag(Test, {
+    [1 + 1]: 2,
+    "stringName": 3
+  }, out, _componentDef, "31");
+  out.w("</div>");
 }, {
   t: _marko_componentType,
   i: true,

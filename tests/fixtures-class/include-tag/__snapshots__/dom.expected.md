@@ -61,4 +61,19 @@
 >
   test.marko {"value":1}
 </div>
+<div
+  class="n"
+>
+  test.marko {"value":1}
+</div>
+<div
+  class="o"
+>
+  test.marko {"2":2,"someGetter":1,"value":1,"anotherValue":1}
+</div>
+<div
+  class="p"
+>
+  test.marko {"2":2,"stringName":3}
+</div>
 ```

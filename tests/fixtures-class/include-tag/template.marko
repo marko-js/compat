@@ -30,3 +30,32 @@ import Test from "./test.marko";
 
 .m
   <include(Test, { value: 1 })/>
+
+.n
+  <var obj = { value: 1 }/>
+  <include("./test.marko", obj)/>
+
+.o
+  <var obj = { value: 1 }/>
+  <include("./test.marko", {
+    someMethod() {
+      return 1;
+    },
+    get someGetter() {
+      return 1;
+    },
+    [1 + 1]: 2,
+    set someSetter(value) {
+    },
+    async someAsyncMethod() {
+      return 1
+    },
+    *someGeneratorMethod() {
+      yield 1;
+    },
+    ...obj,
+    anotherValue: 1
+  })/>
+
+.p
+  <include("./test.marko", { [1 + 1]: 2, "string-name": 3 })/>

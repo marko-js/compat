@@ -42,3 +42,32 @@ import Thing from "./nested/thing.marko";
 <div class="m">
   <${Test} value=1/>
 </div>
+<div class="n">
+  $ var obj = {
+    value: 1
+  };
+  <${Test} ...obj/>
+</div>
+<div class="o">
+  $ var obj = {
+    value: 1
+  };
+  <${Test} someMethod() {
+    return 1;
+  } ...{
+    get someGetter() {
+      return 1;
+    },
+    [1 + 1]: 2,
+    set someSetter(value) {}
+  } someAsyncMethod=async function () {
+    return 1;
+  } someGeneratorMethod=function* () {
+    yield 1;
+  } ...obj anotherValue=1/>
+</div>
+<div class="p">
+  <${Test} ...{
+    [1 + 1]: 2
+  } string-name=3/>
+</div>

@@ -16,7 +16,7 @@ export function exprToAttrs(expr: t.Expression | undefined) {
     switch (prop.type) {
       case "ObjectMethod": {
         const name = getPropKeyName(prop.key);
-        if (name) {
+        if (name && prop.kind === "method") {
           props = undefined;
           attrs.push(t.markoAttribute(name, methodToFunctionExpression(prop)));
         } else if (props) {
