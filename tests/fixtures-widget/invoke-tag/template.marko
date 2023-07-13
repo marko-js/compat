@@ -1,0 +1,11 @@
+<var x = 0/>
+<var fn = (...args) => {
+  for (const arg of args) {
+    x += arg;
+  }
+}/>
+<invoke fn(1)/>
+<invoke fn(2, 3)/>
+<invoke fn(...[4, 5, 6])/>
+
+-- ${x}

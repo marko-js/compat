@@ -86,11 +86,8 @@ for (const api of ["class", "widget"]) {
           skipRenderDOM = hasCompileErrors ?? skipCompileDOM,
           skipHydrate = hasCompileErrors ?? skipRenderHTML ?? skipRenderDOM,
         }: FixtureConfig = (() => {
-          try {
-            return require(resolve("test.ts")).default;
-          } catch {
-            return {};
-          }
+          const resolved = resolve("test.ts");
+          return fs.existsSync(resolved) ? require(resolved).default : {};
         })();
 
         describe("compile", () => {

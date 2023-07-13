@@ -3,19 +3,18 @@ import { diagnosticError, getLocRange } from "@marko/babel-utils";
 
 export default {
   exit(tag: t.NodePath<t.MarkoTag>) {
+    let hasErrors = false;
     if (!tag.node.attributes.length) {
       diagnosticError(tag, {
         label: "The <invoke> tag requires a value.",
-        fix() {
-          tag.remove();
-        },
       });
-      return;
+      hasErrors = true;
     }
 
     const attrs = tag.get("attributes");
     const functionAttr = attrs[0] as t.NodePath<t.MarkoAttribute>;
     if (
+      functionAttr &&
       !(
         isDefaultAttributeValue(functionAttr.node) &&
         functionAttr.node.arguments
@@ -23,23 +22,20 @@ export default {
     ) {
       diagnosticError(functionAttr, {
         label: "The <invoke> tag requires a function call.",
-        fix() {
-          tag.remove();
-        },
       });
-      return;
+      hasErrors = true;
     }
 
-    for (const attr of attrs) {
-      if (t.isMarkoSpreadAttribute(attr.node)) {
-        diagnosticError(attr, {
-          label: "Spread attributes are not supported in <invoke> tags.",
-          fix() {
-            attr.remove();
-          },
-        });
-        break;
-      }
+    if (attrs.length > 1) {
+      diagnosticError(attrs[1], {
+        label: "The <invoke> tag does not support other attributes.",
+      });
+      hasErrors = true;
+    }
+
+    if (hasErrors) {
+      tag.remove();
+      return;
     }
 
     const { file } = tag.hub;
@@ -47,7 +43,7 @@ export default {
     const callIdentifier = t.identifier(functionAttr.node.name);
     const callExpression = t.callExpression(
       callIdentifier,
-      functionAttr.node.arguments,
+      functionAttr.node.arguments!,
     );
     if (start != null) {
       withLoc(

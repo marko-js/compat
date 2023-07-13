@@ -1,0 +1,5 @@
+tests/fixtures-widget/invoke-tag-errors/template.marko:2:3: The <invoke> tag requires a value.
+
+tests/fixtures-widget/invoke-tag-errors/template.marko:4:11: The <invoke> tag requires a function call.
+
+tests/fixtures-widget/invoke-tag-errors/template.marko:6:17: The <invoke> tag does not support other attributes.
