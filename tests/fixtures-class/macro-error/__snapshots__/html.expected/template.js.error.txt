@@ -1,0 +1,7 @@
+tests/fixtures-class/macro-error/template.marko:1:1: The <macro-body> tag can only be used inside a <macro> tag.
+
+tests/fixtures-class/macro-error/template.marko:1:16: The <macro-body> tag does not support attributes.
+
+tests/fixtures-class/macro-error/template.marko:1:13: The <macro-body> tag does not support params.
+
+tests/fixtures-class/macro-error/template.marko:1:20: The <macro-body> tag does not support children.
