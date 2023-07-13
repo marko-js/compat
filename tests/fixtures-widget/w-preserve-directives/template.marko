@@ -1,0 +1,9 @@
+<div w-preserve data-id=input.id>${input.id}</div>
+<div w-preserve-if(true) data-id=input.id>${input.id}</div>
+<div w-preserve-if(false) data-id=input.id>${input.id}</div>
+
+<div w-preserve-body data-id=input.id>${input.id}</div>
+<div w-preserve-body-if(true) data-id=input.id>${input.id}</div>
+<div w-preserve-body-if(false) data-id=input.id>${input.id}</div>
+
+<div a=input.id b=input.id c=input.id w-preserve-attrs="a,b,d"/>

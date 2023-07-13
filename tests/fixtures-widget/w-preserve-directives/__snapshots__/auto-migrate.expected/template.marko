@@ -1,0 +1,19 @@
+<div no-update data-id=input.id>
+  ${input.id}
+</div>
+<div no-update-if(true) data-id=input.id>
+  ${input.id}
+</div>
+<div no-update-if(false) data-id=input.id>
+  ${input.id}
+</div>
+<div no-update-body data-id=input.id>
+  ${input.id}
+</div>
+<div no-update-body-if(true) data-id=input.id>
+  ${input.id}
+</div>
+<div no-update-body-if(false) data-id=input.id>
+  ${input.id}
+</div>
+<div d:no-update=null a:no-update=input.id b:no-update=input.id c=input.id/>
