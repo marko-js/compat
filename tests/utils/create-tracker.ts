@@ -172,13 +172,7 @@ function getStatusString(
     (typeof update === "object" && !Object.keys(update).length)
       ? ""
       : typeof update === "function"
-      ? `\n${update
-          .toString()
-          .replace(
-            /^.*?(?:{\s*([\s\S]*?);?\s*}.*?|=>\s*([\s\S]*?);?\s*)$/,
-            "$1$2;",
-          )
-          .replace(/^ {4}/gm, "")}\n`
+      ? `\n${getFunctionBody(update.toString()).replace(/^ {4}/gm, "")}\n`
       : ` ${JSON.stringify(update)}`;
 
   const formattedHTML = Array.from(container.childNodes)
@@ -307,4 +301,32 @@ function isDocument(node: Node): node is Document {
 
 function isComment(node: Node): node is Comment {
   return node.nodeType === 8 /* Node.COMMENT_NODE */;
+}
+
+function getFunctionBody(source: string) {
+  const match = source.match(/^[^(=]*(?:\(.*?\))?(?:\s*=>)?\s*({)?/m);
+  if (match) {
+    if (match[1]) {
+      return trimDedent(
+        source
+          .slice(match[0].length)
+          .replace(/;?\s*}\s*$/m, ";")
+          .trim(),
+      );
+    }
+    return trimDedent(source.slice(match[0].length).replace(/;?\s*$/m, ";"));
+  }
+
+  return trimDedent(source);
+}
+
+function trimDedent(str: string) {
+  const indent = str.match(/^[ \t]+(?=\S)/gm);
+  if (!indent) {
+    return str.trim();
+  }
+
+  return str
+    .replace(new RegExp(`^[ \\t]{${indent[0].length}}`, "gm"), "")
+    .trim();
 }

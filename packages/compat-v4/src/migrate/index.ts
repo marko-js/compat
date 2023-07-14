@@ -8,12 +8,14 @@ import nonStandardTemplateLiterals from "./non-standard-template-literals";
 import includeDirective from "./include-directive";
 import legacyAttributeTags from "./legacy-attribute-tags";
 import keyModifier from "./key-modifier";
+import refAttribute from "./ref-attribute";
 
 export default [
   ifDirective,
   forDirective,
   includeDirective,
   keyModifier,
+  refAttribute,
   legacyAttributeTags,
   renderCalls,
   dynamicAttributes,
