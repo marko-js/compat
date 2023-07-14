@@ -1,0 +1,1 @@
+tests/fixtures-widget/script-marko-init-errors/template.marko:2:20: Unexpected token
