@@ -7,11 +7,13 @@ import bodyOnlyIfDirective from "./body-only-if-directive";
 import nonStandardTemplateLiterals from "./non-standard-template-literals";
 import includeDirective from "./include-directive";
 import legacyAttributeTags from "./legacy-attribute-tags";
+import keyModifier from "./key-modifier";
 
 export default [
   ifDirective,
   forDirective,
   includeDirective,
+  keyModifier,
   legacyAttributeTags,
   renderCalls,
   dynamicAttributes,
