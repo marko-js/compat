@@ -6,11 +6,13 @@ import dynamicAttributes from "./dynamic-attributes";
 import bodyOnlyIfDirective from "./body-only-if-directive";
 import nonStandardTemplateLiterals from "./non-standard-template-literals";
 import includeDirective from "./include-directive";
+import legacyAttributeTags from "./legacy-attribute-tags";
 
 export default [
   ifDirective,
   forDirective,
   includeDirective,
+  legacyAttributeTags,
   renderCalls,
   dynamicAttributes,
   bodyOnlyIfDirective,

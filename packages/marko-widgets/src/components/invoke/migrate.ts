@@ -1,5 +1,5 @@
 import { types as t } from "@marko/compiler";
-import { diagnosticError, getLocRange } from "@marko/babel-utils";
+import { diagnosticError, withLoc } from "@marko/babel-utils";
 
 export default {
   exit(tag: t.NodePath<t.MarkoTag>) {
@@ -61,18 +61,6 @@ export default {
     );
   },
 };
-
-function withLoc<T extends t.Node>(
-  file: t.BabelFile,
-  node: T,
-  start: number,
-  end: number,
-): T {
-  node.loc = getLocRange(file, start, end);
-  node.start = start;
-  node.end = end;
-  return node;
-}
 
 function isDefaultAttributeValue(
   node: t.MarkoAttribute | t.MarkoSpreadAttribute,

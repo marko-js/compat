@@ -2,8 +2,8 @@ import { types as t } from "@marko/compiler";
 import {
   diagnosticDeprecate,
   diagnosticError,
-  getLocRange,
   parseExpression,
+  withLoc,
 } from "@marko/babel-utils";
 
 export default {
@@ -217,15 +217,3 @@ export default {
     });
   },
 };
-
-function withLoc<T extends t.Node>(
-  file: t.BabelFile,
-  node: T,
-  start: number,
-  end: number,
-): T {
-  node.loc = getLocRange(file, start, end);
-  node.start = start;
-  node.end = end;
-  return node;
-}
