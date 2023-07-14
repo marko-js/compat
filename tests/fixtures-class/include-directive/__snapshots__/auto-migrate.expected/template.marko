@@ -1,0 +1,76 @@
+<div class="a">
+  <${Test}/>
+</div>
+<div class="b">
+  <${Nested}/>
+</div>
+<div class="c">
+  <${Thing}/>
+</div>
+<div class="d">
+  <test/>
+</div>
+<div class="e">
+  <${Test} value=1/>
+</div>
+<div class="f">
+  <${Nested} value=1/>
+</div>
+<div class="g">
+  <${Thing} value=1/>
+</div>
+<div class="h">
+  <test value=1/>
+</div>
+<div class="i">
+  <${null}/>
+</div>
+<div class="j">
+  <${false}/>
+</div>
+import Test from "./test.marko";
+import Nested from "./nested/index.marko";
+import Thing from "./nested/thing.marko";
+<div class="k">
+  <${Test}/>
+</div>
+<div class="l">
+  template.marko renderbody
+  <${Test}/>
+</div>
+<div class="m">
+  <${Test} value=1/>
+</div>
+<div class="n">
+  $ var obj = {
+    value: 1
+  };
+  <div>
+    <${Test} ...obj/>
+  </div>
+</div>
+<div class="o">
+  $ var obj = {
+    value: 1
+  };
+  <div>
+    <${Test} someMethod() {
+      return 1;
+    } ...{
+      get someGetter() {
+        return 1;
+      },
+      [1 + 1]: 2,
+      set someSetter(value) {}
+    } someAsyncMethod=async function () {
+      return 1;
+    } someGeneratorMethod=function* () {
+      yield 1;
+    } ...obj anotherValue=1/>
+  </div>
+</div>
+<div class="p">
+  <${Test} ...{
+    [1 + 1]: 2
+  } string-name=3/>
+</div>
