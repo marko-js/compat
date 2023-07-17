@@ -17,6 +17,10 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
       out.w("Blah");
       if (_tagName2) out.w(`</${_tagName2}>`);else out.ef();
     }
+    out.w("Blah");
+    out.w("<span>");
+    out.w("Blah");
+    out.w("</span>");
   }
   out.w("</div>");
 }, {

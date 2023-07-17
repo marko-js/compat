@@ -1,0 +1,30 @@
+<div>
+  <${input}/>
+</div>
+<div>
+  <${input}>
+    Child Content
+  </>
+</div>
+$ var inputAlias = input;
+<div>
+  <${inputAlias.renderBody}/>
+</div>
+$ var bodyAlias = input.renderBody;
+<div>
+  <if(typeof bodyAlias === "string")>
+    ${bodyAlias}
+  </if>
+  <else>
+    <${bodyAlias}/>
+  </else>
+</div>
+$ var textContent = "Text Content";
+<div>
+  <if(typeof textContent === "string")>
+    ${textContent}
+  </if>
+  <else>
+    <${textContent}/>
+  </else>
+</div>

@@ -1,9 +1,12 @@
 # Write
-  <div><!--F#f_1-->Blah<!--F/--></div>
+  <div><!--F#f_1-->Blah<!--F/-->Blah<span>Blah</span></div>
 
 # Render
 ```html
 <div>
-  Blah
+  BlahBlah
+  <span>
+    Blah
+  </span>
 </div>
 ```

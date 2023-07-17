@@ -75,11 +75,19 @@ export default {
       label:
         'The "body-only-if(x)" directive is deprecated. Please use "<${test ? tag : null>" instead. See: https://github.com/marko-js/marko/wiki/Deprecation:-body%E2%80%90only%E2%80%90if',
       fix() {
-        tag.set(
-          "name",
-          t.conditionalExpression(arg, nameExpression, t.nullLiteral()),
-        );
         attr.remove();
+
+        if (arg.type === "BooleanLiteral") {
+          if (arg.value) {
+            tag.replaceWithMultiple(tag.node.body.body);
+          }
+          return;
+        } else {
+          tag.set(
+            "name",
+            t.conditionalExpression(arg, nameExpression, t.nullLiteral()),
+          );
+        }
       },
     });
   },
