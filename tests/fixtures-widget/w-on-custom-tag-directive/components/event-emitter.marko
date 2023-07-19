@@ -1,0 +1,8 @@
+class {
+  trigger() {
+    this.emit("thing", 1);
+    this.emit("Thing", 2);
+  }
+}
+
+<button onClick("trigger")>trigger</>

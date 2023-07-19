@@ -1,0 +1,17 @@
+<script marko-init>
+  function trackEvent(name) {
+    return (...args) => {
+      window.__test_events__.push([name, args.slice(0, -1)]);
+    }
+  }
+</script>
+
+<event-emitter w-on-thing=trackEvent("a")/>
+<event-emitter w-onthing=trackEvent("b")/>
+<event-emitter w-onThing=trackEvent("c")/>
+<event-emitter w-on-Thing=trackEvent("d")/>
+
+<div w-on-thing=trackEvent("e")/>
+<div w-onthing=trackEvent("f")/>
+<div w-onThing=trackEvent("g")/>
+<div w-on-Thing=trackEvent("h")/>

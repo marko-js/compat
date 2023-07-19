@@ -1,0 +1,13 @@
+$ function trackEvent(name) {
+  return (...args) => {
+    window.__test_events__.push([name, args.slice(0, -1)]);
+  };
+}
+<event-emitter key="a" on-thing(trackEvent("a"))/>
+<event-emitter key="a" onthing(trackEvent("b"))/>
+<event-emitter key="a" onThing(trackEvent("c"))/>
+<event-emitter key="a" on-Thing(trackEvent("d"))/>
+<div id:scoped="a" key="a" on-thing(trackEvent("a"))/>
+<div id:scoped="a" key="a" onthing(trackEvent("b"))/>
+<div id:scoped="a" key="a" onThing(trackEvent("c"))/>
+<div id:scoped="a" key="a" on-Thing(trackEvent("d"))/>
