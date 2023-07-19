@@ -7,7 +7,7 @@ import {
   parseParams,
   parseStatements,
 } from "@marko/babel-utils";
-import { ForType, parseFor } from "../../util/parse-for";
+import { ForType, parseFor } from "./parse-for";
 
 export default {
   enter(tag: t.NodePath<t.MarkoTag>) {

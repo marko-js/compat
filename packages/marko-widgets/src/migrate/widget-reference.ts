@@ -1,5 +1,6 @@
 import { types as t } from "@marko/compiler";
 import { diagnosticDeprecate } from "@marko/babel-utils";
+import { isMemberProperty } from "@marko/compat-utils";
 
 export default {
   Identifier(id) {
@@ -10,7 +11,7 @@ export default {
     ) {
       if (
         id.parentPath.isMemberExpression() &&
-        isAccessingName(id.parentPath.node, "elId") &&
+        isMemberProperty(id.parentPath.node, "elId") &&
         id.parentPath.parentPath.isCallExpression() &&
         id.parentPath.parentPath.node.arguments.length <= 1 &&
         id.parentPath.parentPath.parentPath.isMarkoAttribute()
@@ -47,14 +48,3 @@ export default {
     }
   },
 } satisfies t.Visitor;
-
-function isAccessingName(node: t.MemberExpression, name: string) {
-  switch (node.property.type) {
-    case "StringLiteral":
-      return node.property.value === name;
-    case "Identifier":
-      return node.property.name === name;
-  }
-
-  return false;
-}

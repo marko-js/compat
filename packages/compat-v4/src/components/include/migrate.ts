@@ -5,8 +5,7 @@ import {
   diagnosticError,
   getTaglibLookup,
 } from "@marko/babel-utils";
-import { importTemplateAtPath } from "../../util/import";
-import { exprToAttrs } from "../../util/expr-to-attrs";
+import { exprToAttrs, importTemplateAtPath } from "@marko/compat-utils";
 
 export default {
   enter(tag: t.NodePath<t.MarkoTag>) {

@@ -4,6 +4,11 @@ import {
   diagnosticError,
   registerMacro,
 } from "@marko/babel-utils";
+import {
+  getAllNodes,
+  getAllTags,
+  isSourceBooleanAttribute,
+} from "@marko/compat-utils";
 
 export default {
   enter(tag: t.NodePath<t.MarkoTag>) {
@@ -13,7 +18,7 @@ export default {
     }
 
     const [attr] = node.attributes;
-    if (!isDefaultAttributeValue(attr) || !attr.arguments) {
+    if (!isSourceBooleanAttribute(attr) || !attr.arguments) {
       return;
     }
 
@@ -26,7 +31,7 @@ export default {
     }
 
     const [attr] = node.attributes;
-    if (!isDefaultAttributeValue(attr) || !attr.arguments) {
+    if (!isSourceBooleanAttribute(attr) || !attr.arguments) {
       return;
     }
 
@@ -117,42 +122,3 @@ export default {
     });
   },
 };
-
-function* getAllTags(
-  body: (t.Program["body"] | t.MarkoTag["body"]["body"])[number][],
-): Generator<t.MarkoTag> {
-  for (const child of body) {
-    if (child.type === "MarkoTag") {
-      yield child;
-      yield* getAllTags(child.body.body);
-    }
-  }
-}
-
-function* getAllNodes(node: t.Node | null | void): Generator<t.Node> {
-  if (!node) return;
-  yield node;
-
-  for (const key of (t as any).VISITOR_KEYS[node.type]) {
-    const child = (node as any)[key] as void | null | t.Node | t.Node[];
-
-    if (Array.isArray(child)) {
-      for (const item of child) {
-        yield* getAllNodes(item);
-      }
-    } else {
-      yield* getAllNodes(child);
-    }
-  }
-}
-
-function isDefaultAttributeValue(
-  node: t.MarkoAttribute | t.MarkoSpreadAttribute,
-): node is t.MarkoAttribute {
-  return (
-    node.type === "MarkoAttribute" &&
-    !node.value.loc &&
-    node.value.type === "BooleanLiteral" &&
-    node.value.value
-  );
-}

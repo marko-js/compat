@@ -1,4 +1,4 @@
-import { Tokenizer } from "./tokenizer";
+import { Tokenizer } from "@marko/compat-utils";
 
 export enum ForType {
   Init,

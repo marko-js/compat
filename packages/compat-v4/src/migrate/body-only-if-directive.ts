@@ -2,13 +2,12 @@ import { types as t } from "@marko/compiler";
 import {
   diagnosticDeprecate,
   diagnosticError,
-  getTagDef,
   isAttributeTag,
   isDynamicTag,
   isMacroTag,
   isNativeTag,
 } from "@marko/babel-utils";
-import { importCustomTag } from "../util/import";
+import { getTagFile, importCustomTag } from "@marko/compat-utils";
 
 export default {
   MarkoAttribute(attr) {
@@ -92,8 +91,3 @@ export default {
     });
   },
 } satisfies t.Visitor;
-
-function getTagFile(tag: t.NodePath<t.MarkoTag>) {
-  const def = getTagDef(tag);
-  return def && (def.template || def.renderer);
-}

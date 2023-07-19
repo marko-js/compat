@@ -1,6 +1,9 @@
 import { types as t } from "@marko/compiler";
 import { diagnosticError, withLoc } from "@marko/babel-utils";
-import { renderCallToDynamicTag } from "@marko/compat-utils";
+import {
+  isSourceBooleanAttribute,
+  renderCallToDynamicTag,
+} from "@marko/compat-utils";
 
 export default {
   exit(tag: t.NodePath<t.MarkoTag>) {
@@ -17,7 +20,7 @@ export default {
     if (
       functionAttr &&
       !(
-        isDefaultAttributeValue(functionAttr.node) &&
+        isSourceBooleanAttribute(functionAttr.node) &&
         functionAttr.node.arguments
       )
     ) {
@@ -73,14 +76,3 @@ export default {
     );
   },
 };
-
-function isDefaultAttributeValue(
-  node: t.MarkoAttribute | t.MarkoSpreadAttribute,
-): node is t.MarkoAttribute {
-  return (
-    node.type === "MarkoAttribute" &&
-    !node.value.loc &&
-    node.value.type === "BooleanLiteral" &&
-    node.value.value
-  );
-}

@@ -4,6 +4,7 @@ import {
   isDynamicTag,
   isNativeTag,
 } from "@marko/babel-utils";
+import { hasAttribute } from "@marko/compat-utils";
 
 export default {
   MarkoAttribute(attr) {
@@ -32,13 +33,3 @@ export default {
     });
   },
 } satisfies t.Visitor;
-
-function hasAttribute(tag: t.NodePath<t.MarkoTag>, name: string) {
-  for (const attr of tag.node.attributes) {
-    if (attr.type === "MarkoAttribute" && attr.name === name) {
-      return true;
-    }
-  }
-
-  return false;
-}

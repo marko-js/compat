@@ -1,5 +1,6 @@
 import { types as t } from "@marko/compiler";
 import { diagnosticDeprecate, diagnosticError } from "@marko/babel-utils";
+import { getAttribute } from "@marko/compat-utils";
 
 export default {
   MarkoAttribute(attr) {
@@ -63,14 +64,6 @@ export default {
     }
   },
 } satisfies t.Visitor;
-
-function getAttribute(tag: t.NodePath<t.MarkoTag>, name: string) {
-  for (const attr of tag.get("attributes")) {
-    if (attr.node.type === "MarkoAttribute" && attr.node.name === name) {
-      return attr as t.NodePath<t.MarkoAttribute>;
-    }
-  }
-}
 
 function renameAttribute(attr: t.NodePath<t.MarkoAttribute>, name: string) {
   const { node } = attr;

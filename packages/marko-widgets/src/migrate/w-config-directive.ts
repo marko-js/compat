@@ -1,5 +1,6 @@
 import { types as t } from "@marko/compiler";
 import { diagnosticDeprecate } from "@marko/babel-utils";
+import { isSourceBooleanAttribute } from "@marko/compat-utils";
 
 export default {
   MarkoAttribute(attr) {
@@ -13,7 +14,7 @@ export default {
         const tag = attr.parentPath as t.NodePath<t.MarkoTag>;
         attr.remove();
 
-        if (!isDefaultAttributeValue(node)) {
+        if (!isSourceBooleanAttribute(node)) {
           tag.insertBefore(
             t.markoScriptlet([
               t.expressionStatement(
@@ -33,14 +34,3 @@ export default {
     });
   },
 } satisfies t.Visitor;
-
-function isDefaultAttributeValue(
-  node: t.MarkoAttribute | t.MarkoSpreadAttribute,
-) {
-  return (
-    node.type === "MarkoAttribute" &&
-    !node.value.loc &&
-    node.value.type === "BooleanLiteral" &&
-    node.value.value
-  );
-}
