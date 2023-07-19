@@ -1,5 +1,6 @@
 import { types as t } from "@marko/compiler";
-import { diagnosticDeprecate, getTagDef } from "@marko/babel-utils";
+import { diagnosticDeprecate } from "@marko/babel-utils";
+import { willMigrateTag } from "@marko/compat-utils";
 
 export default {
   MarkoAttribute(attr) {
@@ -10,12 +11,7 @@ export default {
     if (name !== "for" || !args?.length) return;
 
     const tag = attr.parentPath as t.NodePath<t.MarkoTag>;
-
-    switch (getTagDef(tag)?.taglibId) {
-      case "marko-widgets":
-      case "@marko/compat-v4":
-        return;
-    }
+    if (willMigrateTag(tag)) return;
 
     diagnosticDeprecate(attr, {
       label:

@@ -1,5 +1,5 @@
 import { types as t } from "@marko/compiler";
-import { diagnosticDeprecate, getTagDef } from "@marko/babel-utils";
+import { diagnosticDeprecate } from "@marko/babel-utils";
 
 export default {
   MarkoAttribute(attr) {
@@ -8,14 +8,6 @@ export default {
     } = attr;
 
     if (name !== "ref") return;
-
-    const tag = attr.parentPath as t.NodePath<t.MarkoTag>;
-
-    switch (getTagDef(tag)?.taglibId) {
-      case "marko-widgets":
-      case "@marko/compat-v4":
-        return;
-    }
 
     diagnosticDeprecate(attr, {
       label:
