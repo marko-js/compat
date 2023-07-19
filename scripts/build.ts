@@ -6,7 +6,7 @@ import { type BuildOptions, build } from "esbuild";
 const packagesDir = path.join(__dirname, "../packages");
 
 Promise.all(
-  ["marko-widgets", "compat-v4"].map(async (pkgName) => {
+  ["compat-utils", "marko-widgets", "compat-v4"].map(async (pkgName) => {
     const packageDir = path.resolve(packagesDir, pkgName);
     const entryPoints = [];
     const srcdir = path.resolve(packageDir, "src");

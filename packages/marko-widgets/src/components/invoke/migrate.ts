@@ -1,5 +1,6 @@
 import { types as t } from "@marko/compiler";
 import { diagnosticError, withLoc } from "@marko/babel-utils";
+import { renderCallToDynamicTag } from "@marko/compat-utils";
 
 export default {
   exit(tag: t.NodePath<t.MarkoTag>) {
@@ -26,13 +27,6 @@ export default {
       hasErrors = true;
     }
 
-    if (attrs.length > 1) {
-      diagnosticError(attrs[1], {
-        label: "The <invoke> tag does not support other attributes.",
-      });
-      hasErrors = true;
-    }
-
     if (hasErrors) {
       tag.remove();
       return;
@@ -54,6 +48,24 @@ export default {
       );
 
       withLoc(file, callExpression, start, functionAttr.node.end!);
+    }
+
+    const dynamicTag = renderCallToDynamicTag(callExpression);
+    if (dynamicTag) {
+      for (let i = 1; i < attrs.length; i++) {
+        dynamicTag.attributes.push(attrs[i].node);
+      }
+
+      tag.replaceWith(dynamicTag);
+      return;
+    }
+
+    if (attrs.length > 1) {
+      diagnosticError(attrs[1], {
+        label: "The <invoke> tag does not support other attributes.",
+      });
+      tag.remove();
+      return;
     }
 
     tag.replaceWith(

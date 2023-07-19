@@ -2,6 +2,7 @@ import { t as _t } from "marko/src/runtime/vdom/index.js";
 const _marko_componentType = "<fixture-dir>/template.marko",
   _marko_template = _t(_marko_componentType);
 export default _marko_template;
+import _marko_dynamic_tag from "marko/src/runtime/helpers/dynamic-tag.js";
 import _marko_renderer from "marko/src/runtime/components/renderer.js";
 import { r as _marko_registerComponent } from "marko/src/runtime/components/registry";
 _marko_registerComponent(_marko_componentType, () => _marko_template);
@@ -16,6 +17,8 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   fn(1);
   fn(2, 3);
   fn(...[4, 5, 6]);
+  var renderBody = out => out.write('hi');
+  _marko_dynamic_tag(out, renderBody, null, null, null, null, _componentDef, "@hi");
   out.t(x, _component);
 }, {
   t: _marko_componentType,

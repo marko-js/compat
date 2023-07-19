@@ -1,6 +1,6 @@
 {
-  "name": "marko-widgets",
-  "version": "8.0.0",
+  "name": "@marko/compat-utils",
+  "version": "0.0.0",
   "homepage": "https://github.com/marko-js/compat/blob/main/README.md",
   "bugs": "https://github.com/marko-js/compat/issues/new?template=Bug_report.md",
   "repository": {
@@ -10,28 +10,21 @@
   "license": "MIT",
   "exports": {
     "./package.json": "./package.json",
-    "./marko.json": "./marko.json",
-    "./renderer": "./renderer.js",
-    "./dom": "./dom.js",
-    "./*.marko": "./*.marko",
     "./*.d.ts": "./*.d.ts",
-    "./*.json": "./*.json",
-    "./*": {
-      "import": "./*.mjs",
-      "default": "./*.js"
+    ".": {
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.js"
     }
   },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "files": [
     "dist",
     "marko.json",
     "!**/*.tsbuildinfo"
   ],
   "dependencies": {
-    "@marko/babel-utils": "^6.2.0",
-    "@marko/compat-utils": "^0.0.0",
-    "@marko/compat-v4": "^0.0.0",
-    "raptor-dom": "^1.1.1",
-    "raptor-renderer": "^1.5.0"
+    "@marko/babel-utils": "^6.2.0"
   },
   "peerDependencies": {
     "@marko/compiler": "^5",

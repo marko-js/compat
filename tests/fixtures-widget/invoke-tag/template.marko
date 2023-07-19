@@ -8,4 +8,7 @@
 <invoke fn(2, 3)/>
 <invoke fn(...[4, 5, 6])/>
 
+<var renderBody=(out) => out.write('hi')/>
+<invoke renderBody(out) w-id="hi"/>
+
 -- ${x}

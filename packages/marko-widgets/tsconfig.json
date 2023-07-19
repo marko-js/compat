@@ -5,5 +5,10 @@
     "outDir": "dist",
     "rootDir": "src",
     "tsBuildInfoFile": "dist/.tsbuildinfo"
-  }
+  },
+  "references": [
+    {
+      "path": "../compat-utils"
+    }
+  ]
 }

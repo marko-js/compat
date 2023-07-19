@@ -1,7 +1,7 @@
 {
   "name": "@marko/compat-v4",
   "version": "0.0.0",
-  "homepage": "https://github.com/marko-js/compat/blob/master/README.md",
+  "homepage": "https://github.com/marko-js/compat/blob/main/README.md",
   "bugs": "https://github.com/marko-js/compat/issues/new?template=Bug_report.md",
   "repository": {
     "type": "git",
@@ -25,7 +25,8 @@
     "!**/*.tsbuildinfo"
   ],
   "dependencies": {
-    "@marko/babel-utils": "^6.2.0"
+    "@marko/babel-utils": "^6.2.0",
+    "@marko/compat-utils": "^0.0.0"
   },
   "peerDependencies": {
     "@marko/compiler": "^5",

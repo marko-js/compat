@@ -2,13 +2,12 @@
   "extends": "../../tsconfig.json",
   "include": ["src"],
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@marko/compat-utils": ["src/index.ts"]
+    },
     "outDir": "dist",
     "rootDir": "src",
     "tsBuildInfoFile": "dist/.tsbuildinfo"
-  },
-  "references": [
-    {
-      "path": "../compat-utils"
-    }
-  ]
+  }
 }

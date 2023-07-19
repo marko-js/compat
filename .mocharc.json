@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/mocharc",
   "timeout": 5000,
   "allow-uncaught": true,
-  "require": ["~ts", "mocha-snap"],
+  "require": ["~preload", "mocha-snap"],
   "spec": "tests/*.test.ts",
   "watchFiles": [
     "packages/*/src/**/*.@(ts|marko)",

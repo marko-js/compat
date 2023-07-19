@@ -7,6 +7,9 @@
   },
   "references": [
     {
+      "path": "./packages/compat-utils"
+    },
+    {
       "path": "./packages/marko-widgets"
     },
     {
