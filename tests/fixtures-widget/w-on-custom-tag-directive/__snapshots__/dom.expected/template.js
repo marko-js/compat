@@ -14,29 +14,21 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
       window.__test_events__.push([name, args.slice(0, -1)]);
     };
   }
-  _marko_tag(_eventEmitter, {}, out, _componentDef, "@a", [["thing", trackEvent("a"), false]]);
-  _marko_tag(_eventEmitter, {}, out, _componentDef, "@a", [["thing", trackEvent("b"), false]]);
-  _marko_tag(_eventEmitter, {}, out, _componentDef, "@a", [["thing", trackEvent("c"), false]]);
-  _marko_tag(_eventEmitter, {}, out, _componentDef, "@a", [["Thing", trackEvent("d"), false]]);
-  out.e("div", {
-    "id": _componentDef.elId("a")
-  }, "@a", _component, 0, 1, {
-    "onthing": _componentDef.d("thing", trackEvent("a"), false)
+  _marko_tag(_eventEmitter, {}, out, _componentDef, "0", [["thing", trackEvent("a"), false]]);
+  _marko_tag(_eventEmitter, {}, out, _componentDef, "1", [["thing", trackEvent("b"), false]]);
+  _marko_tag(_eventEmitter, {}, out, _componentDef, "2", [["thing", trackEvent("c"), false]]);
+  _marko_tag(_eventEmitter, {}, out, _componentDef, "3", [["Thing", trackEvent("d"), false]]);
+  out.e("div", null, "4", _component, 0, 0, {
+    "onthing": _componentDef.d("thing", trackEvent("e"), false)
   });
-  out.e("div", {
-    "id": _componentDef.elId("a")
-  }, "@a", _component, 0, 1, {
-    "onthing": _componentDef.d("thing", trackEvent("b"), false)
+  out.e("div", null, "5", _component, 0, 0, {
+    "onthing": _componentDef.d("thing", trackEvent("f"), false)
   });
-  out.e("div", {
-    "id": _componentDef.elId("a")
-  }, "@a", _component, 0, 1, {
-    "onthing": _componentDef.d("thing", trackEvent("c"), false)
+  out.e("div", null, "6", _component, 0, 0, {
+    "onthing": _componentDef.d("thing", trackEvent("g"), false)
   });
-  out.e("div", {
-    "id": _componentDef.elId("a")
-  }, "@a", _component, 0, 1, {
-    "onThing": _componentDef.d("Thing", trackEvent("d"), false)
+  out.e("div", null, "7", _component, 0, 0, {
+    "onThing": _componentDef.d("Thing", trackEvent("h"), false)
   });
 }, {
   t: _marko_componentType,

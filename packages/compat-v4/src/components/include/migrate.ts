@@ -1,11 +1,6 @@
-import path from "path";
 import { types as t } from "@marko/compiler";
-import {
-  diagnosticDeprecate,
-  diagnosticError,
-  getTaglibLookup,
-} from "@marko/babel-utils";
-import { exprToAttrs, importTemplateAtPath } from "@marko/compat-utils";
+import { diagnosticDeprecate, diagnosticError } from "@marko/babel-utils";
+import { exprToAttrs, getTagNameForTemplatePath } from "@marko/compat-utils";
 
 export default {
   enter(tag: t.NodePath<t.MarkoTag>) {
@@ -41,33 +36,11 @@ export default {
       }
     }
 
-    const { file } = tag.hub;
     const [rendererExpression, inputExpression] = args as t.Expression[];
-    let tagNameExpression: t.Expression;
-
-    if (rendererExpression.type === "StringLiteral") {
-      const lookup = getTaglibLookup(file);
-      const request = rendererExpression.value;
-      const resolvedRequest = path.join(
-        file.opts.filename as string,
-        "..",
-        request,
-      );
-
-      for (const def of lookup.getTagsSorted()) {
-        if (
-          def.template === resolvedRequest ||
-          def.renderer === resolvedRequest
-        ) {
-          tagNameExpression = t.stringLiteral(def.name);
-          break;
-        }
-      }
-
-      tagNameExpression ||= importTemplateAtPath(tag, rendererExpression.value);
-    } else {
-      tagNameExpression = rendererExpression;
-    }
+    const tagNameExpression =
+      rendererExpression.type === "StringLiteral"
+        ? getTagNameForTemplatePath(tag, rendererExpression.value)
+        : rendererExpression;
 
     diagnosticDeprecate(tag, {
       label:

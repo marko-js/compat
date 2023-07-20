@@ -19,6 +19,10 @@ export function getAttribute(tag: t.NodePath<t.MarkoTag>, name: string) {
   }
 }
 
+export function getAttributeValue(tag: t.NodePath<t.MarkoTag>, name: string) {
+  return getAttribute(tag, name)?.get("value");
+}
+
 export function hasAttribute(tag: t.NodePath<t.MarkoTag>, name: string) {
   return !!getAttribute(tag, name);
 }
