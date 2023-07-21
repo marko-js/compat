@@ -8,7 +8,7 @@ const packagesDir = path.join(__dirname, "../packages");
 Promise.all(
   ["compat-utils", "marko-widgets", "compat-v4"].map(async (pkgName) => {
     const packageDir = path.resolve(packagesDir, pkgName);
-    const entryPoints = [];
+    const entryPoints: string[] = [];
     const srcdir = path.resolve(packageDir, "src");
     const outdir = path.resolve(packageDir, "dist");
     const pkg = JSON.parse(
