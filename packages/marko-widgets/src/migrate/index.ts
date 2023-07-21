@@ -7,9 +7,11 @@ import wIdDirective from "./w-id-directive";
 import widgetReference from "./widget-reference";
 import wPreserveDirectives from "./w-preserve-directives";
 import wOn from "./w-on";
+import wBind from "./w-bind";
 
 export default [
   scriptMarkoInit,
+  wBind,
   wBodyDirective,
   wConfigDirective,
   wOn,

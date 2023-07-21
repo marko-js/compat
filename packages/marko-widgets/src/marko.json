@@ -1,5 +1,6 @@
 {
   "taglib-id": "marko-widgets",
   "migrate": "./migrate/index",
+  "translate": "./translate",
   "tags-dir": "./components"
 }
