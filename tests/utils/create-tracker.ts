@@ -1,6 +1,16 @@
 import format, { plugins } from "pretty-format";
 
 const { DOMElement, DOMCollection } = plugins;
+const enum NodeType {
+  ELEMENT_NODE = 1,
+  TEXT_NODE = 3,
+  COMMENT_NODE = 8,
+  DOCUMENT_NODE = 9,
+}
+const enum NodeFilter {
+  SHOW_ELEMENT = 1,
+  SHOW_COMMENT = 128,
+}
 
 export default function createTracker(
   window: Window & typeof globalThis,
@@ -89,7 +99,7 @@ function cloneAndNormalize(container: ParentNode) {
   const document = isDocument(container) ? container : container.ownerDocument!;
   const commentAndElementWalker = document.createTreeWalker(
     clone,
-    1 /** SHOW_ELEMENT */ | 128 /** SHOW_COMMENT */,
+    NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_COMMENT,
   );
 
   let node: Comment | Element;
@@ -279,7 +289,7 @@ function getNodePath(node: Node) {
 
     if (
       !parentNode ||
-      parentNode.nodeType !== 1 /* Node.ELEMENT_NODE */ ||
+      parentNode.nodeType !== NodeType.ELEMENT_NODE ||
       (parentNode as Element).tagName === "BODY"
     ) {
       break;
@@ -296,11 +306,11 @@ function getNodeTypeName(node: Node) {
 }
 
 function isDocument(node: Node): node is Document {
-  return node.nodeType === 9 /* Node.DOCUMENT_NODE */;
+  return node.nodeType === NodeType.DOCUMENT_NODE;
 }
 
 function isComment(node: Node): node is Comment {
-  return node.nodeType === 8 /* Node.COMMENT_NODE */;
+  return node.nodeType === NodeType.COMMENT_NODE;
 }
 
 function getFunctionBody(source: string) {
