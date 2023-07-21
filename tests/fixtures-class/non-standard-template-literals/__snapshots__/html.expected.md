@@ -4,6 +4,7 @@
 # Render
 ```html
 <div
+  data-other="2"
   id="GENERATED-0"
 />
 <div
