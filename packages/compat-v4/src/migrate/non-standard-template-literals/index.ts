@@ -10,16 +10,38 @@ export default {
   MarkoPlaceholder(placeholder) {
     placeholder.traverse(stringVisitor);
   },
-  MarkoAttribute(attr) {
-    const value = attr.get("value");
+  MarkoTag(tag) {
+    if (tag.node.arguments) {
+      for (const arg of tag.get("arguments") as t.NodePath<
+        t.Expression | t.SpreadElement
+      >[]) {
+        checkPath(arg);
+      }
+    }
 
-    if (value.isStringLiteral()) {
-      StringLiteral(value);
-    } else {
-      value.traverse(stringVisitor);
+    for (const attr of tag.get("attributes")) {
+      checkPath(attr.get("value"));
+
+      if (attr.isMarkoAttribute()) {
+        if (attr.node.arguments) {
+          for (const arg of attr.get("arguments") as t.NodePath<
+            t.Expression | t.SpreadElement
+          >[]) {
+            checkPath(arg);
+          }
+        }
+      }
     }
   },
 } satisfies t.Visitor;
+
+function checkPath(path: t.NodePath<t.Node>) {
+  if (path.isStringLiteral()) {
+    StringLiteral(path);
+  } else {
+    path.traverse(stringVisitor);
+  }
+}
 
 function StringLiteral(string: t.NodePath<t.StringLiteral>) {
   const templateLiteral = parseNonStandardTemplateLiteral(string);

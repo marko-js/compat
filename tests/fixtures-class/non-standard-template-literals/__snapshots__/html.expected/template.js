@@ -4,6 +4,7 @@ const _marko_componentType = "<fixture-dir>/template.marko",
 export default _marko_template;
 const fromStatic = "${STATIC}";
 import { x as _marko_escapeXml } from "marko/src/runtime/html/helpers/escape-xml.js";
+import _marko_props from "marko/src/runtime/html/helpers/data-marko.js";
 import _marko_renderer from "marko/src/runtime/components/renderer.js";
 const _marko_component = {};
 _marko_template._ = _marko_renderer(function (input, out, _componentDef, _component, state, $global) {
@@ -41,6 +42,10 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     x: 1
   }.missing ?? ""}def`));
   out.w("</div>");
+  const handler = console.log;
+  out.w(`<button${_marko_props(out, _componentDef, {
+    "onclick": _componentDef.d("click", handler, false)
+  })}></button>`);
 }, {
   t: _marko_componentType,
   i: true,

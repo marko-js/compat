@@ -13,3 +13,6 @@ $ const c = 3;
 <#g>${"abc${`d${\"}\"}e`}f"}</>
 <#h>${"abc${c}"}</>
 <#i>${"abc${{x: 1}.missing}def"}</>
+
+$ const handler = console.log;
+<button onClick("${handler}")/>
