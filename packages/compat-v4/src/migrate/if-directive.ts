@@ -8,19 +8,27 @@ export default {
       node: { name, arguments: args },
     } = attr;
 
-    if (name !== "if" || !args?.length) return;
+    switch (name) {
+      case "if":
+      case "else-if":
+        if (!args?.length) return;
+        break;
+      case "else":
+        break;
+      default:
+        return;
+    }
 
     const tag = attr.parentPath as t.NodePath<t.MarkoTag>;
     if (willMigrateTag(tag)) return;
 
     diagnosticDeprecate(attr, {
-      label:
-        'The "if(x)" directive is deprecated. Please use "<if(test)>" tag instead. See: https://github.com/marko-js/marko/wiki/Deprecation:-control-flow-attributes',
+      label: `The "${name}" directive is deprecated. Please use "<${name}>" tag instead. See: https://github.com/marko-js/marko/wiki/Deprecation:-control-flow-attributes`,
       fix() {
         attr.remove();
         tag.replaceWith(
           t.markoTag(
-            t.stringLiteral("if"),
+            t.stringLiteral(name),
             [],
             t.markoTagBody([tag.node]),
             args,
