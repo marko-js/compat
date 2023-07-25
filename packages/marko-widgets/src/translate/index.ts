@@ -201,6 +201,34 @@ export default {
         );
       }
 
+      if (markoOpts.modules === "cjs") {
+        program.pushContainer(
+          "body",
+          t.expressionStatement(
+            t.assignmentExpression(
+              "=",
+              t.memberExpression(
+                t.identifier("module"),
+                t.identifier("exports"),
+              ),
+              t.callExpression(
+                t.memberExpression(
+                  t.identifier("Object"),
+                  t.identifier("assign"),
+                ),
+                [
+                  t.memberExpression(
+                    t.identifier("exports"),
+                    t.identifier("default"),
+                  ),
+                  t.identifier("exports"),
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+
       optimizeHTMLWrites(program);
     },
   },
