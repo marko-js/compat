@@ -36,6 +36,7 @@ export default function createBrowser({
       ]
     : Object.keys(require.extensions);
   const window = context.window as unknown as Window & typeof globalThis;
+  (window as any).__coverage__ = (globalThis as any).__coverage__;
 
   return {
     ...context,
