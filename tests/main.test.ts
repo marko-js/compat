@@ -264,7 +264,7 @@ for (const api of ["class", "widget"]) {
               const tracker = createTracker(browser.window, document.body);
 
               try {
-                await browser.whenAsyncComplete();
+                await browser.yield();
                 tracker.logUpdate(input);
 
                 for (const update of steps) {
@@ -274,7 +274,7 @@ for (const api of ["class", "widget"]) {
                     instance.input = update;
                   }
 
-                  await browser.whenAsyncComplete();
+                  await browser.yield();
                   tracker.logUpdate(update);
                 }
 
@@ -308,7 +308,7 @@ for (const api of ["class", "widget"]) {
               const tracker = createTracker(window, document.body);
 
               try {
-                await browser.whenAsyncComplete();
+                await browser.yield();
                 tracker.logUpdate(input);
 
                 for (const update of steps) {
@@ -317,7 +317,7 @@ for (const api of ["class", "widget"]) {
                   if (typeof update !== "function") break;
 
                   await update(screen);
-                  await browser.whenAsyncComplete();
+                  await browser.yield();
                   tracker.logUpdate(update);
                 }
 
@@ -373,6 +373,7 @@ for (const api of ["class", "widget"]) {
 
             const browser = createBrowser({
               dir: fixtureDir,
+              html: `<!DOCTYPE html><html><head></head><body>${html}</body></html>`,
               extensions: register({
                 ...domConfig,
                 extensions: {},
@@ -381,9 +382,6 @@ for (const api of ["class", "widget"]) {
 
             const { window } = browser;
             const { document } = window;
-            document.write(
-              `<!DOCTYPE html><html><head></head><body>${html}</body></html>`,
-            );
             const tracker = createTracker(window, document.body);
 
             for (const msg of logs) {
@@ -391,7 +389,7 @@ for (const api of ["class", "widget"]) {
             }
 
             try {
-              await browser.whenAsyncComplete();
+              await browser.yield();
               tracker.logUpdate(input);
               return (htmlResult = { browser, tracker });
             } finally {
