@@ -49,7 +49,7 @@ export default {
         tag.replaceWith(
           t.markoTag(
             tagNameExpression,
-            exprToAttrs(inputExpression),
+            exprToAttrs(inputExpression).concat(tag.node.attributes),
             tag.node.body,
           ),
         );
