@@ -56,6 +56,22 @@ export default {
           return;
         }
 
+        if (
+          params.length === 1 &&
+          inExpression.type !== "ArrayExpression" &&
+          !(
+            inExpression.type === "LogicalExpression" &&
+            inExpression.operator === "||" &&
+            inExpression.right.type === "ArrayExpression"
+          )
+        ) {
+          inExpression = t.logicalExpression(
+            "||",
+            inExpression,
+            t.arrayExpression(),
+          );
+        }
+
         const iteratorExpression =
           parsed.iterator?.value &&
           parseExpression(

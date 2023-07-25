@@ -14,7 +14,7 @@ static function evenItemsIterator(items, cb) {
   }
 }
 <div class="array">
-  <for|color| of=colorsArray>
+  <for|color| of=(colorsArray || [])>
     <li>
       ${color}
     </li>
@@ -23,7 +23,7 @@ static function evenItemsIterator(items, cb) {
 <div class="array-iterator">
   <for|color| of=(() => {
     const _result = [];
-    evenItemsIterator(colorsArray, _result.push.bind(_result));
+    evenItemsIterator(colorsArray || [], _result.push.bind(_result));
     return _result;
   })()>
     <li>
@@ -32,7 +32,7 @@ static function evenItemsIterator(items, cb) {
   </for>
 </div>
 <div class="array-separator">
-  <for|color, _index| of=colorsArray>
+  <for|color, _index| of=(colorsArray || [])>
     ${_index ? ", " : ""}
     <li>
       ${color}
@@ -40,7 +40,7 @@ static function evenItemsIterator(items, cb) {
   </for>
 </div>
 <div class="array-status-var">
-  <for|color, _index2, _all| of=colorsArray>
+  <for|color, _index2, _all| of=(colorsArray || [])>
     $ const loop = {
       getIndex() {
         return _index2;
@@ -72,7 +72,7 @@ static function evenItemsIterator(items, cb) {
 <div class="array-iterator-and-status-var">
   <for|color, _index3| of=(() => {
     const _result2 = [];
-    evenItemsIterator(colorsArray, _result2.push.bind(_result2));
+    evenItemsIterator(colorsArray || [], _result2.push.bind(_result2));
     return _result2;
   })()>
     ${_index3 ? ", " : ""}
@@ -84,7 +84,7 @@ static function evenItemsIterator(items, cb) {
 <div class="array-status-var-and-iterator">
   <for|color, _index4, _all2| of=(() => {
     const _result3 = [];
-    evenItemsIterator(colorsArray, _result3.push.bind(_result3));
+    evenItemsIterator(colorsArray || [], _result3.push.bind(_result3));
     return _result3;
   })()>
     $ const loop = {
@@ -111,7 +111,7 @@ static function evenItemsIterator(items, cb) {
   </for>
 </div>
 <div class="array-status-var-and-separator">
-  <for|color, _index5, _all3| of=colorsArray>
+  <for|color, _index5, _all3| of=(colorsArray || [])>
     $ const loop = {
       getIndex() {
         return _index5;
@@ -138,7 +138,7 @@ static function evenItemsIterator(items, cb) {
 <div class="array-status-var-and-iterator-and-separator">
   <for|color, _index6, _all4| of=(() => {
     const _result4 = [];
-    evenItemsIterator(colorsArray, _result4.push.bind(_result4));
+    evenItemsIterator(colorsArray || [], _result4.push.bind(_result4));
     return _result4;
   })()>
     $ const loop = {
