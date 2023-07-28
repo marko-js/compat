@@ -18,7 +18,11 @@ export default {
         attr.remove();
 
         if (isSourceBooleanAttribute(node)) {
-          bodyValue = t.identifier("input");
+          bodyValue = t.memberExpression(
+            t.identifier("input"),
+            t.identifier("renderBody"),
+          );
+          needsGuard = true;
         } else if (
           !(
             bodyValue.type === "MemberExpression" &&
