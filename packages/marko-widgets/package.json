@@ -13,6 +13,7 @@
     "./marko.json": "./marko.json",
     "./renderer": "./renderer.js",
     "./dom": "./dom.js",
+    ".": "./index.js",
     "./*.marko": "./*.marko",
     "./*.d.ts": "./*.d.ts",
     "./*.json": "./*.json",
@@ -24,6 +25,9 @@
   "files": [
     "dist",
     "marko.json",
+    "dom.js",
+    "index.js",
+    "renderer.js",
     "!**/*.tsbuildinfo"
   ],
   "dependencies": {
