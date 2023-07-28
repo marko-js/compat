@@ -1,8 +1,4 @@
-import {
-  importDefault,
-  importNamed,
-  parseExpression,
-} from "@marko/babel-utils";
+import { importDefault, parseExpression } from "@marko/babel-utils";
 import { types as t } from "@marko/compiler";
 import { version } from "marko/package.json";
 import { optimizeHTMLWrites } from "./optmize-html-writes";
@@ -34,7 +30,6 @@ export default {
         "marko/src/runtime/components/legacy/renderer-legacy.js",
         "marko_renderer",
       );
-      const widgetIdentifier = importDefault(file, widgetBind, "marko_widget");
       const templateRendererMember = t.memberExpression(
         templateIdentifier,
         t.identifier("_"),
@@ -93,29 +88,6 @@ export default {
       prependNodes.push(t.exportDefaultDeclaration(templateIdentifier));
       program.unshiftContainer("body", prependNodes);
 
-      if (!isHTML) {
-        program.pushContainer(
-          "body",
-          t.expressionStatement(
-            t.callExpression(
-              importNamed(
-                file,
-                "marko/src/runtime/components/registry",
-                "r",
-                "marko_registerComponent",
-              ),
-              [
-                componentTypeIdentifier,
-                t.arrowFunctionExpression(
-                  [],
-                  isSplit ? widgetIdentifier : templateIdentifier,
-                ),
-              ],
-            ),
-          ),
-        );
-      }
-
       const templateRenderOptionsProps = [
         t.objectProperty(t.identifier("t"), componentTypeIdentifier),
       ];
@@ -152,14 +124,6 @@ export default {
                 renderBlock.node,
               ),
               t.objectExpression(templateRenderOptionsProps),
-              t.callExpression(
-                importDefault(
-                  file,
-                  "marko/src/runtime/components/legacy/defineWidget-legacy.js",
-                  "marko_defineWidget",
-                ),
-                [widgetIdentifier],
-              ),
             ]),
           ),
         ),

@@ -37,7 +37,10 @@ export default {
       label:
         "Legacy components using w-bind and defineRenderer/defineComponent or defineWidget are deprecated. See: https://github.com/marko-js/marko/issues/421",
       fix() {
-        attr.remove();
+        attr.replaceWithMultiple([
+          t.markoAttribute("key", t.stringLiteral("_wbind")),
+          t.markoAttribute("id", t.stringLiteral("_wbind"), "scoped"),
+        ]);
       },
     });
   },
