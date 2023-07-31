@@ -64,7 +64,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   out.be("div", {
     "class": "i"
   }, "16", _component, null, 1);
-  {
+  if (typeof null === "string") {} else {
     const _tagName = null;
     if (_tagName) _marko_tag(_tagName, {}, out, _componentDef, "17");
   }
@@ -72,12 +72,18 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   out.be("div", {
     "class": "j"
   }, "18", _component, null, 1);
-  _marko_dynamic_tag(out, false, null, null, null, null, _componentDef, "19");
+  if (typeof false === "string") {} else {
+    _marko_dynamic_tag(out, false, null, null, null, null, _componentDef, "19");
+  }
   out.ee();
   out.be("div", {
     "class": "k"
   }, "20", _component, null, 1);
-  _marko_tag(Test, {}, out, _componentDef, "21");
+  if (typeof Test === "string") {
+    out.t(Test, _component);
+  } else {
+    _marko_tag(Test, {}, out, _componentDef, "21");
+  }
   out.ee();
   out.be("div", {
     "class": "l"

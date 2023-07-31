@@ -23,16 +23,31 @@
   <test value=1/>
 </div>
 <div class="i">
-  <${null}/>
+  <if(typeof null === "string")>
+    ${null}
+  </if>
+  <else>
+    <${null}/>
+  </else>
 </div>
 <div class="j">
-  <${false}/>
+  <if(typeof false === "string")>
+    ${false}
+  </if>
+  <else>
+    <${false}/>
+  </else>
 </div>
 import Test from "./test.marko";
 import Nested from "./nested/index.marko";
 import Thing from "./nested/thing.marko";
 <div class="k">
-  <${Test}/>
+  <if(typeof Test === "string")>
+    ${Test}
+  </if>
+  <else>
+    <${Test}/>
+  </else>
 </div>
 <div class="l">
   <${Test}>

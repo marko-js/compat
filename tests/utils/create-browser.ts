@@ -1,5 +1,5 @@
 import resolveExports from "resolve.exports";
-import { sync as resolveSync } from "resolve";
+import { type Opts as ResolveOpts, sync as resolveSync } from "resolve";
 import { type ConstructorOptions, JSDOM } from "jsdom";
 import createContextRequire from "context-require";
 
@@ -66,13 +66,14 @@ export default function createBrowser({
       dir,
       context,
       extensions,
-      resolve(basedir, req) {
+      resolve(basedir, req, { filename }) {
         return resolveSync(req, {
           basedir,
+          filename,
           pathFilter,
           packageFilter,
           extensions: resolveExtensions,
-        });
+        } as ResolveOpts);
       },
     }),
   };

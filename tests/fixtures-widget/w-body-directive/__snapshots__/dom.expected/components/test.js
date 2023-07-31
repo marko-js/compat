@@ -9,12 +9,20 @@ _marko_registerComponent(_marko_componentType, () => _marko_template);
 const _marko_component = {};
 _marko_template._ = _marko_renderer(function (input, out, _componentDef, _component, state, $global) {
   out.be("div", null, "0", _component, null, 0);
-  _marko_dynamic_tag(out, input, null, null, null, null, _componentDef, "1");
+  if (typeof input.renderBody === "string") {
+    out.t(input.renderBody, _component);
+  } else {
+    _marko_dynamic_tag(out, input.renderBody, null, null, null, null, _componentDef, "1");
+  }
   out.ee();
   out.be("div", null, "2", _component, null, 0);
-  _marko_dynamic_tag(out, input, null, out => {
-    out.t("Child Content", _component);
-  }, null, null, _componentDef, "3");
+  if (typeof input.renderBody === "string") {
+    out.t(input.renderBody, _component);
+  } else {
+    _marko_dynamic_tag(out, input.renderBody, null, out => {
+      out.t("Child Content", _component);
+    }, null, null, _componentDef, "3");
+  }
   out.ee();
   var inputAlias = input;
   out.be("div", null, "4", _component, null, 0);

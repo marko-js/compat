@@ -8,6 +8,7 @@ import Thing from "./nested/thing.marko";
 import _marko_tag from "marko/src/runtime/helpers/render-tag.js";
 import _test from "./components/test.marko";
 import _marko_dynamic_tag from "marko/src/runtime/helpers/dynamic-tag.js";
+import { x as _marko_escapeXml } from "marko/src/runtime/html/helpers/escape-xml.js";
 import _marko_renderer from "marko/src/runtime/components/renderer.js";
 const _marko_component = {};
 _marko_template._ = _marko_renderer(function (input, out, _componentDef, _component, state, $global) {
@@ -44,16 +45,24 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   }, out, _componentDef, "15");
   out.w("</div>");
   out.w("<div class=i>");
-  {
+  if (typeof null === "string") {} else {
     const _tagName = null;
     if (_tagName) _marko_tag(_tagName, {}, out, _componentDef, "17");
   }
   out.w("</div>");
   out.w("<div class=j>");
-  _marko_dynamic_tag(out, false, null, null, null, null, _componentDef, "19");
+  if (typeof false === "string") {
+    out.w("false");
+  } else {
+    _marko_dynamic_tag(out, false, null, null, null, null, _componentDef, "19");
+  }
   out.w("</div>");
   out.w("<div class=k>");
-  _marko_tag(Test, {}, out, _componentDef, "21");
+  if (typeof Test === "string") {
+    out.w(_marko_escapeXml(Test));
+  } else {
+    _marko_tag(Test, {}, out, _componentDef, "21");
+  }
   out.w("</div>");
   out.w("<div class=l>");
   out.w("template.marko renderbody");

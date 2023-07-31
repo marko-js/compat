@@ -1,10 +1,20 @@
 <div>
-  <${input}/>
+  <if(typeof input.renderBody === "string")>
+    ${input.renderBody}
+  </if>
+  <else>
+    <${input.renderBody}/>
+  </else>
 </div>
 <div>
-  <${input}>
-    Child Content
-  </>
+  <if(typeof input.renderBody === "string")>
+    ${input.renderBody}
+  </if>
+  <else>
+    <${input.renderBody}>
+      Child Content
+    </>
+  </else>
 </div>
 $ var inputAlias = input;
 <div>

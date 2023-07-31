@@ -12,6 +12,7 @@ import {
   type queries,
   within,
 } from "@testing-library/dom";
+import { writeTempFile } from "./utils/temp-fs";
 import createBrowser from "./utils/create-browser";
 import createTracker from "./utils/create-tracker";
 import initComponents from "./utils/init-components.marko";
@@ -42,8 +43,10 @@ const baseConfig: compiler.Config = {
     configFile: false,
   },
   writeVersionComment: false,
-  resolveVirtualDependency(_filename, { code, virtualPath }) {
-    return `virtual:${virtualPath} ${code}`;
+  resolveVirtualDependency(filename, { code, virtualPath }) {
+    const resolved = path.resolve(filename, "..", virtualPath);
+    writeTempFile(resolved, code);
+    return virtualPath;
   },
 };
 
