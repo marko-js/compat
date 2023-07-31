@@ -6,10 +6,18 @@ import {
 } from "@marko/babel-utils";
 import { hasAttribute } from "@marko/compat-utils";
 
+declare module "@marko/compiler" {
+  interface MarkoMeta {
+    needsWidgetBind?: boolean;
+  }
+}
+
 export default {
   MarkoAttribute(attr) {
     const { node } = attr;
     if (node.name !== "w-id") return;
+
+    attr.hub.file.metadata.marko.needsWidgetBind = true;
 
     diagnosticDeprecate(attr, {
       label: `The "w-id" attribute is deprecated. Please use "key" attribute instead. See: https://github.com/marko-js/marko/wiki/Deprecation:-w‐*-Attributes`,

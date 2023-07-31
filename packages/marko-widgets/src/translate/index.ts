@@ -10,11 +10,13 @@ export default {
         hub: { file },
       } = program;
       const meta = file.metadata.marko;
-      const { widgetBind } = meta;
-      if (!widgetBind) return;
+      const { widgetBind, needsWidgetBind } = meta;
+      if (!(widgetBind || needsWidgetBind)) return;
       program.skip();
 
-      const isSplit = !/^\.(?:\/(?:index(?:\.js)?)?)?$/.test(widgetBind);
+      const isSplit = widgetBind
+        ? !/^\.(?:\/(?:index(?:\.js)?)?)?$/.test(widgetBind)
+        : true;
       const { markoOpts } = file;
       const includeMetaInSource = markoOpts.meta !== false;
       const isHTML = markoOpts.output === "html";
@@ -92,6 +94,12 @@ export default {
         t.objectProperty(t.identifier("t"), componentTypeIdentifier),
       ];
 
+      if (!widgetBind) {
+        templateRenderOptionsProps.push(
+          t.objectProperty(t.identifier("i"), t.booleanLiteral(true)),
+        );
+      }
+
       if (isSplit) {
         templateRenderOptionsProps.push(
           t.objectProperty(t.identifier("s"), t.booleanLiteral(true)),
@@ -104,6 +112,10 @@ export default {
         );
       }
 
+      const componentDefIdentifier = (file as any)
+        ._componentDefIdentifier as t.Identifier;
+      const componentInstanceIdentifier = (file as any)
+        ._componentInstanceIdentifier as t.Identifier;
       program.pushContainer(
         "body",
         t.expressionStatement(
@@ -116,8 +128,8 @@ export default {
                 [
                   t.identifier("input"),
                   t.identifier("out"),
-                  (file as any)._componentDefIdentifier,
-                  (file as any)._componentInstanceIdentifier,
+                  componentDefIdentifier,
+                  componentInstanceIdentifier,
                   t.identifier("state"),
                   t.identifier("$global"),
                 ],
@@ -133,11 +145,16 @@ export default {
       if (includeMetaInSource) {
         const metaObject = t.objectExpression([
           t.objectProperty(t.identifier("id"), componentTypeIdentifier),
-          t.objectProperty(
-            t.identifier("component"),
-            t.stringLiteral(widgetBind),
-          ),
         ]);
+
+        if (widgetBind) {
+          metaObject.properties.push(
+            t.objectProperty(
+              t.identifier("component"),
+              t.stringLiteral(widgetBind),
+            ),
+          );
+        }
 
         if (meta.deps.length) {
           metaObject.properties.push(
