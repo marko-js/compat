@@ -1,5 +1,5 @@
 import { types as t } from "@marko/compiler";
-import { diagnosticError, withLoc } from "@marko/babel-utils";
+import { diagnosticError, parseExpression, withLoc } from "@marko/babel-utils";
 import {
   isSourceBooleanAttribute,
   renderCallToDynamicTag,
@@ -37,19 +37,20 @@ export default {
 
     const { file } = tag.hub;
     const start = functionAttr.node.start;
-    const callIdentifier = t.identifier(functionAttr.node.name);
+    const callIdentifier =
+      start == null
+        ? parseExpression(file, functionAttr.node.name)
+        : parseExpression(
+            file,
+            functionAttr.node.name,
+            start,
+            start + functionAttr.node.name.length,
+          );
     const callExpression = t.callExpression(
       callIdentifier,
       functionAttr.node.arguments!,
     );
     if (start != null) {
-      withLoc(
-        file,
-        callIdentifier,
-        start,
-        start + functionAttr.node.name.length,
-      );
-
       withLoc(file, callExpression, start, functionAttr.node.end!);
     }
 
