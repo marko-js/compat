@@ -33,23 +33,19 @@ export default {
       return;
     }
 
-    const isSplit = !/^\.(?:\/(?:index(?:\.js)?)?)?$/.test(meta.widgetBind);
-
-    if (isSplit) {
-      const base = path.basename(file.opts.filename as string);
-      const registryPath = `marko/${
-        file.markoOpts.optimize ? "dist" : "src"
-      }/runtime/components/registry`;
-      meta.deps.push({
-        type: "js",
-        path: `./${base}`,
-        virtualPath: `./${base}.register.js`,
-        code:
-          file.markoOpts.modules === "cjs"
-            ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget(require("${meta.widgetBind}")));`
-            : `import {defineWidget} from "marko-widgets";import widget from "${meta.widgetBind}";import {r} from "${registryPath}";r("${meta.id}",()=>widget);`,
-      });
-    }
+    const base = path.basename(file.opts.filename as string);
+    const registryPath = `marko/${
+      file.markoOpts.optimize ? "dist" : "src"
+    }/runtime/components/registry`;
+    meta.deps.push({
+      type: "js",
+      path: `./${base}`,
+      virtualPath: `./${base}.register.js`,
+      code:
+        file.markoOpts.modules === "cjs"
+          ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget(require("${meta.widgetBind}")));`
+          : `import {defineWidget} from "marko-widgets";import widget from "${meta.widgetBind}";import {r} from "${registryPath}";r("${meta.id}",()=>widget);`,
+    });
 
     diagnosticDeprecate(attr, {
       label:
