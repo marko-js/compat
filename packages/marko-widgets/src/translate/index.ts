@@ -1,9 +1,5 @@
 import path from "path";
-import {
-  getTemplateId,
-  importDefault,
-  parseExpression,
-} from "@marko/babel-utils";
+import { importDefault, parseExpression } from "@marko/babel-utils";
 import { types as t } from "@marko/compiler";
 import { version } from "marko/package.json";
 import { getAttribute } from "@marko/compat-utils";
@@ -91,19 +87,10 @@ export default {
         hub: { file },
       } = program;
       const meta = file.metadata.marko;
-      const { widgetBind, deps } = meta;
+      const { widgetBind } = meta;
       if (!widgetBind) return;
 
-      const { markoOpts } = file;
-      const isCJS = markoOpts.modules === "cjs";
-      const isImplicit = widgetBind === true;
-      const isDynamic = typeof widgetBind === "object";
-      const templateFileName = file.opts.filename as string;
-      const registryPath = `marko/${
-        file.markoOpts.optimize ? "dist" : "src"
-      }/runtime/components/registry.js`;
-
-      if (isDynamic) {
+      if (typeof widgetBind === "object") {
         program.unshiftContainer(
           "body",
           t.variableDeclaration("const", [
@@ -111,24 +98,7 @@ export default {
               ((file as any)._widgetTypesIdentifier =
                 program.scope.generateUidIdentifier("widget_types")),
               t.objectExpression(
-                Object.entries(widgetBind).map(([name, request]) => {
-                  const id = getTemplateId(
-                    file.markoOpts.optimize,
-                    path.resolve(
-                      templateFileName,
-                      "..",
-                      request.replace(/^\.\/?$/, "./index"),
-                    ),
-                  );
-                  deps.push({
-                    type: "js",
-                    virtualPath: `./${path.basename(
-                      templateFileName,
-                    )}.${name.replace(/[/\\:]/g, "_")}.register.js`,
-                    code: isCJS
-                      ? `require("${registryPath}").r("${id}",()=>require("marko-widgets").defineWidget(require("${request}")));`
-                      : `import widget from "${request}";import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${id}",()=>defineWidget(widget));`,
-                  });
+                Object.entries(widgetBind).map(([name, id]) => {
                   return t.objectProperty(
                     t.stringLiteral(name),
                     t.stringLiteral(id),
@@ -138,18 +108,6 @@ export default {
             ),
           ]),
         );
-      } else {
-        deps.push({
-          type: "js",
-          virtualPath: `./${path.basename(templateFileName)}.register.js`,
-          code: isImplicit
-            ? isCJS
-              ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget({}));`
-              : `import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${meta.id}",()=>defineWidget({}));`
-            : isCJS
-            ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget(require("${widgetBind}")));`
-            : `import widget from "${widgetBind}";import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${meta.id}",()=>defineWidget(widget));`,
-        });
       }
     },
     exit(program) {

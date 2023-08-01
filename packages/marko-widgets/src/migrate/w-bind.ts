@@ -15,6 +15,7 @@ export default {
 
     const { file } = attr.hub;
     const meta = file.metadata.marko;
+    let widgetBind: string | undefined;
 
     if (typeof meta.widgetBind === "object") {
       diagnosticDeprecate(attr, {
@@ -25,14 +26,14 @@ export default {
     }
 
     if (node.value.type === "BooleanLiteral" && node.value.value === true) {
-      meta.widgetBind = existsRelative(file, "widget.js")
+      widgetBind = existsRelative(file, "widget.js")
         ? "./widget.js"
         : "./index.js";
     } else if (node.value.type === "StringLiteral") {
-      meta.widgetBind = node.value.value;
+      widgetBind = node.value.value;
     }
 
-    if (!meta.widgetBind) {
+    if (!widgetBind) {
       diagnosticError(attr, {
         label:
           "Invalid value for w-bind, expected a string literal or 'true'. Alternatively <widget-types> must be defined.",
@@ -42,10 +43,39 @@ export default {
       return;
     }
 
+    meta.widgetBind = widgetBind;
+
     diagnosticDeprecate(attr, {
       label:
         "Legacy components using w-bind, <widget-types> and defineRenderer/defineComponent or defineWidget are deprecated. See: https://github.com/marko-js/marko/issues/421",
     });
+  },
+  Program: {
+    exit(program) {
+      const { file } = program.hub;
+      const meta = file.metadata.marko;
+      const { widgetBind } = meta;
+      if (!widgetBind || typeof widgetBind === "object") return;
+      const { markoOpts } = file;
+      const isCJS = markoOpts.modules === "cjs";
+      const registryPath = `marko/${
+        file.markoOpts.optimize ? "dist" : "src"
+      }/runtime/components/registry.js`;
+      meta.deps.push({
+        type: "js",
+        virtualPath: `./${path.basename(
+          file.opts.filename as string,
+        )}.register.js`,
+        code:
+          widgetBind === true
+            ? isCJS
+              ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget({}));`
+              : `import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${meta.id}",()=>defineWidget({}));`
+            : isCJS
+            ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget(require("${meta.widgetBind}")));`
+            : `import widget from "${meta.widgetBind}";import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${meta.id}",()=>defineWidget(widget));`,
+      });
+    },
   },
 } satisfies t.Visitor;
 
