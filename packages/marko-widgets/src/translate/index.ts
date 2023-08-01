@@ -1,11 +1,157 @@
 import path from "path";
-import { importDefault, parseExpression } from "@marko/babel-utils";
+import {
+  getTemplateId,
+  importDefault,
+  parseExpression,
+} from "@marko/babel-utils";
 import { types as t } from "@marko/compiler";
 import { version } from "marko/package.json";
+import { getAttribute } from "@marko/compat-utils";
 import { optimizeHTMLWrites } from "./optmize-html-writes";
 
 export default {
+  MarkoTag(tag) {
+    const {
+      hub: { file },
+    } = tag;
+    const meta = file.metadata.marko;
+    const { widgetBind } = meta;
+    if (!widgetBind) return;
+    const wBindAttr = getAttribute(tag, "w-bind");
+    if (!wBindAttr) return;
+
+    if (typeof widgetBind === "object") {
+      const componentDefIdentifier = (file as any)
+        ._componentDefIdentifier as t.Identifier;
+      const componentInstanceIdentifier = (file as any)
+        ._componentInstanceIdentifier as t.Identifier;
+      const widgetTypesIdentifier = (file as any)
+        ._widgetTypesIdentifier as t.Identifier;
+      const wTypeIdentifier = tag.scope.generateUidIdentifier("wtype");
+      const wBindIdentifier = tag.scope.generateUidIdentifier("wbind");
+      tag.insertBefore(
+        t.markoScriptlet([
+          t.variableDeclaration("const", [
+            t.variableDeclarator(
+              wTypeIdentifier,
+              t.memberExpression(
+                widgetTypesIdentifier,
+                wBindAttr.node.value,
+                true,
+              ),
+            ),
+            t.variableDeclarator(
+              wBindIdentifier,
+              t.logicalExpression(
+                "&&",
+                wTypeIdentifier,
+                t.stringLiteral("_wbind"),
+              ),
+            ),
+          ]),
+          t.expressionStatement(
+            t.assignmentExpression(
+              "=",
+              componentInstanceIdentifier,
+              t.callExpression(
+                t.memberExpression(componentDefIdentifier, t.identifier("t")),
+                [wTypeIdentifier],
+              ),
+            ),
+          ),
+        ]),
+      );
+      wBindAttr.replaceWithMultiple([
+        t.markoAttribute("key", wBindIdentifier),
+        t.markoAttribute(
+          "id",
+          t.logicalExpression(
+            "&&",
+            wBindIdentifier,
+            t.callExpression(
+              t.memberExpression(
+                componentInstanceIdentifier,
+                t.identifier("elId"),
+              ),
+              [wBindIdentifier],
+            ),
+          ),
+        ),
+      ]);
+    } else {
+      wBindAttr.replaceWithMultiple([
+        t.markoAttribute("key", t.stringLiteral("_wbind")),
+        t.markoAttribute("id", t.stringLiteral("_wbind"), "scoped"),
+      ]);
+    }
+  },
   Program: {
+    enter(program) {
+      const {
+        hub: { file },
+      } = program;
+      const meta = file.metadata.marko;
+      const { widgetBind, deps } = meta;
+      if (!widgetBind) return;
+
+      const { markoOpts } = file;
+      const isCJS = markoOpts.modules === "cjs";
+      const isImplicit = widgetBind === true;
+      const isDynamic = typeof widgetBind === "object";
+      const templateFileName = file.opts.filename as string;
+      const registryPath = `marko/${
+        file.markoOpts.optimize ? "dist" : "src"
+      }/runtime/components/registry.js`;
+
+      if (isDynamic) {
+        program.unshiftContainer(
+          "body",
+          t.variableDeclaration("const", [
+            t.variableDeclarator(
+              ((file as any)._widgetTypesIdentifier =
+                program.scope.generateUidIdentifier("widget_types")),
+              t.objectExpression(
+                Object.entries(widgetBind).map(([name, request]) => {
+                  const id = getTemplateId(
+                    file.markoOpts.optimize,
+                    path.resolve(
+                      templateFileName,
+                      "..",
+                      request.replace(/^\.\/?$/, "./index"),
+                    ),
+                  );
+                  deps.push({
+                    type: "js",
+                    virtualPath: `./${path.basename(
+                      templateFileName,
+                    )}.${name.replace(/[/\\:]/g, "_")}.register.js`,
+                    code: isCJS
+                      ? `require("${registryPath}").r("${id}",()=>require("marko-widgets").defineWidget(require("${request}")));`
+                      : `import widget from "${request}";import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${id}",()=>defineWidget(widget));`,
+                  });
+                  return t.objectProperty(
+                    t.stringLiteral(name),
+                    t.stringLiteral(id),
+                  );
+                }),
+              ),
+            ),
+          ]),
+        );
+      } else {
+        deps.push({
+          type: "js",
+          virtualPath: `./${path.basename(templateFileName)}.register.js`,
+          code: isImplicit
+            ? isCJS
+              ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget({}));`
+              : `import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${meta.id}",()=>defineWidget({}));`
+            : isCJS
+            ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget(require("${widgetBind}")));`
+            : `import widget from "${widgetBind}";import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${meta.id}",()=>defineWidget(widget));`,
+        });
+      }
+    },
     exit(program) {
       const {
         hub: { file },
@@ -15,11 +161,16 @@ export default {
       if (!widgetBind) return;
       program.skip();
 
+      const { deps } = meta;
       const isImplicit = widgetBind === true;
-      const isSplit = isImplicit
-        ? true
-        : !/^\.(?:\/(?:index(?:\.js)?)?)?$/.test(widgetBind);
+      const isDynamic = typeof widgetBind === "object";
+      const isSplit =
+        isImplicit || isDynamic
+          ? true
+          : !/^\.(?:\/(?:index(?:\.js)?)?)?$/.test(widgetBind);
       const { markoOpts } = file;
+      const isCJS = markoOpts.modules === "cjs";
+      const templateFileName = file.opts.filename as string;
       const includeMetaInSource = markoOpts.meta !== false;
       const isHTML = markoOpts.output === "html";
       const renderBlock = (file as any)
@@ -92,11 +243,15 @@ export default {
       prependNodes.push(t.exportDefaultDeclaration(templateIdentifier));
       program.unshiftContainer("body", prependNodes);
 
-      const templateRenderOptionsProps = [
-        t.objectProperty(t.identifier("t"), componentTypeIdentifier),
-      ];
+      const templateRenderOptionsProps: t.ObjectProperty[] = [];
 
-      if (isImplicit) {
+      if (!isDynamic) {
+        templateRenderOptionsProps.push(
+          t.objectProperty(t.identifier("t"), componentTypeIdentifier),
+        );
+      }
+
+      if (isImplicit || isDynamic) {
         templateRenderOptionsProps.push(
           t.objectProperty(t.identifier("i"), t.booleanLiteral(true)),
         );
@@ -148,21 +303,29 @@ export default {
         const metaObject = t.objectExpression([
           t.objectProperty(t.identifier("legacy"), t.booleanLiteral(true)),
           t.objectProperty(t.identifier("id"), componentTypeIdentifier),
-          t.objectProperty(
-            t.identifier("component"),
-            t.stringLiteral(
-              widgetBind === true
-                ? path.basename(file.opts.filename as string)
-                : widgetBind,
-            ),
-          ),
         ]);
 
-        if (meta.deps.length) {
+        if (isImplicit) {
+          metaObject.properties.push(
+            t.objectProperty(
+              t.identifier("component"),
+              t.stringLiteral(path.basename(templateFileName)),
+            ),
+          );
+        } else if (!isDynamic) {
+          metaObject.properties.push(
+            t.objectProperty(
+              t.identifier("component"),
+              t.stringLiteral(widgetBind),
+            ),
+          );
+        }
+
+        if (deps.length) {
           metaObject.properties.push(
             t.objectProperty(
               t.identifier("deps"),
-              parseExpression(file, JSON.stringify(meta.deps)),
+              parseExpression(file, JSON.stringify(deps)),
             ),
           );
         }
@@ -184,7 +347,7 @@ export default {
         );
       }
 
-      if (markoOpts.modules === "cjs") {
+      if (isCJS) {
         program.pushContainer(
           "body",
           t.expressionStatement(
