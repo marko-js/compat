@@ -13,7 +13,15 @@ export default {
       label:
         'The "ref" attribute is deprecated. Please use the "key" attribute instead. See: https://github.com/marko-js/marko/wiki/Deprecation:-ref-attribute',
       fix() {
-        attr.node.name = "key";
+        attr.replaceWith(
+          t.markoAttribute(
+            "key",
+            attr.node.value,
+            attr.node.modifier,
+            attr.node.arguments,
+            attr.node.default,
+          ),
+        );
       },
     });
   },
