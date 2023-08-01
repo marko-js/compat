@@ -5,8 +5,7 @@ export default _marko_template;
 import _eventEmitter from "./components/event-emitter.marko";
 import _marko_tag from "marko/src/runtime/helpers/render-tag.js";
 import _marko_props from "marko/src/runtime/html/helpers/data-marko.js";
-import _marko_renderer from "marko/src/runtime/components/renderer.js";
-const _marko_component = {};
+import _marko_renderer from "marko/src/runtime/components/legacy/renderer-legacy.js";
 _marko_template._ = _marko_renderer(function (input, out, _componentDef, _component, state, $global) {
   function trackEvent(name) {
     return (...args) => {
@@ -32,5 +31,6 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
 }, {
   t: _marko_componentType,
   i: true,
+  s: true,
   d: true
-}, _marko_component);
+});

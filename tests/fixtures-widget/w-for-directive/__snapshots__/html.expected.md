@@ -1,5 +1,5 @@
 # Write
-  <input id=s0-0-a><label for=s0-0-a>a</label><input id=s0-0-b><label for=s0-0-b>b</label><input id=s0-0-c><label for=s0-0-c>c</label>
+  <!--M#s0-0--><input data-marko-key="@a s0-0" id=s0-0-a><label for=s0-0-a>a</label><input data-marko-key="@b s0-0" id=s0-0-b><label for=s0-0-b>b</label><input data-marko-key="@c s0-0" id=s0-0-c><label for=s0-0-c>c</label><!--M/--><script>$MC=(window.$MC||[]).concat({"w":[["s0-0",0,0,{"f":4}]],"t":["<fixture-dir>/template.marko"]})</script>
 
 # Render
 ```html

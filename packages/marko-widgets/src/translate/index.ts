@@ -1,3 +1,4 @@
+import path from "path";
 import { importDefault, parseExpression } from "@marko/babel-utils";
 import { types as t } from "@marko/compiler";
 import { version } from "marko/package.json";
@@ -10,13 +11,14 @@ export default {
         hub: { file },
       } = program;
       const meta = file.metadata.marko;
-      const { widgetBind, needsWidgetBind } = meta;
-      if (!(widgetBind || needsWidgetBind)) return;
+      const { widgetBind } = meta;
+      if (!widgetBind) return;
       program.skip();
 
-      const isSplit = widgetBind
-        ? !/^\.(?:\/(?:index(?:\.js)?)?)?$/.test(widgetBind)
-        : true;
+      const isImplicit = widgetBind === true;
+      const isSplit = isImplicit
+        ? true
+        : !/^\.(?:\/(?:index(?:\.js)?)?)?$/.test(widgetBind);
       const { markoOpts } = file;
       const includeMetaInSource = markoOpts.meta !== false;
       const isHTML = markoOpts.output === "html";
@@ -94,7 +96,7 @@ export default {
         t.objectProperty(t.identifier("t"), componentTypeIdentifier),
       ];
 
-      if (!widgetBind) {
+      if (isImplicit) {
         templateRenderOptionsProps.push(
           t.objectProperty(t.identifier("i"), t.booleanLiteral(true)),
         );
@@ -144,17 +146,17 @@ export default {
 
       if (includeMetaInSource) {
         const metaObject = t.objectExpression([
+          t.objectProperty(t.identifier("legacy"), t.booleanLiteral(true)),
           t.objectProperty(t.identifier("id"), componentTypeIdentifier),
-        ]);
-
-        if (widgetBind) {
-          metaObject.properties.push(
-            t.objectProperty(
-              t.identifier("component"),
-              t.stringLiteral(widgetBind),
+          t.objectProperty(
+            t.identifier("component"),
+            t.stringLiteral(
+              widgetBind === true
+                ? path.basename(file.opts.filename as string)
+                : widgetBind,
             ),
-          );
-        }
+          ),
+        ]);
 
         if (meta.deps.length) {
           metaObject.properties.push(

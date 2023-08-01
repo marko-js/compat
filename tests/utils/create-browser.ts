@@ -1,10 +1,10 @@
-import resolveExports from "resolve.exports";
+import { type Options as ExportsOpts, exports } from "resolve.exports";
 import { type Opts as ResolveOpts, sync as resolveSync } from "resolve";
 import { type ConstructorOptions, JSDOM } from "jsdom";
 import createContextRequire from "context-require";
 
 const exportsMainFile = `__package_exports__`;
-const resolveExportsOptions: resolveExports.Options = {
+const resolveExportsOptions: ExportsOpts = {
   browser: true,
   conditions: ["default", "require", "browser"],
 };
@@ -77,28 +77,94 @@ export default function createBrowser({
       },
     }),
   };
-}
+  function pathFilter(
+    pkg: Record<string, unknown>,
+    _file: string,
+    relativePath: string,
+  ) {
+    if (pkg.exports) {
+      return exports(
+        pkg,
+        relativePath === exportsMainFile ? "." : relativePath,
+        resolveExportsOptions,
+      )?.[0] as string;
+    } else if (pkg.browser) {
+      const pkgBrowser = pkg.browser as Record<string, string | false> | string;
+      let requestedFile = relativePath === exportsMainFile ? "." : relativePath;
 
-function pathFilter(
-  pkg: Record<string, unknown>,
-  _file: string,
-  relativePath: string,
-) {
-  if (pkg.exports) {
-    return resolveExports.resolve(
-      pkg,
-      relativePath === exportsMainFile ? "." : relativePath,
-      resolveExportsOptions,
-    )?.[0] as string;
+      if (typeof pkgBrowser === "string") {
+        switch (requestedFile) {
+          case ".":
+          case "./":
+            return pkgBrowser;
+          default:
+            return requestedFile;
+        }
+      }
+
+      let replacement = pkgBrowser[requestedFile];
+      if (replacement !== undefined) {
+        return replacement;
+      }
+
+      if (requestedFile === ".") {
+        // Check `.` and `./`
+        requestedFile = "./";
+        replacement = pkgBrowser[requestedFile];
+        if (replacement !== undefined) {
+          return replacement;
+        }
+      } else if (requestedFile[0] !== ".") {
+        requestedFile = `./${requestedFile}`;
+        replacement = pkgBrowser[requestedFile];
+        if (replacement !== undefined) {
+          return replacement;
+        }
+      }
+
+      const isFolder = requestedFile[requestedFile.length - 1] === "/";
+      if (isFolder) {
+        // If we're definitely matching a folder we'll try adding `index` to the
+        // end first.
+        requestedFile += "index";
+        replacement = pkgBrowser[requestedFile];
+        if (replacement !== undefined) {
+          return replacement;
+        }
+      }
+
+      for (const ext of resolveExtensions) {
+        replacement = pkgBrowser[requestedFile + ext];
+        if (replacement !== undefined) {
+          return replacement;
+        }
+      }
+
+      if (!isFolder) {
+        // If we're not matching a folder we'll try adding `/index` to the end.
+        requestedFile += "/index";
+        replacement = pkgBrowser[requestedFile];
+        if (replacement !== undefined) {
+          return replacement;
+        }
+
+        for (const ext of resolveExtensions) {
+          replacement = pkgBrowser[requestedFile + ext];
+          if (replacement !== undefined) {
+            return replacement;
+          }
+        }
+      }
+    }
+
+    return relativePath;
   }
-
-  return relativePath;
 }
 
-function packageFilter<T extends { main?: unknown; exports?: unknown }>(
-  pkg: T,
-) {
-  if (pkg.exports) {
+function packageFilter<
+  T extends { main?: unknown; exports?: unknown; browser?: unknown },
+>(pkg: T) {
+  if (pkg.exports || pkg.browser) {
     // defers to the "exports" field.
     pkg.main = exportsMainFile;
   }

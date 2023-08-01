@@ -4,8 +4,7 @@ const _marko_componentType = "<fixture-dir>/template.marko",
 export default _marko_template;
 import _marko_dynamic_tag from "marko/src/runtime/helpers/dynamic-tag.js";
 import { x as _marko_escapeXml } from "marko/src/runtime/html/helpers/escape-xml.js";
-import _marko_renderer from "marko/src/runtime/components/renderer.js";
-const _marko_component = {};
+import _marko_renderer from "marko/src/runtime/components/legacy/renderer-legacy.js";
 _marko_template._ = _marko_renderer(function (input, out, _componentDef, _component, state, $global) {
   var x = 0;
   var fn = (...args) => {
@@ -22,5 +21,6 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
 }, {
   t: _marko_componentType,
   i: true,
+  s: true,
   d: true
-}, _marko_component);
+});

@@ -4,7 +4,7 @@ import { diagnosticDeprecate, diagnosticError } from "@marko/babel-utils";
 
 declare module "@marko/compiler" {
   interface MarkoMeta {
-    widgetBind?: string;
+    widgetBind?: string | true;
   }
 }
 
@@ -15,16 +15,17 @@ export default {
 
     const { file } = attr.hub;
     const meta = file.metadata.marko;
+    let widgetBind: string | true | undefined;
 
     if (node.value.type === "BooleanLiteral" && node.value.value === true) {
-      meta.widgetBind = existsRelative(file, "widget.js")
+      widgetBind = existsRelative(file, "widget.js")
         ? "./widget.js"
         : "./index.js";
     } else if (node.value.type === "StringLiteral") {
-      meta.widgetBind = node.value.value;
+      widgetBind = node.value.value;
     }
 
-    if (!meta.widgetBind) {
+    if (!widgetBind) {
       diagnosticError(attr, {
         label: "Invalid value for w-bind, expected a string literal or 'true'",
       });
@@ -33,19 +34,7 @@ export default {
       return;
     }
 
-    const base = path.basename(file.opts.filename as string);
-    const registryPath = `marko/${
-      file.markoOpts.optimize ? "dist" : "src"
-    }/runtime/components/registry`;
-    meta.deps.push({
-      type: "js",
-      path: `./${base}`,
-      virtualPath: `./${base}.register.js`,
-      code:
-        file.markoOpts.modules === "cjs"
-          ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget(require("${meta.widgetBind}")));`
-          : `import {defineWidget} from "marko-widgets";import widget from "${meta.widgetBind}";import {r} from "${registryPath}";r("${meta.id}",()=>widget);`,
-    });
+    meta.widgetBind = widgetBind;
 
     diagnosticDeprecate(attr, {
       label:
@@ -57,6 +46,33 @@ export default {
         ]);
       },
     });
+  },
+  Program: {
+    exit(program) {
+      const { file } = program.hub;
+      const meta = file.metadata.marko;
+      const { widgetBind } = meta;
+      if (!widgetBind) return;
+
+      const isCJS = file.markoOpts.modules === "cjs";
+      const base = path.basename(file.opts.filename as string);
+      const registryPath = `marko/${
+        file.markoOpts.optimize ? "dist" : "src"
+      }/runtime/components/registry.js`;
+      meta.deps.push({
+        type: "js",
+        path: `./${base}`,
+        virtualPath: `./${base}.register.js`,
+        code:
+          widgetBind === true
+            ? isCJS
+              ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget({}));`
+              : `import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${meta.id}",()=>defineWidget({}));`
+            : isCJS
+            ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget(require("${widgetBind}")));`
+            : `import widget from "${widgetBind}";import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${meta.id}",()=>defineWidget(widget));`,
+      });
+    },
   },
 } satisfies t.Visitor;
 
