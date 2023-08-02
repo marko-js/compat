@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "dependencies": {
+    "jquery": "^3.7.0",
+    "mocha-autotest": "^1.1.2",
+    "marko-widgets": "^8.0.0"
+  }
+}

@@ -2,10 +2,10 @@
   "$schema": "https://json.schemastore.org/mocharc",
   "timeout": 5000,
   "require": ["~preload", "mocha-snap"],
-  "spec": "tests/*.test.ts",
+  "spec": "tests/**/*.test.@(ts|js)",
   "watchFiles": [
     "packages/*/src/**/*.@(ts|marko)",
-    "tests/**/*.@(ts|marko)",
+    "tests/**/*.@(ts|js|marko)",
     "!**/__snapshots__/**"
   ]
 }

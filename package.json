@@ -8,7 +8,8 @@
     "url": "https://github.com/marko-js/compat"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "tests/old"
   ],
   "scripts": {
     "build": "npm run build:types && node -r ~preload ./scripts/build.ts",
