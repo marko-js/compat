@@ -18,7 +18,7 @@ export default {
     }
 
     const [attr] = node.attributes;
-    if (!isSourceBooleanAttribute(attr) || !attr.arguments) {
+    if (!isSourceBooleanAttribute(attr)) {
       return;
     }
 
@@ -31,12 +31,12 @@ export default {
     }
 
     const [attr] = node.attributes;
-    if (!isSourceBooleanAttribute(attr) || !attr.arguments) {
+    if (!isSourceBooleanAttribute(attr)) {
       return;
     }
 
     const name = attr.name;
-    let params = attr.arguments as t.Identifier[];
+    let params = (attr.arguments || []) as t.Identifier[];
 
     for (const param of params) {
       if (param.type !== "Identifier") {
@@ -95,9 +95,9 @@ export default {
                 childTag.attributes.push(t.markoAttribute(params[i].name, arg));
               }
             }
-          }
 
-          childTag.arguments = [];
+            childTag.arguments = [];
+          }
         }
 
         tag.replaceWith(
