@@ -29,14 +29,6 @@ export default {
       return;
     }
 
-    if (tag.node.body.body.length) {
-      diagnosticError(tag, {
-        label: "The <layout-placeholder> tag does not support children.",
-      });
-      tag.remove();
-      return;
-    }
-
     const memberProperty = t.identifier(toCamelCase(name.node.value));
     if (node.name.start != null && node.name.end != null) {
       withLoc(
