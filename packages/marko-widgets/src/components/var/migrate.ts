@@ -1,5 +1,6 @@
 import { types as t } from "@marko/compiler";
 import { diagnosticDeprecate, diagnosticError } from "@marko/babel-utils";
+import { isSourceBooleanAttribute } from "@marko/compat-utils";
 
 export default {
   exit(tag: t.NodePath<t.MarkoTag>) {
@@ -42,21 +43,45 @@ export default {
 
           statements.push(
             t.variableDeclaration("var", [
-              t.variableDeclarator(t.identifier(node.name), node.value),
+              t.variableDeclarator(
+                t.identifier(node.name),
+                isSourceBooleanAttribute(node) ? null : node.value,
+              ),
             ]),
           );
         }
 
         if (condition) {
-          tag.replaceWith(
-            t.markoScriptlet([
-              t.ifStatement(condition, t.blockStatement(statements)),
-            ]),
-          );
+          if (tag.node.body.body.length) {
+            tag.replaceWith(
+              t.markoTag(
+                t.stringLiteral("if"),
+                [],
+                t.markoTagBody(
+                  (
+                    statements.map((it) =>
+                      t.markoScriptlet([it]),
+                    ) as t.MarkoTagBody["body"]
+                  ).concat(tag.node.body.body),
+                ),
+                [condition],
+              ),
+            );
+          } else {
+            tag.replaceWith(
+              t.markoScriptlet([
+                t.ifStatement(condition, t.blockStatement(statements)),
+              ]),
+            );
+          }
         } else {
-          tag.replaceWithMultiple(
-            statements.map((it) => t.markoScriptlet([it])),
+          let body: t.MarkoTagBody["body"] = statements.map((it) =>
+            t.markoScriptlet([it]),
           );
+          if (tag.node.body.body.length) {
+            body = body.concat(tag.node.body.body);
+          }
+          tag.replaceWithMultiple(body);
         }
       },
     });
