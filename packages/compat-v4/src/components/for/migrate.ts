@@ -6,6 +6,7 @@ import {
   parseExpression,
   parseParams,
   parseStatements,
+  withLoc,
 } from "@marko/babel-utils";
 import { ForType, parseFor } from "./parse-for";
 
@@ -52,7 +53,7 @@ export default {
             label: "Invalid <for> arguments.",
             loc: args[0].loc || false,
           });
-          node.arguments = null;
+          tag.replaceWithMultiple(tag.node.body.body);
           return;
         }
 
@@ -89,22 +90,38 @@ export default {
             parsed.separator.start + start,
             parsed.separator.end + start,
           );
-        const statusExpression =
-          parsed.statusVar?.value &&
-          parseExpression(
-            file,
-            parsed.statusVar.value,
-            parsed.statusVar.start + start,
-            parsed.statusVar.end + start,
-          );
+        let statusExpression = parsed.statusVar?.value
+          ? parseExpression(
+              file,
+              parsed.statusVar.value,
+              parsed.statusVar.start + start,
+              parsed.statusVar.end + start,
+            )
+          : undefined;
 
         if (statusExpression) {
+          if (statusExpression.type === "StringLiteral") {
+            if (t.isValidIdentifier(statusExpression.value)) {
+              const statusIdentifier = t.identifier(statusExpression.value);
+              if (statusExpression.start != null) {
+                withLoc(
+                  file,
+                  statusIdentifier,
+                  statusExpression.start + 1,
+                  statusExpression.end! - 1,
+                );
+              }
+
+              statusExpression = statusIdentifier;
+            }
+          }
+
           if (statusExpression.type !== "Identifier") {
             diagnosticError(tag, {
               label: "Invalid <for> status variable.",
               loc: statusExpression.loc || false,
             });
-            node.arguments = null;
+            tag.replaceWithMultiple(tag.node.body.body);
             return;
           }
         }
@@ -116,6 +133,10 @@ export default {
             let valueAttr = params.length === 1 ? "of" : "in";
 
             if (iteratorExpression) {
+              const itemParamName =
+                params.length === 1 && params[0].type === "Identifier"
+                  ? params[0].name
+                  : "it";
               const resultId = generateSafeIdentifier(scope, "result");
               inExpression = t.callExpression(
                 t.arrowFunctionExpression(
@@ -127,12 +148,12 @@ export default {
                     t.expressionStatement(
                       t.callExpression(iteratorExpression, [
                         inExpression!,
-                        t.callExpression(
-                          t.memberExpression(
+                        t.arrowFunctionExpression(
+                          [t.identifier(itemParamName)],
+                          t.callExpression(
                             t.memberExpression(resultId, t.identifier("push")),
-                            t.identifier("bind"),
+                            [t.identifier(itemParamName)],
                           ),
-                          [resultId],
                         ),
                       ]),
                     ),
@@ -167,6 +188,8 @@ export default {
                       sepExpression,
                       t.stringLiteral(""),
                     ),
+                    sepExpression.type === "StringLiteral" &&
+                      !/[-<&]/g.test(sepExpression.value),
                   ),
                 );
               }
@@ -179,7 +202,7 @@ export default {
                   t.markoScriptlet([
                     t.variableDeclaration("const", [
                       t.variableDeclarator(
-                        statusExpression,
+                        statusExpression as t.Identifier,
                         t.objectExpression([
                           t.objectMethod(
                             "method",
@@ -266,7 +289,7 @@ export default {
               start + invalidPart.end,
             ),
           });
-          node.arguments = null;
+          tag.replaceWithMultiple(tag.node.body.body);
           return;
         }
 
@@ -286,38 +309,34 @@ export default {
             label: "Invalid <for(x from y)> arguments.",
             loc: args[0].loc || false,
           });
-          node.arguments = null;
+          tag.replaceWithMultiple(tag.node.body.body);
           return;
         }
 
         const attrs: t.MarkoAttribute[] = [];
+        let fromExpression: t.Expression | undefined;
+        let toExpression: t.Expression | undefined;
 
         if (parsed.from?.value) {
-          attrs.push(
-            t.markoAttribute(
-              "from",
-              parseExpression(
-                file,
-                parsed.from.value,
-                parsed.from.start + start,
-                parsed.from.end + start,
-              ),
-            ),
+          fromExpression = parseExpression(
+            file,
+            parsed.from.value,
+            parsed.from.start + start,
+            parsed.from.end + start,
           );
+
+          attrs.push(t.markoAttribute("from", fromExpression));
         }
 
         if (parsed.to?.value) {
-          attrs.push(
-            t.markoAttribute(
-              "to",
-              parseExpression(
-                file,
-                parsed.to.value,
-                parsed.to.start + start,
-                parsed.to.end + start,
-              ),
-            ),
+          toExpression = parseExpression(
+            file,
+            parsed.to.value,
+            parsed.to.start + start,
+            parsed.to.end + start,
           );
+
+          attrs.push(t.markoAttribute("to", toExpression));
         }
 
         if (parsed.step?.value) {
@@ -332,6 +351,26 @@ export default {
               ),
             ),
           );
+        } else if (toExpression && fromExpression) {
+          if (
+            toExpression.type === "NumericLiteral" &&
+            fromExpression.type === "NumericLiteral"
+          ) {
+            if (fromExpression.value > toExpression.value) {
+              attrs.push(t.markoAttribute("step", t.numericLiteral(-1)));
+            }
+          } else {
+            attrs.push(
+              t.markoAttribute(
+                "step",
+                t.conditionalExpression(
+                  t.binaryExpression("<=", fromExpression, toExpression),
+                  t.numericLiteral(1),
+                  t.numericLiteral(-1),
+                ),
+              ),
+            );
+          }
         }
 
         diagnosticDeprecate(tag, {
@@ -363,7 +402,7 @@ export default {
               start + invalidPart.end,
             ),
           });
-          node.arguments = null;
+          tag.replaceWithMultiple(tag.node.body.body);
           return;
         }
 
