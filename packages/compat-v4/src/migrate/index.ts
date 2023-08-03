@@ -1,6 +1,6 @@
 import type { Visitor } from "@marko/compiler/babel-types";
 import ifDirective from "./if-directive";
-import forDirective from "./for-directive";
+import loopDirective from "./loop-directive";
 import renderCalls from "./render-calls";
 import dynamicAttributes from "./dynamic-attributes";
 import bodyOnlyIfDirective from "./body-only-if-directive";
@@ -12,7 +12,7 @@ import refAttribute from "./ref-attribute";
 
 export default [
   ifDirective,
-  forDirective,
+  loopDirective,
   includeDirective,
   keyModifier,
   refAttribute,
