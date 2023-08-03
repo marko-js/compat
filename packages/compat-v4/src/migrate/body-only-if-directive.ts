@@ -84,7 +84,7 @@ export default {
         } else {
           tag.set(
             "name",
-            t.conditionalExpression(arg, nameExpression, t.nullLiteral()),
+            t.conditionalExpression(arg, t.nullLiteral(), nameExpression),
           );
         }
       },
