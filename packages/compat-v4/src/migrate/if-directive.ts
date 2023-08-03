@@ -10,6 +10,7 @@ export default {
 
     switch (name) {
       case "if":
+      case "unless":
       case "else-if":
         if (!args?.length) return;
         break;
