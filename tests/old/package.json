@@ -1,4 +1,5 @@
 {
+  "name": "tests-old",
   "private": true,
   "devDependencies": {
     "diffable-html": "^5.0.0",
