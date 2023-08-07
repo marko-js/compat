@@ -1,6 +1,6 @@
 {
   "name": "@marko/compat-v4",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "homepage": "https://github.com/marko-js/compat/blob/main/README.md",
   "bugs": "https://github.com/marko-js/compat/issues/new?template=Bug_report.md",
   "repository": {
@@ -26,7 +26,7 @@
   ],
   "dependencies": {
     "@marko/babel-utils": "^6.3.1",
-    "@marko/compat-utils": "^0.0.0"
+    "@marko/compat-utils": "^1.0.0"
   },
   "peerDependencies": {
     "@marko/compiler": "^5",
