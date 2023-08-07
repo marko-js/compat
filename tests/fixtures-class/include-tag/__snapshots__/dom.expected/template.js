@@ -72,7 +72,9 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   out.be("div", {
     "class": "j"
   }, "18", _component, null, 1);
-  if (typeof false === "string") {} else {
+  if (typeof false === "string") {
+    out.t(false, _component);
+  } else {
     _marko_dynamic_tag(out, false, null, null, null, null, _componentDef, "19");
   }
   out.ee();

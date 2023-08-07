@@ -3,6 +3,7 @@ const _marko_componentType = "<fixture-dir>/template.marko",
   _marko_template = _t(_marko_componentType);
 export default _marko_template;
 const fromStatic = "${STATIC}";
+import _marko_class_merge from "marko/src/runtime/helpers/class-value.js";
 import _marko_renderer from "marko/src/runtime/components/renderer.js";
 import { r as _marko_registerComponent } from "marko/src/runtime/components/registry";
 _marko_registerComponent(_marko_componentType, () => _marko_template);
@@ -13,8 +14,9 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   const b = 2;
   const c = 3;
   out.e("div", {
-    "id": "1",
-    "data-other": "2"
+    "class": _marko_class_merge(a),
+    "id": `${a}`,
+    "data-other": b
   }, "0", _component, 0, 0);
   out.be("div", {
     "id": "a"

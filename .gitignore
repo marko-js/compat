@@ -12,7 +12,7 @@ npm-debug.log
 # Build
 dist
 *.marko.js
-*.actual*
+*actual*
 *.tsbuildinfo
 
 # Logging

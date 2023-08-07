@@ -16,8 +16,7 @@ var baseConfig = {
   },
   writeVersionComment: false,
   resolveVirtualDependency(filename, { code, virtualPath }) {
-    var resolvedPath = path.resolve(filename, "..", virtualPath);
-    tempFS.writeTempFile(resolvedPath, code);
+    tempFS.writeTempFile(path.resolve(filename, "..", virtualPath), code);
     return virtualPath;
   },
 };

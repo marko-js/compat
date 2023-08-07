@@ -1,15 +1,17 @@
 # Write
-  <div id=no-body></div><div id=with-body>Body 1Body 2Body 3Body 4</div>Referenced Global true
+  <div id=no-body>Child 1Child 2Child 3Child 4</div><div id=with-body>Child 1Body 1Child 2Body 2Child 3Body 3Child 4Body 4</div>Referenced Global true
 
 # Render
 ```html
 <div
   id="no-body"
-/>
+>
+  Child 1Child 2Child 3Child 4
+</div>
 <div
   id="with-body"
 >
-  Body 1Body 2Body 3Body 4
+  Child 1Body 1Child 2Body 2Child 3Body 3Child 4Body 4
 </div>
 Referenced Global true
 ```

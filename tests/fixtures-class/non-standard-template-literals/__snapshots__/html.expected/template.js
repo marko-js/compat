@@ -3,6 +3,8 @@ const _marko_componentType = "<fixture-dir>/template.marko",
   _marko_template = _t(_marko_componentType);
 export default _marko_template;
 const fromStatic = "${STATIC}";
+import _marko_class_merge from "marko/src/runtime/helpers/class-value.js";
+import _marko_attr from "marko/src/runtime/html/helpers/attr.js";
 import { x as _marko_escapeXml } from "marko/src/runtime/html/helpers/escape-xml.js";
 import _marko_props from "marko/src/runtime/html/helpers/data-marko.js";
 import _marko_renderer from "marko/src/runtime/components/renderer.js";
@@ -12,15 +14,15 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   const a = 1;
   const b = 2;
   const c = 3;
-  out.w("<div id=1 data-other=2></div>");
+  out.w(`<div${_marko_attr("class", _marko_class_merge(a))}${_marko_attr("id", `${a}`)}${_marko_attr("data-other", b)}></div>`);
   out.w("<div id=a>");
-  out.w("${STATIC}");
+  out.w(_marko_escapeXml(fromStatic));
   out.w("</div>");
   out.w("<div id=b>");
-  out.w("${SCRIPLET}");
+  out.w(_marko_escapeXml(fromScriptlet));
   out.w("</div>");
   out.w("<div id=c>");
-  out.w("1");
+  out.w(_marko_escapeXml(a));
   out.w("</div>");
   out.w("<div id=d>");
   out.w("abc}");
@@ -35,7 +37,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   out.w("abcd}ef");
   out.w("</div>");
   out.w("<div id=h>");
-  out.w("abc3");
+  out.w(_marko_escapeXml(`abc${c ?? ""}`));
   out.w("</div>");
   out.w("<div id=i>");
   out.w(_marko_escapeXml(`abc${{

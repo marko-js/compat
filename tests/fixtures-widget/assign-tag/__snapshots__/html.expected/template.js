@@ -8,7 +8,7 @@ const _marko_component = {};
 _marko_template._ = _marko_renderer(function (input, out, _componentDef, _component, state, $global) {
   var firstName = "John";
   var lastName = "Smith";
-  var fullName = true;
+  var fullName;
   fullName = `${firstName ?? ""} ${lastName ?? ""}`;
   out.w("<div>");
   out.w(_marko_escapeXml(fullName));

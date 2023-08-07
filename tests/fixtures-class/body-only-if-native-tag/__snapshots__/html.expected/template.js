@@ -7,12 +7,12 @@ const _marko_component = {};
 _marko_template._ = _marko_renderer(function (input, out, _componentDef, _component, state, $global) {
   out.w("<div>");
   {
-    const _tagName = input.test ? "span" : null;
+    const _tagName = input.test ? null : "span";
     if (_tagName) out.w(`<${_tagName}>`);else out.bf("f_1", _component, 1);
     out.w("Blah");
     if (_tagName) out.w(`</${_tagName}>`);else out.ef();
     if (input.shouldShow) {
-      const _tagName2 = input.test ? "span" : null;
+      const _tagName2 = input.test ? null : "span";
       if (_tagName2) out.w(`<${_tagName2}>`);else out.bf("f_2", _component, 1);
       out.w("Blah");
       if (_tagName2) out.w(`</${_tagName2}>`);else out.ef();

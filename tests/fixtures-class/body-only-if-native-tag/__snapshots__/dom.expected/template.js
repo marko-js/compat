@@ -9,12 +9,12 @@ const _marko_component = {};
 _marko_template._ = _marko_renderer(function (input, out, _componentDef, _component, state, $global) {
   out.be("div", null, "0", _component, null, 0);
   {
-    const _tagName = input.test ? "span" : null;
+    const _tagName = input.test ? null : "span";
     if (_tagName) out.be(_tagName, null, "1", _component, null, 0);else out.bf("f_1", _component);
     out.t("Blah", _component);
     if (_tagName) out.ee();else out.ef();
     if (input.shouldShow) {
-      const _tagName2 = input.test ? "span" : null;
+      const _tagName2 = input.test ? null : "span";
       if (_tagName2) out.be(_tagName2, null, "2", _component, null, 0);else out.bf("f_2", _component);
       out.t("Blah", _component);
       if (_tagName2) out.ee();else out.ef();

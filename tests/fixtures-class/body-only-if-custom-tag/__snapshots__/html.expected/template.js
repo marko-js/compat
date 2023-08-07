@@ -16,40 +16,40 @@ const _marko_component = {};
 _marko_template._ = _marko_renderer(function (input, out, _componentDef, _component, state, $global) {
   out.w("<div id=no-body>");
   {
-    const _tagName = input.show1 ? Component1 : null;
+    const _tagName = input.show1 ? null : Component1;
     if (_tagName) _marko_tag(_tagName, {}, out, _componentDef, "1");
-    const _tagName2 = input.show2 ? Component2Template : null;
+    const _tagName2 = input.show2 ? null : Component2Template;
     if (_tagName2) _marko_tag(_tagName2, {}, out, _componentDef, "2");
-    const _tagName3 = input.show3 ? _Component : null;
+    const _tagName3 = input.show3 ? null : _Component;
     if (_tagName3) _marko_tag(_tagName3, {}, out, _componentDef, "3");
-    const _tagName4 = input.show4 ? Component4Template : null;
+    const _tagName4 = input.show4 ? null : Component4Template;
     if (_tagName4) _marko_tag(_tagName4, {}, out, _componentDef, "4");
   }
   out.w("</div>");
   out.w("<div id=with-body>");
   {
-    const _tagName5 = input.show1 ? Component1 : null;
+    const _tagName5 = input.show1 ? null : Component1;
     const _renderBody = out => {
       out.w("Body 1");
     };
     if (_tagName5) _marko_tag(_tagName5, {
       "renderBody": _renderBody
     }, out, _componentDef, "6");else _renderBody(out);
-    const _tagName6 = input.show2 ? Component2Template : null;
+    const _tagName6 = input.show2 ? null : Component2Template;
     const _renderBody2 = out => {
       out.w("Body 2");
     };
     if (_tagName6) _marko_tag(_tagName6, {
       "renderBody": _renderBody2
     }, out, _componentDef, "7");else _renderBody2(out);
-    const _tagName7 = input.show3 ? _Component : null;
+    const _tagName7 = input.show3 ? null : _Component;
     const _renderBody3 = out => {
       out.w("Body 3");
     };
     if (_tagName7) _marko_tag(_tagName7, {
       "renderBody": _renderBody3
     }, out, _componentDef, "8");else _renderBody3(out);
-    const _tagName8 = input.show4 ? Component4Template : null;
+    const _tagName8 = input.show4 ? null : Component4Template;
     const _renderBody4 = out => {
       out.w("Body 4");
     };

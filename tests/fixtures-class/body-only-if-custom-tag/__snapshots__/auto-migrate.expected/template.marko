@@ -12,22 +12,22 @@ export interface Input {
   show4: boolean;
 }
 <div id="no-body">
-  <${input.show1 ? Component1 : null}/>
-  <${input.show2 ? Component2Template : null}/>
-  <${input.show3 ? _Component : null}/>
-  <${input.show4 ? Component4Template : null}/>
+  <${input.show1 ? null : Component1}/>
+  <${input.show2 ? null : Component2Template}/>
+  <${input.show3 ? null : _Component}/>
+  <${input.show4 ? null : Component4Template}/>
 </div>
 <div id="with-body">
-  <${input.show1 ? Component1 : null}>
+  <${input.show1 ? null : Component1}>
     Body 1
   </>
-  <${input.show2 ? Component2Template : null}>
+  <${input.show2 ? null : Component2Template}>
     Body 2
   </>
-  <${input.show3 ? _Component : null}>
+  <${input.show3 ? null : _Component}>
     Body 3
   </>
-  <${input.show4 ? Component4Template : null}>
+  <${input.show4 ? null : Component4Template}>
     Body 4
   </>
 </div>

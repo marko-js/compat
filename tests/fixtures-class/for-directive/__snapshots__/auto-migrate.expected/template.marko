@@ -25,7 +25,7 @@ static function evenItemsIterator(items, cb) {
 <div class="array-iterator">
   <for|color| of=(() => {
     const _result = [];
-    evenItemsIterator(colorsArray || [], _result.push.bind(_result));
+    evenItemsIterator(colorsArray || [], color => _result.push(color));
     return _result;
   })()>
     <div>
@@ -80,7 +80,7 @@ static function evenItemsIterator(items, cb) {
 <div class="array-iterator-and-status-var">
   <for|color, _index3| of=(() => {
     const _result2 = [];
-    evenItemsIterator(colorsArray || [], _result2.push.bind(_result2));
+    evenItemsIterator(colorsArray || [], color => _result2.push(color));
     return _result2;
   })()>
     ${_index3 ? ", " : ""}
@@ -94,7 +94,7 @@ static function evenItemsIterator(items, cb) {
 <div class="array-status-var-and-iterator">
   <for|color, _index4, _all2| of=(() => {
     const _result3 = [];
-    evenItemsIterator(colorsArray || [], _result3.push.bind(_result3));
+    evenItemsIterator(colorsArray || [], color => _result3.push(color));
     return _result3;
   })()>
     $ const loop = {
@@ -153,7 +153,7 @@ static function evenItemsIterator(items, cb) {
 <div class="array-status-var-and-iterator-and-separator">
   <for|color, _index6, _all4| of=(() => {
     const _result4 = [];
-    evenItemsIterator(colorsArray || [], _result4.push.bind(_result4));
+    evenItemsIterator(colorsArray || [], color => _result4.push(color));
     return _result4;
   })()>
     $ const loop = {

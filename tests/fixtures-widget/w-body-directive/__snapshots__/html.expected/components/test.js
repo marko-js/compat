@@ -38,7 +38,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   var textContent = "Text Content";
   out.w("<div>");
   if (typeof textContent === "string") {
-    out.w("Text Content");
+    out.w(_marko_escapeXml(textContent));
   } else {
     out.w(`<${textContent}></${textContent}>`);
   }

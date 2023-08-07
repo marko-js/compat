@@ -27,7 +27,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   }, "0", _component, null, 1);
   {
     let _keyValue = 0;
-    for (const color of colorsArray || []) {
+    for (const color of colorsArray || [] || []) {
       const _keyScope = `[${_keyValue++}]`;
       out.be("li", null, "1" + _keyScope, _component, null, 0);
       out.t(color, _component);
@@ -42,9 +42,9 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     let _keyValue2 = 0;
     for (const color of (() => {
       const _result = [];
-      evenItemsIterator(colorsArray || [], _result.push.bind(_result));
+      evenItemsIterator(colorsArray || [], color => _result.push(color));
       return _result;
-    })()) {
+    })() || []) {
       const _keyScope2 = `[${_keyValue2++}]`;
       out.be("li", null, "3" + _keyScope2, _component, null, 0);
       out.t(color, _component);
@@ -57,7 +57,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   }, "4", _component, null, 1);
   {
     let _index10 = 0;
-    for (const color of colorsArray || []) {
+    for (const color of colorsArray || [] || []) {
       let _index = _index10++;
       const _keyScope3 = `[${_index}]`;
       out.t(_index ? ", " : "", _component);
@@ -117,9 +117,9 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     let _index12 = 0;
     for (const color of (() => {
       const _result2 = [];
-      evenItemsIterator(colorsArray || [], _result2.push.bind(_result2));
+      evenItemsIterator(colorsArray || [], color => _result2.push(color));
       return _result2;
-    })()) {
+    })() || []) {
       let _index3 = _index12++;
       const _keyScope5 = `[${_index3}]`;
       out.t(_index3 ? ", " : "", _component);
@@ -136,7 +136,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     let _index13 = 0;
     const _all2 = (() => {
       const _result3 = [];
-      evenItemsIterator(colorsArray || [], _result3.push.bind(_result3));
+      evenItemsIterator(colorsArray || [], color => _result3.push(color));
       return _result3;
     })();
     for (const color of _all2) {
@@ -211,7 +211,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     let _index15 = 0;
     const _all4 = (() => {
       const _result4 = [];
-      evenItemsIterator(colorsArray || [], _result4.push.bind(_result4));
+      evenItemsIterator(colorsArray || [], color => _result4.push(color));
       return _result4;
     })();
     for (const color of _all4) {
@@ -262,7 +262,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   }, "15", _component, null, 1);
   {
     let _index16 = 0;
-    for (const [color, code] of Object.entries(colorCodes)) {
+    for (const [color, code] of Object.entries(colorCodes) || []) {
       let _index7 = _index16++;
       const _keyScope7 = `[${_index7}]`;
       out.t(_index7 ? ", " : "", _component);

@@ -1,7 +1,10 @@
 # Render
 ```html
 <div>
-  BlahBlah
+  <span>
+    Blah
+  </span>
+  Blah
   <span>
     Blah
   </span>
