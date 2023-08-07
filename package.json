@@ -18,7 +18,7 @@
     "ci:test": "c8 npm test -- --forbid-only",
     "format": "eslint -f unix --fix . && prettier . --write --log-level=error && sort-package-json --quiet",
     "prepare": "husky install",
-    "release": "npm run build && npm exec -ws replace --silent src dist marko.json && changeset publish && npm exec -ws replace --silent dist src marko.json",
+    "release": "npm run build && npm exec -w marko-widgets -w @marko/compat-v4 replace --silent src dist marko.json && changeset publish && npm exec -w marko-widgets -w @marko/compat-v4 replace --silent dist src marko.json",
     "test": "mocha",
     "version": "changeset version && npm i --package-lock-only"
   },
