@@ -6,6 +6,13 @@
     "impliedStrict": true,
     "warnOnUnsupportedTypeScriptVersion": false
   },
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "project": "packages/*/tsconfig.json"
+      }
+    }
+  },
   "env": {
     "node": true,
     "mocha": true,
