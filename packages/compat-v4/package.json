@@ -31,5 +31,8 @@
   "peerDependencies": {
     "@marko/compiler": "^5",
     "marko": "^5"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
