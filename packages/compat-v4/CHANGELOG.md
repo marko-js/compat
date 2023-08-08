@@ -1,5 +1,11 @@
 # @marko/compat-v4
 
+## 1.0.1
+
+### Patch Changes
+
+- [#2](https://github.com/marko-js/compat/pull/2) [`008375a`](https://github.com/marko-js/compat/commit/008375ad1926976462e4dfa56a712a4e22ba6293) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Fix issue where body-only-if migrator was not revisiting arguments
+
 ## 1.0.0
 
 ### Major Changes

@@ -1,6 +1,6 @@
 {
   "name": "marko-widgets",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "homepage": "https://github.com/marko-js/compat/blob/main/README.md",
   "bugs": "https://github.com/marko-js/compat/issues/new?template=Bug_report.md",
   "repository": {
@@ -33,7 +33,7 @@
   "dependencies": {
     "@marko/babel-utils": "^6.3.1",
     "@marko/compat-utils": "^1.0.0",
-    "@marko/compat-v4": "^1.0.0",
+    "@marko/compat-v4": "^1.0.1",
     "raptor-dom": "^1.1.1",
     "raptor-renderer": "^1.5.0"
   },
