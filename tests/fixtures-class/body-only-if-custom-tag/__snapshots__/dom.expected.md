@@ -10,6 +10,11 @@
 >
   Child 1Body 1Child 2Body 2Child 3Body 3Child 4Body 4
 </div>
+<div
+  id="revisit"
+>
+  Child 1
+</div>
 Referenced Global true
 ```
 
@@ -25,6 +30,9 @@ Referenced Global true
 >
   Body 1Child 2Body 2Child 3Body 3Child 4Body 4
 </div>
+<div
+  id="revisit"
+/>
 Referenced Global true
 ```
 
@@ -76,6 +84,9 @@ removed div2/#text17 before div2/#text18
 inserted div2/#text17
 removed div2/#text18 before div2/#text0
 inserted div2/#text18
+removed #text before #text
+removed #text before #text
+removed #text in div3
 ```
 
 # Render {"show2":true}
@@ -89,6 +100,11 @@ inserted div2/#text18
   id="with-body"
 >
   Child 1Body 1Body 2Child 3Body 3Child 4Body 4
+</div>
+<div
+  id="revisit"
+>
+  Child 1
 </div>
 Referenced Global true
 ```
@@ -114,6 +130,9 @@ removed #text after div2/#text6
 removed #text after div2/#text6
 removed #text after div2/#text6
 removed #text after div2/#text6
+inserted div3/#text0
+inserted div3/#text2
+inserted div3/#text1
 ```
 
 # Render {"show3":true}
@@ -127,6 +146,11 @@ removed #text after div2/#text6
   id="with-body"
 >
   Child 1Body 1Child 2Body 2Body 3Child 4Body 4
+</div>
+<div
+  id="revisit"
+>
+  Child 1
 </div>
 Referenced Global true
 ```
@@ -165,6 +189,11 @@ removed #text after div2/#text12
   id="with-body"
 >
   Child 1Body 1Child 2Body 2Child 3Body 3Body 4
+</div>
+<div
+  id="revisit"
+>
+  Child 1
 </div>
 Referenced Global true
 ```

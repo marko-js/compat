@@ -58,6 +58,12 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     }, out, _componentDef, "9");else _renderBody4(out);
   }
   out.w("</div>");
+  out.w("<div id=revisit>");
+  {
+    const _tagName9 = input.show1 ? null : Component1;
+    if (_tagName9) _marko_tag(_tagName9, {}, out, _componentDef, "11");
+  }
+  out.w("</div>");
   out.w("Referenced Global ");
   out.w(_marko_escapeXml(typeof Component4 === "undefined"));
 }, {

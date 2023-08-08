@@ -11,11 +11,15 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     if (_tagName) out.w(`<${_tagName}>`);else out.bf("f_1", _component, 1);
     out.w("Blah");
     if (_tagName) out.w(`</${_tagName}>`);else out.ef();
+    const _tagName2 = input.test ? null : "span";
+    if (_tagName2) out.w(`<${_tagName2}>`);else out.bf("f_2", _component, 1);
+    out.w("Blah");
+    if (_tagName2) out.w(`</${_tagName2}>`);else out.ef();
     if (input.shouldShow) {
-      const _tagName2 = input.test ? null : "span";
-      if (_tagName2) out.w(`<${_tagName2}>`);else out.bf("f_2", _component, 1);
+      const _tagName3 = input.test ? null : "span";
+      if (_tagName3) out.w(`<${_tagName3}>`);else out.bf("f_3", _component, 1);
       out.w("Blah");
-      if (_tagName2) out.w(`</${_tagName2}>`);else out.ef();
+      if (_tagName3) out.w(`</${_tagName3}>`);else out.ef();
     }
     out.w("Blah");
     out.w("<span>");
