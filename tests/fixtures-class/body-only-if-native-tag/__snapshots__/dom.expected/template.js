@@ -13,14 +13,18 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     if (_tagName) out.be(_tagName, null, "1", _component, null, 0);else out.bf("f_1", _component);
     out.t("Blah", _component);
     if (_tagName) out.ee();else out.ef();
+    const _tagName2 = input.test ? null : "span";
+    if (_tagName2) out.be(_tagName2, null, "2", _component, null, 0);else out.bf("f_2", _component);
+    out.t("Blah", _component);
+    if (_tagName2) out.ee();else out.ef();
     if (input.shouldShow) {
-      const _tagName2 = input.test ? null : "span";
-      if (_tagName2) out.be(_tagName2, null, "2", _component, null, 0);else out.bf("f_2", _component);
+      const _tagName3 = input.test ? null : "span";
+      if (_tagName3) out.be(_tagName3, null, "3", _component, null, 0);else out.bf("f_3", _component);
       out.t("Blah", _component);
-      if (_tagName2) out.ee();else out.ef();
+      if (_tagName3) out.ee();else out.ef();
     }
     out.t("Blah", _component);
-    out.be("span", null, "3", _component, null, 0);
+    out.be("span", null, "4", _component, null, 0);
     out.t("Blah", _component);
     out.ee();
   }

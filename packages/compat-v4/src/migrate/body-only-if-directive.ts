@@ -86,6 +86,10 @@ export default {
             "name",
             t.conditionalExpression(arg, t.nullLiteral(), nameExpression),
           );
+
+          (tag.get("name") as t.NodePath<t.ConditionalExpression>)
+            .get("test")
+            .visit();
         }
       },
     });
