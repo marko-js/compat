@@ -9,6 +9,7 @@ import includeDirective from "./include-directive";
 import legacyAttributeTags from "./legacy-attribute-tags";
 import keyModifier from "./key-modifier";
 import refAttribute from "./ref-attribute";
+import nativeTagNamespacedAttribute from "./native-tag-namespaced-attribute";
 
 export default [
   ifDirective,
@@ -21,4 +22,5 @@ export default [
   dynamicAttributes,
   bodyOnlyIfDirective,
   nonStandardTemplateLiterals,
+  nativeTagNamespacedAttribute,
 ] satisfies Visitor[];
