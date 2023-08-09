@@ -1,5 +1,14 @@
 # marko-widgets
 
+## 8.0.2
+
+### Patch Changes
+
+- [#4](https://github.com/marko-js/compat/pull/4) [`ad02286`](https://github.com/marko-js/compat/commit/ad02286bf28b66acafa1156dc381e61213be1456) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Allow namespace native tag attributes.
+
+- Updated dependencies [[`ad02286`](https://github.com/marko-js/compat/commit/ad02286bf28b66acafa1156dc381e61213be1456)]:
+  - @marko/compat-v4@1.0.2
+
 ## 8.0.1
 
 ### Patch Changes
