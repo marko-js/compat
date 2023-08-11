@@ -1,5 +1,11 @@
 # marko-widgets
 
+## 8.0.3
+
+### Patch Changes
+
+- [#6](https://github.com/marko-js/compat/pull/6) [`dd221c1`](https://github.com/marko-js/compat/commit/dd221c1138ed7332301935b6195ccc9e91061372) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Fix issue where user provided id on an element with `w-bind` was being replaced.
+
 ## 8.0.2
 
 ### Patch Changes
