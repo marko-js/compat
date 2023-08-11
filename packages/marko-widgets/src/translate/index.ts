@@ -2,7 +2,7 @@ import path from "path";
 import { importDefault, parseExpression } from "@marko/babel-utils";
 import { types as t } from "@marko/compiler";
 import { version } from "marko/package.json";
-import { getAttribute } from "@marko/compat-utils";
+import { getAttribute, hasAttribute } from "@marko/compat-utils";
 import { optimizeHTMLWrites } from "./optmize-html-writes";
 
 export default {
@@ -57,23 +57,30 @@ export default {
           ),
         ]),
       );
-      wBindAttr.replaceWithMultiple([
-        t.markoAttribute("key", wBindIdentifier),
-        t.markoAttribute(
-          "id",
-          t.logicalExpression(
-            "&&",
-            wBindIdentifier,
-            t.callExpression(
-              t.memberExpression(
-                componentInstanceIdentifier,
-                t.identifier("elId"),
+
+      if (hasAttribute(tag, "id")) {
+        wBindAttr.replaceWith(t.markoAttribute("key", wBindIdentifier));
+      } else {
+        wBindAttr.replaceWithMultiple([
+          t.markoAttribute("key", wBindIdentifier),
+          t.markoAttribute(
+            "id",
+            t.logicalExpression(
+              "&&",
+              wBindIdentifier,
+              t.callExpression(
+                t.memberExpression(
+                  componentInstanceIdentifier,
+                  t.identifier("elId"),
+                ),
+                [wBindIdentifier],
               ),
-              [wBindIdentifier],
             ),
           ),
-        ),
-      ]);
+        ]);
+      }
+    } else if (hasAttribute(tag, "id")) {
+      wBindAttr.replaceWith(t.markoAttribute("key", t.stringLiteral("_wbind")));
     } else {
       wBindAttr.replaceWithMultiple([
         t.markoAttribute("key", t.stringLiteral("_wbind")),
