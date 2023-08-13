@@ -46,6 +46,8 @@ export function optimizeHTMLWrites(program: t.NodePath<t.Program>) {
 
 function getOutContent(path: t.NodePath<t.Node>) {
   let { node } = path;
+  if (!node) return;
+
   if (node.type === "ExpressionStatement") {
     node = node.expression;
   }
