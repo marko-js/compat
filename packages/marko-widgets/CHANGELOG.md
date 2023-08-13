@@ -1,5 +1,11 @@
 # marko-widgets
 
+## 8.0.4
+
+### Patch Changes
+
+- [`dcc424d`](https://github.com/marko-js/compat/commit/dcc424d174a78eaee1278fe53fd26e074cb339d9) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Fix issue where a node was removed but the NodePath still exists while optimizing html.
+
 ## 8.0.3
 
 ### Patch Changes
