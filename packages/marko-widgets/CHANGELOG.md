@@ -1,5 +1,14 @@
 # marko-widgets
 
+## 8.0.6
+
+### Patch Changes
+
+- [`c9fc240`](https://github.com/marko-js/compat/commit/c9fc240f1579c90b27d279ab1da8365db42606f8) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Fix issue where layout-placeholder's were not properly being converted to camelCase.
+
+- Updated dependencies [[`0044e93`](https://github.com/marko-js/compat/commit/0044e93d26febfa14d153e3cd0aebc084351ff44), [`c6b3b0b`](https://github.com/marko-js/compat/commit/c6b3b0b92db74abc02f9d8976b65dc5c6c73ae9c)]:
+  - @marko/compat-v4@1.0.4
+
 ## 8.0.5
 
 ### Patch Changes
