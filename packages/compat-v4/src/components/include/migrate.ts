@@ -3,7 +3,7 @@ import { diagnosticDeprecate, diagnosticError } from "@marko/babel-utils";
 import { exprToAttrs, getTagNameForTemplatePath } from "@marko/compat-utils";
 
 export default {
-  enter(tag: t.NodePath<t.MarkoTag>) {
+  exit(tag: t.NodePath<t.MarkoTag>) {
     const args = tag.node.arguments;
     if (!args?.length) {
       diagnosticError(tag, {

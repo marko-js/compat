@@ -14,6 +14,9 @@
 }
 </div>
 <div>
+  test.marko {}
+</div>
+<div>
   components/test.marko {}
 </div>
 <div>

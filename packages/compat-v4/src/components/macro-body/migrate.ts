@@ -2,7 +2,7 @@ import { types as t } from "@marko/compiler";
 import { diagnosticError } from "@marko/babel-utils";
 
 export default {
-  enter(tag: t.NodePath<t.MarkoTag>) {
+  exit(tag: t.NodePath<t.MarkoTag>) {
     const closestMacro = tag.findParent(isMacroDefinition);
     let hasErrors = false;
 

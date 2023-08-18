@@ -10,6 +10,7 @@ import legacyAttributeTags from "./legacy-attribute-tags";
 import keyModifier from "./key-modifier";
 import refAttribute from "./ref-attribute";
 import nativeTagNamespacedAttribute from "./native-tag-namespaced-attribute";
+import tagArguments from "./tag-arguments";
 
 export default [
   ifDirective,
@@ -23,4 +24,5 @@ export default [
   bodyOnlyIfDirective,
   nonStandardTemplateLiterals,
   nativeTagNamespacedAttribute,
+  tagArguments,
 ] satisfies Visitor[];

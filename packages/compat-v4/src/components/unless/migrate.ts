@@ -2,7 +2,7 @@ import { types as t } from "@marko/compiler";
 import { diagnosticDeprecate, diagnosticError } from "@marko/babel-utils";
 
 export default {
-  enter(tag: t.NodePath<t.MarkoTag>) {
+  exit(tag: t.NodePath<t.MarkoTag>) {
     const { node } = tag;
     const name = tag.get("name");
     const args = node.arguments || [];
