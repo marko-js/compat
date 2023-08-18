@@ -16,11 +16,17 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     "x": 1
   }, out, _componentDef, "1");
   _marko_tag(Test, someData, out, _componentDef, "2");
-  _marko_tag(_test, {}, out, _componentDef, "3");
+  if (someData.y > 2) {
+    _marko_tag(Test, {}, out, _componentDef, "3");
+  }
+  if (someData.y <= 2) {
+    _marko_tag(Test, {}, out, _componentDef, "4");
+  }
+  _marko_tag(_test, {}, out, _componentDef, "5");
   _marko_tag(_test, {
     "x": 1
-  }, out, _componentDef, "4");
-  _marko_tag(_test, someData, out, _componentDef, "5");
+  }, out, _componentDef, "6");
+  _marko_tag(_test, someData, out, _componentDef, "7");
 }, {
   t: _marko_componentType,
   i: true,

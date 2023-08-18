@@ -1,6 +1,6 @@
 import { types as t } from "@marko/compiler";
 import { diagnosticDeprecate } from "@marko/babel-utils";
-import { willMigrateTag } from "@marko/compat-utils";
+import { willMigrateAllAttrs } from "@marko/compat-utils";
 
 export default {
   MarkoAttribute(attr) {
@@ -21,7 +21,7 @@ export default {
     }
 
     const tag = attr.parentPath as t.NodePath<t.MarkoTag>;
-    if (willMigrateTag(tag)) return;
+    if (willMigrateAllAttrs(tag)) return;
 
     diagnosticDeprecate(attr, {
       label: `The "${name}" directive is deprecated. Please use "<${name}>" tag instead. See: https://github.com/marko-js/marko/wiki/Deprecation:-control-flow-attributes`,

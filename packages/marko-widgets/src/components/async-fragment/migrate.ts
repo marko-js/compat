@@ -6,7 +6,7 @@ import {
 } from "@marko/babel-utils";
 
 export default {
-  enter(tag: t.NodePath<t.MarkoTag>) {
+  exit(tag: t.NodePath<t.MarkoTag>) {
     diagnosticDeprecate(tag, {
       label: `The "<async-fragment>" tag is deprecated. Please use "<await>" instead. See: https://github.com/marko-js/marko/wiki/Deprecation:-async-fragment`,
       fix() {

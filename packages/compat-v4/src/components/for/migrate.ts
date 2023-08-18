@@ -11,7 +11,7 @@ import {
 import { ForType, parseFor } from "./parse-for";
 
 export default {
-  enter(tag: t.NodePath<t.MarkoTag>) {
+  exit(tag: t.NodePath<t.MarkoTag>) {
     const { node } = tag;
     const args = node.arguments;
     const len = args?.length;

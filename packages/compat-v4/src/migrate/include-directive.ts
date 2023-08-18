@@ -1,6 +1,6 @@
 import { types as t } from "@marko/compiler";
 import { diagnosticDeprecate } from "@marko/babel-utils";
-import { willMigrateTag } from "@marko/compat-utils";
+import { willMigrateAllAttrs } from "@marko/compat-utils";
 
 export default {
   MarkoAttribute(attr) {
@@ -11,7 +11,7 @@ export default {
     if (name !== "include" || !args?.length) return;
 
     const tag = attr.parentPath as t.NodePath<t.MarkoTag>;
-    if (willMigrateTag(tag)) return;
+    if (willMigrateAllAttrs(tag)) return;
 
     diagnosticDeprecate(attr, {
       label:

@@ -5,6 +5,12 @@ $ var someData = {
 <${Test}/>
 <${Test} x=1/>
 <${Test} ...someData/>
+<if(someData.y > 2)>
+  <${Test}/>
+</if>
+<if(someData.y <= 2)>
+  <${Test}/>
+</if>
 <test/>
 <test x=1/>
 <test ...someData/>

@@ -7,7 +7,7 @@ import {
 } from "@marko/babel-utils";
 
 export default {
-  enter(tag: t.NodePath<t.MarkoTag>) {
+  exit(tag: t.NodePath<t.MarkoTag>) {
     const firstArg = tag.node.arguments?.[0];
     if (firstArg?.type !== "MarkoParseError") return;
     const match = /^\s*([$a-zA-Z_][0-9a-zA-Z_$]*)\s+from\s+/.exec(

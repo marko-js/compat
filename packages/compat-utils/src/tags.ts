@@ -8,7 +8,9 @@ export function getTagFile(tag: t.NodePath<t.MarkoTag>) {
   return def && (def.template || def.renderer);
 }
 
-export function willMigrateTag(tag: t.NodePath<t.MarkoTag>) {
+export function willMigrateTag(
+  tag: t.NodePath<t.MarkoTag>,
+): tag is t.NodePath<t.MarkoTag & { name: t.StringLiteral }> {
   switch (getTagDef(tag)?.taglibId) {
     case "marko-widgets":
     case "@marko/compat-v4":
@@ -16,6 +18,19 @@ export function willMigrateTag(tag: t.NodePath<t.MarkoTag>) {
     default:
       return false;
   }
+}
+
+export function willMigrateAllAttrs(tag: t.NodePath<t.MarkoTag>) {
+  if (willMigrateTag(tag)) {
+    switch (tag.node.name.value) {
+      case "assign":
+      case "invoke":
+      case "var":
+        return true;
+    }
+  }
+
+  return false;
 }
 
 export function getTagNameForTemplatePath(
