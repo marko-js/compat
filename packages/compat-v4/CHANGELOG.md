@@ -1,5 +1,13 @@
 # @marko/compat-v4
 
+## 1.0.4
+
+### Patch Changes
+
+- [`0044e93`](https://github.com/marko-js/compat/commit/0044e93d26febfa14d153e3cd0aebc084351ff44) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Fix issue where if directive migration was running on valid else tags
+
+- [`c6b3b0b`](https://github.com/marko-js/compat/commit/c6b3b0b92db74abc02f9d8976b65dc5c6c73ae9c) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Migrate if attribute on else tag to an else-if tag.
+
 ## 1.0.3
 
 ### Patch Changes
