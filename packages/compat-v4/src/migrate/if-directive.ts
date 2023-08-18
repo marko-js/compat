@@ -7,6 +7,21 @@ export default {
     const {
       node: { name, arguments: args },
     } = attr;
+    const tag = attr.parentPath as t.NodePath<t.MarkoTag>;
+    if (
+      name === "if" &&
+      tag.node.name.type === "StringLiteral" &&
+      tag.node.name.value === "else"
+    ) {
+      diagnosticDeprecate(attr, {
+        label: `The "if" attribute on an <else> tag is deprecated. Please use "<else-if>" tag instead.`,
+        fix() {
+          tag.node.arguments = args;
+          tag.node.name = t.stringLiteral("else-if");
+        },
+      });
+      return;
+    }
 
     switch (name) {
       case "if":
@@ -20,12 +35,7 @@ export default {
         return;
     }
 
-    const tag = attr.parentPath as t.NodePath<t.MarkoTag>;
-    if (
-      (tag.node.name.type === "StringLiteral" &&
-        tag.node.name.value === "if") ||
-      willMigrateAllAttrs(tag)
-    ) {
+    if (willMigrateAllAttrs(tag)) {
       return;
     }
 
