@@ -1,5 +1,17 @@
 # marko-widgets
 
+## 8.0.5
+
+### Patch Changes
+
+- [#9](https://github.com/marko-js/compat/pull/9) [`705598e`](https://github.com/marko-js/compat/commit/705598ef6bb7d136c1d948d1639b7a14c2289f0c) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Ensure all tag migrations happen on exit so that directive migrations can run first.
+
+- [#9](https://github.com/marko-js/compat/pull/9) [`705598e`](https://github.com/marko-js/compat/commit/705598ef6bb7d136c1d948d1639b7a14c2289f0c) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Only skip directive migrations for specific tags that handle all attributes. Previously any migrated tag was not properly getting directives migrated.
+
+- Updated dependencies [[`705598e`](https://github.com/marko-js/compat/commit/705598ef6bb7d136c1d948d1639b7a14c2289f0c), [`705598e`](https://github.com/marko-js/compat/commit/705598ef6bb7d136c1d948d1639b7a14c2289f0c), [`33b1d0d`](https://github.com/marko-js/compat/commit/33b1d0d723c82ade65f27a31910120a29f522417)]:
+  - @marko/compat-v4@1.0.3
+  - @marko/compat-utils@1.0.1
+
 ## 8.0.4
 
 ### Patch Changes
