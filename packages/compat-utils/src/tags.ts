@@ -20,6 +20,13 @@ export function willMigrateTag(
   }
 }
 
+export function isCoreOrMigrateTag(
+  tag: t.NodePath<t.MarkoTag>,
+): tag is t.NodePath<t.MarkoTag & { name: t.StringLiteral }> {
+  const taglibId = getTagDef(tag)?.taglibId;
+  return taglibId ? /^@?marko[-/]/.test(taglibId) : false;
+}
+
 export function willMigrateAllAttrs(tag: t.NodePath<t.MarkoTag>) {
   if (willMigrateTag(tag)) {
     switch (tag.node.name.value) {
