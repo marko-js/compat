@@ -21,7 +21,13 @@ export default {
     }
 
     const tag = attr.parentPath as t.NodePath<t.MarkoTag>;
-    if (willMigrateAllAttrs(tag)) return;
+    if (
+      (tag.node.name.type === "StringLiteral" &&
+        tag.node.name.value === "if") ||
+      willMigrateAllAttrs(tag)
+    ) {
+      return;
+    }
 
     diagnosticDeprecate(attr, {
       label: `The "${name}" directive is deprecated. Please use "<${name}>" tag instead. See: https://github.com/marko-js/marko/wiki/Deprecation:-control-flow-attributes`,
