@@ -1,5 +1,11 @@
 # @marko/compat-v4
 
+## 1.0.5
+
+### Patch Changes
+
+- [`85f920c`](https://github.com/marko-js/compat/commit/85f920c22323cb0cd3c6a6da51d3e07dc14824c1) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Fix issue where the if directive was not removed from an else tag.
+
 ## 1.0.4
 
 ### Patch Changes
