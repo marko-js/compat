@@ -18,6 +18,7 @@ export default {
         fix() {
           tag.node.arguments = args;
           tag.node.name = t.stringLiteral("else-if");
+          attr.remove();
         },
       });
       return;
