@@ -66,9 +66,9 @@ export default {
 };
 
 function toCamelCase(str: string) {
-  return str.replace(/(?<=-)[a-z]/g, toUpperCase);
+  return str.replace(/-([a-z])/g, matchToUpperCase);
 }
 
-function toUpperCase(str: string) {
+function matchToUpperCase(_: string, str: string) {
   return str.toUpperCase();
 }
