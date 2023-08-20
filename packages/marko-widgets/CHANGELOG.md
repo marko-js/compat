@@ -1,5 +1,11 @@
 # marko-widgets
 
+## 8.0.8
+
+### Patch Changes
+
+- [`69c1d09`](https://github.com/marko-js/compat/commit/69c1d09af2047ec3c257f0caed24bcc54fb32727) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Fix issue where layout-put was not properly camelcasing dashed names
+
 ## 8.0.7
 
 ### Patch Changes
