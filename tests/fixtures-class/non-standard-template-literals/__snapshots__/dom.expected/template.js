@@ -2,6 +2,9 @@ import { t as _t } from "marko/src/runtime/vdom/index.js";
 const _marko_componentType = "<fixture-dir>/template.marko",
   _marko_template = _t(_marko_componentType);
 export default _marko_template;
+function _toString(value) {
+  return value == null ? "" : value;
+}
 const fromStatic = "${STATIC}";
 import _marko_class_merge from "marko/src/runtime/helpers/class-value.js";
 import _marko_renderer from "marko/src/runtime/components/renderer.js";
@@ -56,14 +59,14 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   out.be("div", {
     "id": "h"
   }, "8", _component, null, 1);
-  out.t(`abc${c ?? ""}`, _component);
+  out.t(`abc${_toString(c)}`, _component);
   out.ee();
   out.be("div", {
     "id": "i"
   }, "9", _component, null, 1);
-  out.t(`abc${{
+  out.t(`abc${_toString({
     x: 1
-  }.missing ?? ""}def`, _component);
+  }.missing)}def`, _component);
   out.ee();
   const handler = console.log;
   out.e("button", null, "10", _component, 0, 0, {

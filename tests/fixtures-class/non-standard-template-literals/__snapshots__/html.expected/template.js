@@ -2,6 +2,9 @@ import { t as _t } from "marko/src/runtime/html/index.js";
 const _marko_componentType = "<fixture-dir>/template.marko",
   _marko_template = _t(_marko_componentType);
 export default _marko_template;
+function _toString(value) {
+  return value == null ? "" : value;
+}
 const fromStatic = "${STATIC}";
 import _marko_class_merge from "marko/src/runtime/helpers/class-value.js";
 import _marko_attr from "marko/src/runtime/html/helpers/attr.js";
@@ -37,12 +40,12 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   out.w("abcd}ef");
   out.w("</div>");
   out.w("<div id=h>");
-  out.w(_marko_escapeXml(`abc${c ?? ""}`));
+  out.w(_marko_escapeXml(`abc${_toString(c)}`));
   out.w("</div>");
   out.w("<div id=i>");
-  out.w(_marko_escapeXml(`abc${{
+  out.w(_marko_escapeXml(`abc${_toString({
     x: 1
-  }.missing ?? ""}def`));
+  }.missing)}def`));
   out.w("</div>");
   const handler = console.log;
   out.w(`<button${_marko_props(out, _componentDef, {

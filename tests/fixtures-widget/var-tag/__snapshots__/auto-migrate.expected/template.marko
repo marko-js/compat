@@ -1,8 +1,11 @@
+static function _toString(value) {
+  return value == null ? "" : value;
+}
 $ var truthy = true;
 $ var falsey = false;
 $ var firstName = "John";
 $ var lastName = "Smith";
-$ var fullName = `${firstName ?? ""} ${lastName ?? ""}`;
+$ var fullName = `${_toString(firstName)} ${_toString(lastName)}`;
 $ if (truthy) {
   var optionalTrue = "a";
 }
