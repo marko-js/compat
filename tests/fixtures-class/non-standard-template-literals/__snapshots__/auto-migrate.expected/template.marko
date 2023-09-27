@@ -1,3 +1,6 @@
+static function _toString(value) {
+  return value == null ? "" : value;
+}
 static const fromStatic = "${STATIC}";
 $ const fromScriptlet = "${SCRIPLET}";
 $ const a = 1;
@@ -26,12 +29,12 @@ $ const c = 3;
   ${`abc${`d${"}"}e`}f`}
 </div>
 <div id="h">
-  ${`abc${c ?? ""}`}
+  ${`abc${_toString(c)}`}
 </div>
 <div id="i">
-  ${`abc${{
+  ${`abc${_toString({
     x: 1
-  }.missing ?? ""}def`}
+  }.missing)}def`}
 </div>
 $ const handler = console.log;
 <button onClick(handler)/>

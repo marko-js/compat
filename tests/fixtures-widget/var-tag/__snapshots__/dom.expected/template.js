@@ -2,6 +2,9 @@ import { t as _t } from "marko/src/runtime/vdom/index.js";
 const _marko_componentType = "<fixture-dir>/template.marko",
   _marko_template = _t(_marko_componentType);
 export default _marko_template;
+function _toString(value) {
+  return value == null ? "" : value;
+}
 import _marko_renderer from "marko/src/runtime/components/renderer.js";
 import { r as _marko_registerComponent } from "marko/src/runtime/components/registry";
 _marko_registerComponent(_marko_componentType, () => _marko_template);
@@ -11,7 +14,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   var falsey = false;
   var firstName = "John";
   var lastName = "Smith";
-  var fullName = `${firstName ?? ""} ${lastName ?? ""}`;
+  var fullName = `${_toString(firstName)} ${_toString(lastName)}`;
   if (truthy) {
     var optionalTrue = "a";
   }

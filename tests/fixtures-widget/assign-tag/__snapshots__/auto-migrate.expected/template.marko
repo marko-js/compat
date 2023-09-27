@@ -1,7 +1,10 @@
+static function _toString(value) {
+  return value == null ? "" : value;
+}
 $ var firstName = "John";
 $ var lastName = "Smith";
 $ var fullName;
-$ fullName = `${firstName ?? ""} ${lastName ?? ""}`;
+$ fullName = `${_toString(firstName)} ${_toString(lastName)}`;
 <div>
   ${fullName}
 </div>

@@ -2,6 +2,7 @@ import { types as t } from "@marko/compiler";
 import { diagnosticDeprecate } from "@marko/babel-utils";
 import { parseNonStandardTemplateLiteral } from "./parse";
 
+const nullishHelpers = new WeakMap<t.Hub, t.Identifier>();
 const stringVisitor = {
   StringLiteral,
 } satisfies t.Visitor;
@@ -82,11 +83,7 @@ function StringLiteral(string: t.NodePath<t.StringLiteral>) {
                   templateLiteral.expressions.map((expr) => {
                     return isNotNullish(expr)
                       ? expr
-                      : t.logicalExpression(
-                          "??",
-                          expr as t.Expression,
-                          t.stringLiteral(""),
-                        );
+                      : castNullishToString(string, expr as t.Expression);
                   }),
                 ),
               );
@@ -96,6 +93,40 @@ function StringLiteral(string: t.NodePath<t.StringLiteral>) {
       });
     }
   }
+}
+
+function castNullishToString(string: t.NodePath, expression: t.Expression) {
+  let nullishHelper = nullishHelpers.get(string.hub);
+  if (!nullishHelper) {
+    nullishHelper = string.scope.generateUidIdentifier("toString");
+    nullishHelpers.set(string.hub, nullishHelper);
+    string.hub.file.path.unshiftContainer(
+      "body",
+      t.markoScriptlet(
+        [
+          t.functionDeclaration(
+            nullishHelper,
+            [t.identifier("value")],
+            t.blockStatement([
+              t.returnStatement(
+                t.conditionalExpression(
+                  t.binaryExpression(
+                    "==",
+                    t.identifier("value"),
+                    t.nullLiteral(),
+                  ),
+                  t.stringLiteral(""),
+                  t.identifier("value"),
+                ),
+              ),
+            ]),
+          ),
+        ],
+        true,
+      ),
+    );
+  }
+  return t.callExpression(nullishHelper, [expression]);
 }
 
 function isNotNullish(node: t.Node): boolean {
