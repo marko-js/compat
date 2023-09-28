@@ -1,5 +1,11 @@
 # @marko/compat-v4
 
+## 1.0.6
+
+### Patch Changes
+
+- [`c042454`](https://github.com/marko-js/compat/commit/c0424540796edb2241575f333ff4d000a1dc7726) Thanks [@mlrawlings](https://github.com/mlrawlings)! - [#14](https://github.com/marko-js/compat/pull/14) avoid the nullish coalescing operator
+
 ## 1.0.5
 
 ### Patch Changes
