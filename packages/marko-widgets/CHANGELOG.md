@@ -1,5 +1,11 @@
 # marko-widgets
 
+## 8.0.10
+
+### Patch Changes
+
+- [#16](https://github.com/marko-js/compat/pull/16) [`261aba9`](https://github.com/marko-js/compat/commit/261aba9185d8c7d13e67a1c015280296d9c19fc2) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Avoid circular references when registering widgets with defineComponent
+
 ## 8.0.9
 
 ### Patch Changes
