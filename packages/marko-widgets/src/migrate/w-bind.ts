@@ -61,20 +61,28 @@ export default {
       const registryPath = `marko/${
         file.markoOpts.optimize ? "dist" : "src"
       }/runtime/components/registry.js`;
-      meta.deps.push({
-        type: "js",
-        virtualPath: `./${path.basename(
-          file.opts.filename as string,
-        )}.register.js`,
-        code:
-          widgetBind === true
-            ? isCJS
-              ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget({}));`
-              : `import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${meta.id}",()=>defineWidget({}));`
-            : isCJS
-            ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget(require("${meta.widgetBind}")));`
-            : `import widget from "${meta.widgetBind}";import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${meta.id}",()=>defineWidget(widget));`,
-      });
+
+      if (
+        typeof widgetBind === "string" &&
+        /^\.(?:\/(?:index(?:\.js)?)?)?$/.test(widgetBind)
+      ) {
+        meta.component = widgetBind;
+      } else {
+        meta.deps.push({
+          type: "js",
+          virtualPath: `./${path.basename(
+            file.opts.filename as string,
+          )}.register.js`,
+          code:
+            widgetBind === true
+              ? isCJS
+                ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget({}));`
+                : `import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${meta.id}",()=>defineWidget({}));`
+              : isCJS
+              ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget(require("${meta.widgetBind}")));`
+              : `import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${meta.id}",()=>defineWidget(widget));import widget from "${meta.widgetBind}";`,
+        });
+      }
     },
   },
 } satisfies t.Visitor;

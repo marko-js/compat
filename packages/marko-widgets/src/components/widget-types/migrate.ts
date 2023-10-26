@@ -62,7 +62,7 @@ export default {
         )}.register.js`,
         code: isCJS
           ? `require("${registryPath}").r("${id}",()=>require("marko-widgets").defineWidget(require("${request}")));`
-          : `import widget from "${request}";import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${id}",()=>defineWidget(widget));`,
+          : `import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${id}",()=>defineWidget(widget));import widget from "${request}";`,
       });
     }
 
