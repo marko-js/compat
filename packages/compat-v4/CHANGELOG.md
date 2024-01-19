@@ -1,5 +1,11 @@
 # @marko/compat-v4
 
+## 1.0.7
+
+### Patch Changes
+
+- [#18](https://github.com/marko-js/compat/pull/18) [`08b6ee5`](https://github.com/marko-js/compat/commit/08b6ee58cbd51a6fee42a66df2180d92442e98f6) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Improve handling of non standard template literals when there are escape sequences.
+
 ## 1.0.6
 
 ### Patch Changes
