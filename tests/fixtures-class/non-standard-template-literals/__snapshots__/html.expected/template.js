@@ -47,6 +47,9 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     x: 1
   }.missing)}def`));
   out.w("</div>");
+  out.w("<div id=j>");
+  out.w("${abc}");
+  out.w("</div>");
   const handler = console.log;
   out.w(`<button${_marko_props(out, _componentDef, {
     "onclick": _componentDef.d("click", handler, false)

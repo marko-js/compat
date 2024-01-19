@@ -23,7 +23,10 @@ export function parseNonStandardTemplateLiteral(
   string: t.NodePath<t.StringLiteral>,
 ) {
   const { file } = string.hub;
-  const { value } = string.node;
+  const { extra } = string.node;
+  let value = extra?.raw as string | undefined;
+  if (typeof value !== "string") return;
+  value = value.slice(1, -1);
   const { length } = value;
   const valueStart = string.node.start == null ? null : string.node.start + 1;
   let elements: undefined | t.TemplateElement[];
