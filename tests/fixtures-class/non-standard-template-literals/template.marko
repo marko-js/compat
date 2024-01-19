@@ -7,12 +7,13 @@ $ const c = 3;
 <#a>${fromStatic}</>
 <#b>${fromScriptlet}</>
 <#c>${"${a}"}</>
-<#d>${"abc${\"}\"}"}</>
+<#d>${'abc${"}"}'}</>
 <#e>${"abc${'}'}"}</>
 <#f>${"abc${`}`}"}</>
-<#g>${"abc${`d${\"}\"}e`}f"}</>
+<#g>${'abc${`d${"}"}e`}f'}</>
 <#h>${"abc${c}"}</>
 <#i>${"abc${{x: 1}.missing}def"}</>
+<#j>${'\${abc}'}</>
 
 $ const handler = console.log;
 <button onClick("${handler}")/>

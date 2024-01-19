@@ -1,5 +1,5 @@
 # Write
-  <div id=1 data-other=2></div><div id=a>${STATIC}</div><div id=b>${SCRIPLET}</div><div id=c>1</div><div id=d>abc}</div><div id=e>abc}</div><div id=f>abc}</div><div id=g>abcd}ef</div><div id=h>abc3</div><div id=i>abcdef</div><button></button>
+  <div id=1 data-other=2></div><div id=a>${STATIC}</div><div id=b>${SCRIPLET}</div><div id=c>1</div><div id=d>abc}</div><div id=e>abc}</div><div id=f>abc}</div><div id=g>abcd}ef</div><div id=h>abc3</div><div id=i>abcdef</div><div id=j>${abc}</div><button></button>
 
 # Render
 ```html
@@ -51,6 +51,11 @@
   id="i"
 >
   abcdef
+</div>
+<div
+  id="j"
+>
+  ${abc}
 </div>
 <button />
 ```

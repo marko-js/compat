@@ -41,6 +41,7 @@ const baseConfig: compiler.Config = {
   babelConfig: {
     babelrc: false,
     configFile: false,
+    browserslistConfigFile: false,
   },
   writeVersionComment: false,
   resolveVirtualDependency(filename, { code, virtualPath }) {

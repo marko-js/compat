@@ -14,7 +14,7 @@ $ const c = 3;
   ${"${a}"}
 </div>
 <div id="d">
-  ${"abc${\"}\"}"}
+  ${'abc${"}"}'}
 </div>
 <div id="e">
   ${"abc${'}'}"}
@@ -23,13 +23,16 @@ $ const c = 3;
   ${"abc${`}`}"}
 </div>
 <div id="g">
-  ${"abc${`d${\"}\"}e`}f"}
+  ${'abc${`d${"}"}e`}f'}
 </div>
 <div id="h">
   ${`abc${c}`}
 </div>
 <div id="i">
   ${"abc${{x: 1}.missing}def"}
+</div>
+<div id="j">
+  ${'\${abc}'}
 </div>
 $ const handler = console.log;
 <button onClick("${handler}")/>

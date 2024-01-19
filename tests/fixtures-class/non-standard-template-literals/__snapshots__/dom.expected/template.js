@@ -68,8 +68,13 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     x: 1
   }.missing)}def`, _component);
   out.ee();
+  out.be("div", {
+    "id": "j"
+  }, "10", _component, null, 1);
+  out.t('\${abc}', _component);
+  out.ee();
   const handler = console.log;
-  out.e("button", null, "10", _component, 0, 0, {
+  out.e("button", null, "11", _component, 0, 0, {
     "onclick": _componentDef.d("click", handler, false)
   });
 }, {
