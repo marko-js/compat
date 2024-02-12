@@ -1,5 +1,11 @@
 # marko-widgets
 
+## 8.0.12
+
+### Patch Changes
+
+- [#20](https://github.com/marko-js/compat/pull/20) [`88c6e9b`](https://github.com/marko-js/compat/commit/88c6e9b6d9f2fe09640e5b8db28fe469fc9fe1c6) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Fix issue with optimizing html output.
+
 ## 8.0.11
 
 ### Patch Changes
