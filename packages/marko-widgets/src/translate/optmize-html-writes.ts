@@ -18,9 +18,9 @@ const mergeWriteCallsVisitor = {
     let nextExpr = curExpr;
 
     while ((nextExpr = curExpr.getNextSibling())) {
+      curExpr.remove();
       const nextContent = getOutContent(nextExpr);
       if (!nextContent) break;
-      curExpr.remove();
       quasis.push("");
       expressions.push(nextContent);
       curExpr = nextExpr;
