@@ -1,5 +1,15 @@
 # marko-widgets
 
+## 8.0.13
+
+### Patch Changes
+
+- [#22](https://github.com/marko-js/compat/pull/22) [`cc693723ad05215b6ec8195c9ab5552aeea2900f`](https://github.com/marko-js/compat/commit/cc693723ad05215b6ec8195c9ab5552aeea2900f) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Fix incompatibilty with latest @marko/compiler
+
+- Updated dependencies [[`cc693723ad05215b6ec8195c9ab5552aeea2900f`](https://github.com/marko-js/compat/commit/cc693723ad05215b6ec8195c9ab5552aeea2900f)]:
+  - @marko/compat-utils@1.0.2
+  - @marko/compat-v4@1.0.8
+
 ## 8.0.12
 
 ### Patch Changes
