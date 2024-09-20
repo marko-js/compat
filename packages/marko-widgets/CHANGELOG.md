@@ -1,5 +1,14 @@
 # marko-widgets
 
+## 8.0.14
+
+### Patch Changes
+
+- [#24](https://github.com/marko-js/compat/pull/24) [`cd2b725ddb5ae07a6b4973831d68c823472c8acb`](https://github.com/marko-js/compat/commit/cd2b725ddb5ae07a6b4973831d68c823472c8acb) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Fix issue where non standard template literals were not transformed when used inside of the legacy dynamic attributes syntax.
+
+- Updated dependencies [[`cd2b725ddb5ae07a6b4973831d68c823472c8acb`](https://github.com/marko-js/compat/commit/cd2b725ddb5ae07a6b4973831d68c823472c8acb)]:
+  - @marko/compat-v4@1.0.9
+
 ## 8.0.13
 
 ### Patch Changes
