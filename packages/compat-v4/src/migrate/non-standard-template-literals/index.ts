@@ -16,19 +16,19 @@ export default {
       for (const arg of tag.get("arguments") as t.NodePath<
         t.Expression | t.SpreadElement
       >[]) {
-        checkPath(arg);
+        migrateNonStandardTemplateLiterals(arg);
       }
     }
 
     for (const attr of tag.get("attributes")) {
-      checkPath(attr.get("value"));
+      migrateNonStandardTemplateLiterals(attr.get("value"));
 
       if (attr.isMarkoAttribute()) {
         if (attr.node.arguments) {
           for (const arg of attr.get("arguments") as t.NodePath<
             t.Expression | t.SpreadElement
           >[]) {
-            checkPath(arg);
+            migrateNonStandardTemplateLiterals(arg);
           }
         }
       }
@@ -36,7 +36,7 @@ export default {
   },
 } satisfies t.Visitor;
 
-function checkPath(path: t.NodePath<t.Node>) {
+export function migrateNonStandardTemplateLiterals(path: t.NodePath<t.Node>) {
   if (path.isStringLiteral()) {
     StringLiteral(path);
   } else {

@@ -54,5 +54,12 @@
 >
   ${abc}
 </div>
+<div
+  id="c"
+/>
+<div
+  d=""
+  id="c"
+/>
 <button />
 ```
