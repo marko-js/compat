@@ -182,8 +182,8 @@ function getStatusString(
     (typeof update === "object" && !Object.keys(update).length)
       ? ""
       : typeof update === "function"
-      ? `\n${getFunctionBody(update.toString()).replace(/^ {4}/gm, "")}\n`
-      : ` ${JSON.stringify(update)}`;
+        ? `\n${getFunctionBody(update.toString()).replace(/^ {4}/gm, "")}\n`
+        : ` ${JSON.stringify(update)}`;
 
   const formattedHTML = Array.from(container.childNodes)
     .map((child) =>
@@ -250,8 +250,8 @@ function formatMutationRecord(record: MutationRecord) {
           relativeNode === previousSibling
             ? "after"
             : relativeNode === nextSibling
-            ? "before"
-            : "in";
+              ? "before"
+              : "in";
         details.push(
           `removed ${Array.from(removedNodes)
             .map(getNodePath)

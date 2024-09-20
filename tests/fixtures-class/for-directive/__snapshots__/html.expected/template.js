@@ -11,7 +11,7 @@ function evenItemsIterator(items, cb) {
   }
 }
 import { x as _marko_escapeXml } from "marko/src/runtime/html/helpers/escape-xml.js";
-import _marko_props from "marko/src/runtime/html/helpers/data-marko.js";
+import _of_fallback from "marko/src/runtime/helpers/of-fallback.js";
 import _marko_renderer from "marko/src/runtime/components/renderer.js";
 const _marko_component = {};
 _marko_template._ = _marko_renderer(function (input, out, _componentDef, _component, state, $global) {
@@ -25,7 +25,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   out.w("<div class=array>");
   {
     let _keyValue = 0;
-    for (const color of colorsArray || [] || []) {
+    for (const color of _of_fallback(colorsArray || [])) {
       const _keyScope = `[${_keyValue++}]`;
       out.w("<div>");
       out.w("<li>");
@@ -38,11 +38,11 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   out.w("<div class=array-iterator>");
   {
     let _keyValue2 = 0;
-    for (const color of (() => {
+    for (const color of _of_fallback((() => {
       const _result = [];
       evenItemsIterator(colorsArray || [], color => _result.push(color));
       return _result;
-    })() || []) {
+    })())) {
       const _keyScope2 = `[${_keyValue2++}]`;
       out.w("<div>");
       out.w("<li>");
@@ -55,7 +55,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   out.w("<div class=array-separator>");
   {
     let _index10 = 0;
-    for (const color of colorsArray || [] || []) {
+    for (const color of _of_fallback(colorsArray || [])) {
       let _index = _index10++;
       const _keyScope3 = `[${_index}]`;
       out.w(_marko_escapeXml(_index ? ", " : ""));
@@ -94,9 +94,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
       out.w(") of ");
       out.w(_marko_escapeXml(loop.getLength()));
       if (loop.isFirst()) {
-        out.w(`<div${_marko_props(out, _componentDef, {
-          "onclick": _componentDef.d("click", loop.getIndex() === 0 && "handleClick", false)
-        })}>`);
+        out.w("<div>");
         out.w(" - FIRST");
         out.w("</div>");
       }
@@ -113,11 +111,11 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   out.w("<div class=array-iterator-and-status-var>");
   {
     let _index12 = 0;
-    for (const color of (() => {
+    for (const color of _of_fallback((() => {
       const _result2 = [];
       evenItemsIterator(colorsArray || [], color => _result2.push(color));
       return _result2;
-    })() || []) {
+    })())) {
       let _index3 = _index12++;
       const _keyScope5 = `[${_index3}]`;
       out.w(_marko_escapeXml(_index3 ? ", " : ""));
@@ -263,7 +261,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   out.w("<div class=props-separator>");
   {
     let _index16 = 0;
-    for (const [color, code] of Object.entries(colorCodes) || []) {
+    for (const [color, code] of _of_fallback(Object.entries(colorCodes))) {
       let _index7 = _index16++;
       const _keyScope10 = `[${_index7}]`;
       out.w(_marko_escapeXml(_index7 ? ", " : ""));
@@ -509,6 +507,5 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   out.w("</div>");
 }, {
   t: _marko_componentType,
-  i: true,
   d: true
 }, _marko_component);

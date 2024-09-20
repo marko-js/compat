@@ -1,1 +1,7 @@
-tests/fixtures-class/await-modern-syntax-error/template.marko:1:15: Unexpected token, expected ","
+
+    at tests/fixtures-class/await-modern-syntax-error/template.marko:1:15
+    > 1 | <await(Promise#resolve("MODERN"))>
+        |               ^ Unexpected token, expected ","
+      2 |   <@then|value|>${value}</>
+      3 | </await>
+      4 |

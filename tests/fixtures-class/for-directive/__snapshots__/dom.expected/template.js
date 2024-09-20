@@ -10,8 +10,9 @@ function evenItemsIterator(items, cb) {
     }
   }
 }
+import _of_fallback from "marko/src/runtime/helpers/of-fallback.js";
 import _marko_renderer from "marko/src/runtime/components/renderer.js";
-import { r as _marko_registerComponent } from "marko/src/runtime/components/registry";
+import { r as _marko_registerComponent } from "marko/src/runtime/components/registry.js";
 _marko_registerComponent(_marko_componentType, () => _marko_template);
 const _marko_component = {};
 _marko_template._ = _marko_renderer(function (input, out, _componentDef, _component, state, $global) {
@@ -27,7 +28,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   }, "0", _component, null, 1);
   {
     let _keyValue = 0;
-    for (const color of colorsArray || [] || []) {
+    for (const color of _of_fallback(colorsArray || [])) {
       const _keyScope = `[${_keyValue++}]`;
       out.be("div", null, "1" + _keyScope, _component, null, 0);
       out.be("li", null, "2" + _keyScope, _component, null, 0);
@@ -42,11 +43,11 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   }, "3", _component, null, 1);
   {
     let _keyValue2 = 0;
-    for (const color of (() => {
+    for (const color of _of_fallback((() => {
       const _result = [];
       evenItemsIterator(colorsArray || [], color => _result.push(color));
       return _result;
-    })() || []) {
+    })())) {
       const _keyScope2 = `[${_keyValue2++}]`;
       out.be("div", null, "4" + _keyScope2, _component, null, 0);
       out.be("li", null, "5" + _keyScope2, _component, null, 0);
@@ -61,7 +62,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   }, "6", _component, null, 1);
   {
     let _index10 = 0;
-    for (const color of colorsArray || [] || []) {
+    for (const color of _of_fallback(colorsArray || [])) {
       let _index = _index10++;
       const _keyScope3 = `[${_index}]`;
       out.t(_index ? ", " : "", _component);
@@ -123,11 +124,11 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   }, "12", _component, null, 1);
   {
     let _index12 = 0;
-    for (const color of (() => {
+    for (const color of _of_fallback((() => {
       const _result2 = [];
       evenItemsIterator(colorsArray || [], color => _result2.push(color));
       return _result2;
-    })() || []) {
+    })())) {
       let _index3 = _index12++;
       const _keyScope5 = `[${_index3}]`;
       out.t(_index3 ? ", " : "", _component);
@@ -283,7 +284,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   }, "24", _component, null, 1);
   {
     let _index16 = 0;
-    for (const [color, code] of Object.entries(colorCodes) || []) {
+    for (const [color, code] of _of_fallback(Object.entries(colorCodes))) {
       let _index7 = _index16++;
       const _keyScope10 = `[${_index7}]`;
       out.t(_index7 ? ", " : "", _component);
@@ -557,7 +558,6 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   out.ee();
 }, {
   t: _marko_componentType,
-  i: true,
   d: true
 }, _marko_component);
 import _marko_defineComponent from "marko/src/runtime/components/defineComponent.js";

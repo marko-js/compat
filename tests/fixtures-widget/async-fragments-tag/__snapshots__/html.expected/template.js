@@ -3,7 +3,7 @@ const _marko_componentType = "<fixture-dir>/template.marko",
   _marko_template = _t(_marko_componentType);
 export default _marko_template;
 import { x as _marko_escapeXml } from "marko/src/runtime/html/helpers/escape-xml.js";
-import _marko_self_iterator from "marko/src/runtime/helpers/self-iterator.js";
+import { a as _marko_repeatable_attr_tag, i as _marko_render_input } from "marko/src/runtime/helpers/attr-tag.js";
 import _await from "marko/src/core-tags/core/await/renderer.js";
 import _marko_tag from "marko/src/runtime/helpers/render-tag.js";
 import _marko_renderer from "marko/src/runtime/components/renderer.js";
@@ -13,17 +13,17 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   out.w("<div class=outer>");
   out.w("Before ");
   out.w("Before inside ");
-  _marko_tag(_await, {
-    "timeout": 10000,
-    "_provider": Promise.resolve("a"),
-    "_name": "Promise.resolve(\"a\")",
-    "then": {
+  _marko_tag(_await, _marko_render_input(() => {
+    _marko_repeatable_attr_tag("then", {
       "renderBody": (out, value) => {
         out.w(_marko_escapeXml(value));
-      },
-      [Symbol.iterator]: _marko_self_iterator
-    }
-  }, out, _componentDef, "1");
+      }
+    });
+  }, {
+    "timeout": 10000,
+    "_provider": Promise.resolve("a"),
+    "_name": "Promise.resolve(\"a\")"
+  }), out, _componentDef, "1");
   out.w(" After inside");
   out.w(" After");
   out.w("</div>");

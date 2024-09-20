@@ -4,7 +4,6 @@ const _marko_componentType = "<fixture-dir>/template.marko",
 export default _marko_template;
 import _eventEmitter from "./components/event-emitter.marko";
 import _marko_tag from "marko/src/runtime/helpers/render-tag.js";
-import _marko_props from "marko/src/runtime/html/helpers/data-marko.js";
 import _marko_renderer from "marko/src/runtime/components/legacy/renderer-legacy.js";
 _marko_template._ = _marko_renderer(function (input, out, _componentDef, _component, state, $global) {
   function trackEvent(name) {
@@ -16,18 +15,10 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   _marko_tag(_eventEmitter, {}, out, _componentDef, "1", [["thing", trackEvent("b"), false]]);
   _marko_tag(_eventEmitter, {}, out, _componentDef, "2", [["thing", trackEvent("c"), false]]);
   _marko_tag(_eventEmitter, {}, out, _componentDef, "3", [["Thing", trackEvent("d"), false]]);
-  out.w(`<div${_marko_props(out, _componentDef, {
-    "onthing": _componentDef.d("thing", trackEvent("e"), false)
-  })}></div>`);
-  out.w(`<div${_marko_props(out, _componentDef, {
-    "onthing": _componentDef.d("thing", trackEvent("f"), false)
-  })}></div>`);
-  out.w(`<div${_marko_props(out, _componentDef, {
-    "onthing": _componentDef.d("thing", trackEvent("g"), false)
-  })}></div>`);
-  out.w(`<div${_marko_props(out, _componentDef, {
-    "onThing": _componentDef.d("Thing", trackEvent("h"), false)
-  })}></div>`);
+  out.w("<div></div>");
+  out.w("<div></div>");
+  out.w("<div></div>");
+  out.w("<div></div>");
 }, {
   t: _marko_componentType,
   i: true,

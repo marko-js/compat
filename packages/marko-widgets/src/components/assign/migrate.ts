@@ -2,6 +2,8 @@ import { types as t } from "@marko/compiler";
 import {
   diagnosticDeprecate,
   diagnosticError,
+  getEnd,
+  getStart,
   parseExpression,
 } from "@marko/babel-utils";
 
@@ -21,6 +23,7 @@ export default {
       label:
         'The "<assign>" tag is deprecated. Please use "$ <js_code>" for JavaScript in the template. See: https://github.com/marko-js/marko/wiki/Deprecation:-var,-assign,-invoke-tags',
       fix() {
+        const { file } = tag.hub;
         const statements: t.Statement[] = [];
         let condition: t.Expression | undefined;
 
@@ -47,14 +50,16 @@ export default {
             continue;
           }
 
+          const nodeStart = getStart(file, node);
+          const nodeEnd = getEnd(file, node);
           statements.push(
             t.expressionStatement(
               t.isBooleanLiteral(value) &&
                 value.value === true &&
                 /^[+-]{2,}|[+-]{2,}$/.test(name)
-                ? node.start != null && node.end != null
-                  ? parseExpression(attr.hub.file, name, node.start, node.end!)
-                  : parseExpression(attr.hub.file, name)
+                ? nodeStart != null && nodeEnd != null
+                  ? parseExpression(file, name, nodeStart, nodeEnd)
+                  : parseExpression(file, name)
                 : t.assignmentExpression("=", t.identifier(name), value),
             ),
           );

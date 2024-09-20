@@ -2,12 +2,15 @@ import { types as t } from "@marko/compiler";
 import {
   diagnosticDeprecate,
   diagnosticError,
+  getEnd,
+  getStart,
   parseExpression,
   withLoc,
 } from "@marko/babel-utils";
 
 export default {
   exit(tag: t.NodePath<t.MarkoTag>) {
+    const { file } = tag.hub;
     const firstArg = tag.node.arguments?.[0];
     if (firstArg?.type !== "MarkoParseError") return;
     const match = /^\s*([$a-zA-Z_][0-9a-zA-Z_$]*)\s+from\s+/.exec(
@@ -19,11 +22,11 @@ export default {
       label:
         'The "<await(result from promise)>" syntax has been deprecated, please use the modern syntax of "<await(promise)><@then|result|>". See: https://github.com/marko-js/marko/wiki/Deprecation:-legacy-await',
       fix() {
-        const start = firstArg.start!;
+        const start = getStart(file, firstArg)!;
         const fromStart = match[0].length;
         const identifierName = match[1];
         const valueIdentifier = withLoc(
-          tag.hub.file,
+          file,
           t.identifier(identifierName),
           start,
           start + identifierName.length,
@@ -33,10 +36,10 @@ export default {
         const timeoutChildren: t.MarkoTagBody["body"] = [];
         const errorChildren: t.MarkoTagBody["body"] = [];
         let providerExpression = parseExpression(
-          tag.hub.file,
+          file,
           firstArg.source.slice(fromStart),
           start + fromStart,
-          firstArg.end!,
+          getEnd(file, firstArg)!,
         );
         let providerMethod: t.Expression | undefined;
         let providerScope: t.Expression | undefined;

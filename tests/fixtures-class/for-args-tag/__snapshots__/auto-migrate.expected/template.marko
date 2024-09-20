@@ -281,8 +281,10 @@ static function evenItemsIterator(items, cb) {
   </while>
 </div>
 <div class="statement-multi-declaration">
-  $ var i = 0,
-    x = 2;
+  $ {
+    var i = 0,
+      x = 2;
+  }
   <while(i < listSize)>
     ${i} ${x}
     $ i++;

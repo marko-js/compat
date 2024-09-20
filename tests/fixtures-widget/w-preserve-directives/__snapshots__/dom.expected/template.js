@@ -4,9 +4,8 @@ const _marko_componentType = "<fixture-dir>/template.marko",
 export default _marko_template;
 import _preserve from "marko/src/core-tags/components/preserve-tag.js";
 import _marko_tag from "marko/src/runtime/helpers/render-tag.js";
-import "marko/src/runtime/vdom/preserve-attrs.js";
 import _marko_renderer from "marko/src/runtime/components/renderer.js";
-import { r as _marko_registerComponent } from "marko/src/runtime/components/registry";
+import { r as _marko_registerComponent } from "marko/src/runtime/components/registry.js";
 _marko_registerComponent(_marko_componentType, () => _marko_template);
 const _marko_component = {};
 _marko_template._ = _marko_renderer(function (input, out, _componentDef, _component, state, $global) {
@@ -82,7 +81,11 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     "b": input.id,
     "c": input.id
   }, "6", _component, 0, 0, {
-    pa: ["d", "a", "b"]
+    pa: {
+      d: 1,
+      a: 1,
+      b: 1
+    }
   });
 }, {
   t: _marko_componentType,

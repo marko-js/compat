@@ -82,15 +82,17 @@ export default function createBrowser({
     _file: string,
     relativePath: string,
   ) {
+    let requestedFile = relativePath === exportsMainFile ? "." : relativePath;
+
     if (pkg.exports) {
-      return exports(
-        pkg,
-        relativePath === exportsMainFile ? "." : relativePath,
-        resolveExportsOptions,
-      )?.[0] as string;
+      try {
+        return exports(pkg, requestedFile, resolveExportsOptions)?.[0];
+      } catch {
+        // ignore.
+        return;
+      }
     } else if (pkg.browser) {
       const pkgBrowser = pkg.browser as Record<string, string | false> | string;
-      let requestedFile = relativePath === exportsMainFile ? "." : relativePath;
 
       if (typeof pkgBrowser === "string") {
         switch (requestedFile) {

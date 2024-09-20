@@ -90,12 +90,12 @@ export function replaceRenderCallExpression(
               node.operator === "||"
                 ? t.unaryExpression("!", node.left)
                 : node.operator === "??"
-                ? t.binaryExpression(
-                    "===",
-                    node.left,
-                    t.unaryExpression("void", t.numericLiteral(0)),
-                  )
-                : node.left,
+                  ? t.binaryExpression(
+                      "===",
+                      node.left,
+                      t.unaryExpression("void", t.numericLiteral(0)),
+                    )
+                  : node.left,
             ],
           ),
         );

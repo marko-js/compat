@@ -1,1 +1,5 @@
-tests/fixtures-widget/assign-tag-no-value-error/template.marko:1:1: The <assign> tag requires a value.
+
+    at tests/fixtures-widget/assign-tag-no-value-error/template.marko:1:1
+    > 1 | <assign/>
+        | ^^^^^^^^^ The <assign> tag requires a value.
+      2 |

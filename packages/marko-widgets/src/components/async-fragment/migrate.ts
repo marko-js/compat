@@ -2,6 +2,8 @@ import { types as t } from "@marko/compiler";
 import {
   diagnosticDeprecate,
   diagnosticError,
+  getEnd,
+  getStart,
   withLoc,
 } from "@marko/babel-utils";
 
@@ -10,6 +12,7 @@ export default {
     diagnosticDeprecate(tag, {
       label: `The "<async-fragment>" tag is deprecated. Please use "<await>" instead. See: https://github.com/marko-js/marko/wiki/Deprecation:-async-fragment`,
       fix() {
+        const { file } = tag.hub;
         const thenChildren: t.MarkoTagBody["body"] = [];
         const placeholderChildren: t.MarkoTagBody["body"] = [];
         const timeoutChildren: t.MarkoTagBody["body"] = [];
@@ -128,13 +131,10 @@ export default {
         }
 
         const valueIdentifier = t.identifier(varExpression.value);
-        if (varExpression.start != null && varExpression.end != null) {
-          withLoc(
-            tag.hub.file,
-            valueIdentifier,
-            varExpression.start + 1,
-            varExpression.end - 1,
-          );
+        const varStart = getStart(file, varExpression);
+        const varEnd = getEnd(file, varExpression);
+        if (varStart != null && varEnd != null) {
+          withLoc(file, valueIdentifier, varStart + 1, varEnd - 1);
         }
 
         if (providerMethod) {

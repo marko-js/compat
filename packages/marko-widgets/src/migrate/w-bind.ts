@@ -79,8 +79,8 @@ export default {
                 ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget({}));`
                 : `import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${meta.id}",()=>defineWidget({}));`
               : isCJS
-              ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget(require("${meta.widgetBind}")));`
-              : `import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${meta.id}",()=>defineWidget(widget));import widget from "${meta.widgetBind}";`,
+                ? `require("${registryPath}").r("${meta.id}",()=>require("marko-widgets").defineWidget(require("${meta.widgetBind}")));`
+                : `import {defineWidget} from "marko-widgets";import {r} from "${registryPath}";r("${meta.id}",()=>defineWidget(widget));import widget from "${meta.widgetBind}";`,
         });
       }
     },

@@ -1,1 +1,8 @@
-tests/fixtures-widget/script-marko-init-errors/template.marko:2:20: Unexpected token
+
+    at tests/fixtures-widget/script-marko-init-errors/template.marko:2:20
+      1 | <script marko-init>
+    > 2 |    function sum(a, #b) {
+        |                    ^ Unexpected token
+      3 |       return a + b;
+      4 |    }
+      5 | </script>
