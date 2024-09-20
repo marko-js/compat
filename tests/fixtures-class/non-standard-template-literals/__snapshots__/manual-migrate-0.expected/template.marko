@@ -3,6 +3,7 @@ $ const fromScriptlet = "${SCRIPLET}";
 $ const a = 1;
 $ const b = 2;
 $ const c = 3;
+$ const d = "d";
 <div class="${a}" id=`${"${a}"}` data-other="${b}"/>
 <div id="a">
   ${fromStatic}
@@ -34,5 +35,7 @@ $ const c = 3;
 <div id="j">
   ${'\${abc}'}
 </div>
+<div ${"${a}"} id="c"/>
+<div ${"${d}"} id="c"/>
 $ const handler = console.log;
 <button onClick("${handler}")/>

@@ -1,5 +1,6 @@
 import { types as t } from "@marko/compiler";
 import { diagnosticDeprecate, parseExpression } from "@marko/babel-utils";
+import { migrateNonStandardTemplateLiterals } from "./non-standard-template-literals";
 
 export default {
   MarkoAttribute(attr) {
@@ -15,7 +16,7 @@ export default {
         label:
           'The "<tag ${attributes}>" syntax is deprecated. Please use "...attributes" instead. See: https://github.com/marko-js/marko/wiki/Deprecation:-w‐*-Attributes',
         fix() {
-          attr.replaceWith(
+          const [replacement] = attr.replaceWith(
             t.markoSpreadAttribute(
               start != null && end != null
                 ? parseExpression(
@@ -27,6 +28,8 @@ export default {
                 : parseExpression(attr.hub.file, name.slice(2, -1)),
             ),
           );
+
+          migrateNonStandardTemplateLiterals(replacement.get("value"));
         },
       });
     }

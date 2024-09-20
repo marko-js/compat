@@ -7,6 +7,7 @@ function _toString(value) {
 }
 const fromStatic = "${STATIC}";
 import _marko_class_merge from "marko/src/runtime/helpers/class-value.js";
+import _marko_merge_attrs from "marko/src/runtime/vdom/helpers/merge-attrs.js";
 import _marko_renderer from "marko/src/runtime/components/renderer.js";
 import { r as _marko_registerComponent } from "marko/src/runtime/components/registry.js";
 _marko_registerComponent(_marko_componentType, () => _marko_template);
@@ -16,6 +17,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   const a = 1;
   const b = 2;
   const c = 3;
+  const d = "d";
   out.e("div", {
     "class": _marko_class_merge(a),
     "id": `${a}`,
@@ -73,8 +75,14 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   }, "10", _component, null, 1);
   out.t('\${abc}', _component);
   out.ee();
+  out.e("div", _marko_merge_attrs(a, {
+    "id": "c"
+  }), "11", _component, 0, 4);
+  out.e("div", _marko_merge_attrs(d, {
+    "id": "c"
+  }), "12", _component, 0, 4);
   const handler = console.log;
-  out.e("button", null, "11", _component, 0, 0, {
+  out.e("button", null, "13", _component, 0, 0, {
     "onclick": _componentDef.d("click", handler, false)
   });
 }, {
