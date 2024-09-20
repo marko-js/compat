@@ -1,5 +1,11 @@
 # @marko/compat-utils
 
+## 1.0.2
+
+### Patch Changes
+
+- [#22](https://github.com/marko-js/compat/pull/22) [`cc693723ad05215b6ec8195c9ab5552aeea2900f`](https://github.com/marko-js/compat/commit/cc693723ad05215b6ec8195c9ab5552aeea2900f) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Fix incompatibilty with latest @marko/compiler
+
 ## 1.0.1
 
 ### Patch Changes
