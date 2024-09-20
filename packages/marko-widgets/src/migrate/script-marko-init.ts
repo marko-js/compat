@@ -2,6 +2,8 @@ import { types as t } from "@marko/compiler";
 import {
   diagnosticDeprecate,
   diagnosticError,
+  getEnd,
+  getStart,
   parseStatements,
 } from "@marko/babel-utils";
 
@@ -12,6 +14,8 @@ export default {
       tag.node.name.value !== "script"
     )
       return;
+
+    const { file } = tag.hub;
     for (const attr of tag.get("attributes")) {
       if (attr.node.type !== "MarkoAttribute") continue;
       switch (attr.node.name) {
@@ -28,8 +32,8 @@ export default {
             return;
           }
 
-          const start = body[0].start;
-          const end = body[body.length - 1].end;
+          const start = getStart(file, body[0]);
+          const end = getEnd(file, body[body.length - 1]);
 
           if (start == null || end == null) {
             diagnosticError(attr, {
@@ -40,8 +44,8 @@ export default {
           }
 
           const statements = parseStatements(
-            tag.hub.file,
-            tag.hub.file.code.slice(start, end),
+            file,
+            file.code.slice(start, end),
             start,
             end,
           );

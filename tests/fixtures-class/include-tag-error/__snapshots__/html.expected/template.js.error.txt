@@ -1,7 +1,36 @@
-tests/fixtures-class/include-tag-error/template.marko:2:3: The <include(...)> tag must have an argument: <include("./target.marko")/> or <include(input.renderBody)/>
 
-tests/fixtures-class/include-tag-error/template.marko:4:3: The <include(...)> tag must have an argument: <include("./target.marko")/> or <include(input.renderBody)/>
+    at tests/fixtures-class/include-tag-error/template.marko:2:3
+      1 | .a
+    > 2 |   <include/>
+        |   ^^^^^^^^^^ The <include(...)> tag must have an argument: <include("./target.marko")/> or <include(input.renderBody)/>
+      3 | .b
+      4 |   <include()/>
+      5 | .c
 
-tests/fixtures-class/include-tag-error/template.marko:6:12: The <include> tag does not support spread arguments.
 
-tests/fixtures-class/include-tag-error/template.marko:8:3: The <include> tag only supports 2 arguments.
+    at tests/fixtures-class/include-tag-error/template.marko:4:3
+      2 |   <include/>
+      3 | .b
+    > 4 |   <include()/>
+        |   ^^^^^^^^^^^^ The <include(...)> tag must have an argument: <include("./target.marko")/> or <include(input.renderBody)/>
+      5 | .c
+      6 |   <include(...[1])/>
+      7 | .d
+
+
+    at tests/fixtures-class/include-tag-error/template.marko:6:12
+      4 |   <include()/>
+      5 | .c
+    > 6 |   <include(...[1])/>
+        |            ^^^^^^ The <include> tag does not support spread arguments.
+      7 | .d
+      8 |   <include(false, 1, 2)/>
+      9 |
+
+
+    at tests/fixtures-class/include-tag-error/template.marko:8:3
+      6 |   <include(...[1])/>
+      7 | .d
+    > 8 |   <include(false, 1, 2)/>
+        |   ^^^^^^^^^^^^^^^^^^^^^^^ The <include> tag only supports 2 arguments.
+      9 |

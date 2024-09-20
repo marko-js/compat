@@ -1,5 +1,5 @@
 import { types as t } from "@marko/compiler";
-import { parseExpression } from "@marko/babel-utils";
+import { getStart, parseExpression } from "@marko/babel-utils";
 
 const enum CODE {
   ASTERISK = 42,
@@ -28,7 +28,8 @@ export function parseNonStandardTemplateLiteral(
   if (typeof value !== "string") return;
   value = value.slice(1, -1);
   const { length } = value;
-  const valueStart = string.node.start == null ? null : string.node.start + 1;
+  const nodeStart = getStart(file, string.node);
+  const valueStart = nodeStart == null ? null : nodeStart + 1;
   let elements: undefined | t.TemplateElement[];
   let expressions: undefined | t.Expression[];
   let lastEndBracket = 0;

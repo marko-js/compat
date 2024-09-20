@@ -8,7 +8,7 @@ function _toString(value) {
 const fromStatic = "${STATIC}";
 import _marko_class_merge from "marko/src/runtime/helpers/class-value.js";
 import _marko_renderer from "marko/src/runtime/components/renderer.js";
-import { r as _marko_registerComponent } from "marko/src/runtime/components/registry";
+import { r as _marko_registerComponent } from "marko/src/runtime/components/registry.js";
 _marko_registerComponent(_marko_componentType, () => _marko_template);
 const _marko_component = {};
 _marko_template._ = _marko_renderer(function (input, out, _componentDef, _component, state, $global) {
@@ -79,7 +79,6 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   });
 }, {
   t: _marko_componentType,
-  i: true,
   d: true
 }, _marko_component);
 import _marko_defineComponent from "marko/src/runtime/components/defineComponent.js";

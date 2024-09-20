@@ -1,7 +1,37 @@
-tests/fixtures-class/unless-tag-errors/template.marko:1:2: The <unless> tag requires a condition argument.
 
-tests/fixtures-class/unless-tag-errors/template.marko:5:2: The <unless> tag requires a condition argument.
+    at tests/fixtures-class/unless-tag-errors/template.marko:1:2
+    > 1 | <unless>
+        |  ^^^^^^ The <unless> tag requires a condition argument.
+      2 |   ...
+      3 | </unless>
+      4 |
 
-tests/fixtures-class/unless-tag-errors/template.marko:5:2: The <unless> tag does not support a tag variable.
 
-tests/fixtures-class/unless-tag-errors/template.marko:9:2: The <unless> tag does not support any attributes.
+    at tests/fixtures-class/unless-tag-errors/template.marko:5:2
+      3 | </unless>
+      4 |
+    > 5 | <unless/someVar>
+        |  ^^^^^^ The <unless> tag requires a condition argument.
+      6 |   ...
+      7 | </unless>
+      8 |
+
+
+    at tests/fixtures-class/unless-tag-errors/template.marko:5:2
+      3 | </unless>
+      4 |
+    > 5 | <unless/someVar>
+        |  ^^^^^^ The <unless> tag does not support a tag variable.
+      6 |   ...
+      7 | </unless>
+      8 |
+
+
+    at tests/fixtures-class/unless-tag-errors/template.marko:9:2
+       7 | </unless>
+       8 |
+    >  9 | <unless(false) some-attr>
+         |  ^^^^^^ The <unless> tag does not support any attributes.
+      10 |   ...
+      11 | </unless>
+      12 |

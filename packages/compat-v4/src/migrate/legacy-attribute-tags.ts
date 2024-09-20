@@ -2,6 +2,7 @@ import { types as t } from "@marko/compiler";
 import {
   diagnosticDeprecate,
   findParentTag,
+  getEnd,
   withLoc,
 } from "@marko/babel-utils";
 
@@ -37,14 +38,16 @@ export default {
         label:
           'The "<my-tag:nested>" tagName syntax is deprecated. Please use the "<@nested>" tagName syntax instead. See: https://github.com/marko-js/marko/wiki/Deprecation:-legacy-nested-tags',
         fix() {
+          const { file } = tag.hub;
           const attrTagNameLiteral = t.stringLiteral(`@${attrTagName}`);
+          const nameEnd = getEnd(file, node.name);
 
-          if (node.name.start != null && node.name.end != null) {
+          if (nameEnd != null) {
             withLoc(
-              tag.hub.file,
+              file,
               attrTagNameLiteral,
-              node.name.end - attrTagName.length + 1,
-              node.name.end,
+              nameEnd - attrTagName.length + 1,
+              nameEnd,
             );
           }
 

@@ -2,13 +2,17 @@ import { types as t } from "@marko/compiler";
 import {
   diagnosticDeprecate,
   diagnosticError,
+  getStart,
   withLoc,
 } from "@marko/babel-utils";
 import { getAttributeValue } from "@marko/compat-utils";
 
 export default {
   exit(tag: t.NodePath<t.MarkoTag>) {
-    const { node } = tag;
+    const {
+      node,
+      hub: { file },
+    } = tag;
     const into = getAttributeValue(tag, "into");
 
     if (!into || !into.isStringLiteral()) {
@@ -46,13 +50,9 @@ export default {
     }
 
     const newName = t.stringLiteral(`@${toCamelCase(into.node.value)}`);
-    if (node.name.start != null && node.name.end != null) {
-      withLoc(
-        tag.hub.file,
-        newName,
-        node.name.start,
-        node.name.start + into.node.value.length,
-      );
+    const nameStart = getStart(file, node.name);
+    if (nameStart != null) {
+      withLoc(file, newName, nameStart, nameStart + into.node.value.length);
     }
 
     diagnosticDeprecate(tag, {

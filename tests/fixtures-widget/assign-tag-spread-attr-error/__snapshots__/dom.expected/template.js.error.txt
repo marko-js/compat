@@ -1,1 +1,6 @@
-tests/fixtures-widget/assign-tag-spread-attr-error/template.marko:1:9: Spread attributes are not supported in <assign> tags.
+
+    at tests/fixtures-widget/assign-tag-spread-attr-error/template.marko:1:9
+    > 1 | <assign ...{ x: 1 }/>
+        |         ^^^^^^^^^^^ Spread attributes are not supported in <assign> tags.
+      2 |
+      3 |

@@ -63,8 +63,8 @@ async function runRenderTest(fixture) {
   let main = !fs.existsSync(mainPath)
     ? {}
     : isVDOM
-    ? browser.require(mainPath)
-    : require(mainPath);
+      ? browser.require(mainPath)
+      : require(mainPath);
 
   if (main.checkError) {
     let e;

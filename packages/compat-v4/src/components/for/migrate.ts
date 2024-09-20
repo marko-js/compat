@@ -2,7 +2,9 @@ import { types as t } from "@marko/compiler";
 import {
   diagnosticDeprecate,
   diagnosticError,
+  getEnd,
   getLocRange,
+  getStart,
   parseExpression,
   parseParams,
   parseStatements,
@@ -17,11 +19,11 @@ export default {
     const len = args?.length;
     if (!len) return;
 
-    const start = args[0].start;
-    const end = args[len - 1].end;
+    const { file } = tag.hub;
+    const start = getStart(file, args[0]);
+    const end = getEnd(file, args[len - 1]);
     if (start == null || end == null) return;
 
-    const { file } = tag.hub;
     const source = file.code.slice(start, end);
     const parsed = parseFor(source);
     if (!parsed) return;
@@ -103,12 +105,13 @@ export default {
           if (statusExpression.type === "StringLiteral") {
             if (t.isValidIdentifier(statusExpression.value)) {
               const statusIdentifier = t.identifier(statusExpression.value);
-              if (statusExpression.start != null) {
+              const statusExprStart = getStart(file, statusExpression);
+              if (statusExprStart != null) {
                 withLoc(
                   file,
                   statusIdentifier,
-                  statusExpression.start + 1,
-                  statusExpression.end! - 1,
+                  statusExprStart + 1,
+                  getEnd(file, statusExpression)! - 1,
                 );
               }
 
@@ -528,7 +531,7 @@ function forInitToRange(
     varName = declarator.id;
     from = declarator.init;
   } else if (init.type === "AssignmentExpression" && init.operator === "=") {
-    varName = init.left;
+    varName = init.left as t.LVal;
     from = init.right;
   } else {
     return;
