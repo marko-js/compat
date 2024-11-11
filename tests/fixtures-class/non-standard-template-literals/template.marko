@@ -15,8 +15,9 @@ $ const d = "d";
 <#h>${"abc${c}"}</>
 <#i>${"abc${{x: 1}.missing}def"}</>
 <#j>${'\${abc}'}</>
-<#c ${"${a}"}></>
-<#c ${"${d}"}></>
+<#k ${"${a}"}></>
+<#l ${"${d}"}></>
+<#m>${"$!{a}"}</>
 
 $ const handler = console.log;
 <button onClick("${handler}")/>

@@ -17,18 +17,19 @@ const enum CODE {
   OPEN_PAREN = 40,
   OPEN_SQUARE_BRACKET = 91,
   SINGLE_QUOTE = 39,
+  EXCLAMATION = 33,
 }
 
 export function parseNonStandardTemplateLiteral(
-  string: t.NodePath<t.StringLiteral>,
+  file: t.BabelFile,
+  string: t.StringLiteral,
 ) {
-  const { file } = string.hub;
-  const { extra } = string.node;
+  const { extra } = string;
   let value = extra?.raw as string | undefined;
   if (typeof value !== "string") return;
   value = value.slice(1, -1);
   const { length } = value;
-  const nodeStart = getStart(file, string.node);
+  const nodeStart = getStart(file, string);
   const valueStart = nodeStart == null ? null : nodeStart + 1;
   let elements: undefined | t.TemplateElement[];
   let expressions: undefined | t.Expression[];
@@ -39,9 +40,16 @@ export function parseNonStandardTemplateLiteral(
       case CODE.BACK_SLASH:
         i++;
         break;
-      case CODE.DOLLAR_SIGN:
-        if (value.charCodeAt(i + 1) === CODE.OPEN_CURLY_BRACE) {
-          const bracketStart = i + 2;
+      case CODE.DOLLAR_SIGN: {
+        const bracketOffset =
+          value.charCodeAt(i + 1) === CODE.EXCLAMATION &&
+          value.charCodeAt(i + 2) === CODE.OPEN_CURLY_BRACE
+            ? 3
+            : value.charCodeAt(i + 1) === CODE.OPEN_CURLY_BRACE
+              ? 2
+              : 0;
+        if (bracketOffset) {
+          const bracketStart = i + bracketOffset;
           const bracketEnd = skipBracketed(
             value,
             bracketStart,
@@ -56,25 +64,31 @@ export function parseNonStandardTemplateLiteral(
 
           i = bracketEnd - 1;
           lastEndBracket = bracketEnd;
-          const expr =
-            valueStart != null
-              ? parseExpression(
-                  file,
-                  value.slice(bracketStart, i),
-                  valueStart + bracketStart,
-                  valueStart + i,
-                )
-              : parseExpression(file, value.slice(bracketStart, i));
 
-          if (elements) {
-            elements.push(el);
-            expressions!.push(expr);
-          } else {
-            elements = [el];
-            expressions = [expr];
+          try {
+            const expr =
+              valueStart != null
+                ? parseExpression(
+                    file,
+                    value.slice(bracketStart, i),
+                    valueStart + bracketStart,
+                    valueStart + i,
+                  )
+                : parseExpression(file, value.slice(bracketStart, i));
+
+            if (elements) {
+              elements.push(el);
+              expressions!.push(expr);
+            } else {
+              elements = [el];
+              expressions = [expr];
+            }
+          } catch {
+            return; // bail if we couldn't process the expression.
           }
         }
         break;
+      }
     }
   }
 

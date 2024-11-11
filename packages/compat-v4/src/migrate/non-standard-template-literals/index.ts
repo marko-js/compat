@@ -45,62 +45,94 @@ export function migrateNonStandardTemplateLiterals(path: t.NodePath<t.Node>) {
 }
 
 function StringLiteral(string: t.NodePath<t.StringLiteral>) {
-  const templateLiteral = parseNonStandardTemplateLiteral(string);
-  if (templateLiteral) {
-    if (
-      templateLiteral.expressions.length === 1 &&
-      templateLiteral.quasis.length === 2 &&
-      templateLiteral.quasis[0].value.raw === "" &&
-      templateLiteral.quasis[1].value.raw === ""
-    ) {
-      diagnosticDeprecate(string, {
-        label: "Non-standard template literals are deprecated.",
-        fix() {
-          string.replaceWith(templateLiteral.expressions[0]);
-        },
-      });
-    } else if (templateLiteral.expressions.every(isNotNullish)) {
-      diagnosticDeprecate(string, {
-        label: "Non-standard template literals are deprecated.",
-        fix() {
-          string.replaceWith(templateLiteral);
-        },
-      });
+  const { file } = string.hub;
+  const replacement = parseAllNonStandardTemplateLiterals(file, string.node);
+  if (replacement) {
+    if (t.isTemplateLiteral(replacement)) {
+      if (replacement.expressions.every(isNotNullish)) {
+        diagnosticDeprecate(string, {
+          label: "Non-standard template literals are deprecated.",
+          fix() {
+            string.replaceWith(replacement);
+          },
+        });
+      } else {
+        diagnosticDeprecate(string, {
+          label: "Non-standard template literals are deprecated.",
+          fix: {
+            type: "confirm",
+            message:
+              "Are the interpolated values guaranteed to not be null or undefined?",
+            apply(confirm) {
+              if (confirm) {
+                string.replaceWith(replacement);
+              } else {
+                string.replaceWith(
+                  t.templateLiteral(
+                    replacement.quasis,
+                    replacement.expressions.map((expr) => {
+                      return isNotNullish(expr)
+                        ? expr
+                        : castNullishToString(file, expr as t.Expression);
+                    }),
+                  ),
+                );
+              }
+            },
+          },
+        });
+      }
     } else {
       diagnosticDeprecate(string, {
         label: "Non-standard template literals are deprecated.",
-        fix: {
-          type: "confirm",
-          message:
-            "Are the interpolated values guaranteed to not be null or undefined?",
-          apply(confirm) {
-            if (confirm) {
-              string.replaceWith(templateLiteral);
-            } else {
-              string.replaceWith(
-                t.templateLiteral(
-                  templateLiteral.quasis,
-                  templateLiteral.expressions.map((expr) => {
-                    return isNotNullish(expr)
-                      ? expr
-                      : castNullishToString(string, expr as t.Expression);
-                  }),
-                ),
-              );
-            }
-          },
+        fix() {
+          string.replaceWith(replacement);
         },
       });
     }
   }
 }
 
-function castNullishToString(string: t.NodePath, expression: t.Expression) {
-  let nullishHelper = nullishHelpers.get(string.hub);
+function parseAllNonStandardTemplateLiterals(
+  file: t.BabelFile,
+  node: t.StringLiteral,
+) {
+  const templateLiteral = parseNonStandardTemplateLiteral(file, node);
+  if (templateLiteral) {
+    for (let i = templateLiteral.expressions.length; i--; ) {
+      traverseWithParent(
+        file,
+        templateLiteral.expressions[i],
+        templateLiteral,
+        i,
+        replaceNestedNonStandardTemplateLiteral,
+      );
+    }
+
+    return isSingleExpressionTemplateLiteral(templateLiteral)
+      ? templateLiteral.expressions[0]
+      : templateLiteral;
+  }
+}
+
+function replaceNestedNonStandardTemplateLiteral(
+  file: t.BabelFile,
+  node: t.Node,
+  parent: t.Node,
+  key: string | number,
+) {
+  if (node.type === "StringLiteral") {
+    (parent as any)[key] =
+      parseAllNonStandardTemplateLiterals(file, node) || node;
+  }
+}
+
+function castNullishToString(file: t.BabelFile, expression: t.Expression) {
+  let nullishHelper = nullishHelpers.get(file.hub);
   if (!nullishHelper) {
-    nullishHelper = string.scope.generateUidIdentifier("toString");
-    nullishHelpers.set(string.hub, nullishHelper);
-    string.hub.file.path.unshiftContainer(
+    nullishHelper = file.path.scope.generateUidIdentifier("toString");
+    nullishHelpers.set(file.hub, nullishHelper);
+    file.path.unshiftContainer(
       "body",
       t.markoScriptlet(
         [
@@ -127,6 +159,15 @@ function castNullishToString(string: t.NodePath, expression: t.Expression) {
     );
   }
   return t.callExpression(nullishHelper, [expression]);
+}
+
+function isSingleExpressionTemplateLiteral(templateLiteral: t.TemplateLiteral) {
+  return (
+    templateLiteral.expressions.length === 1 &&
+    templateLiteral.quasis.length === 2 &&
+    templateLiteral.quasis[0].value.raw === "" &&
+    templateLiteral.quasis[1].value.raw === ""
+  );
 }
 
 function isNotNullish(node: t.Node): boolean {
@@ -160,5 +201,37 @@ function isNotNullish(node: t.Node): boolean {
       return node.operator !== "void";
     default:
       return false;
+  }
+}
+
+function traverseWithParent(
+  file: t.BabelFile,
+  node: t.Node | null | undefined,
+  parent: t.Node,
+  key: string | number,
+  enter: (
+    file: t.BabelFile,
+    node: t.Node,
+    parent: t.Node,
+    key: string | number,
+  ) => void,
+): void {
+  if (!node) return;
+
+  const keys = (t as any).VISITOR_KEYS[node.type];
+  if (!keys) return;
+
+  enter(file, node, parent, key);
+
+  for (const key of keys) {
+    const value: t.Node | undefined | null = (node as any)[key];
+
+    if (Array.isArray(value)) {
+      for (let i = 0; i < value.length; i++) {
+        traverseWithParent(file, value[i], value, i, enter);
+      }
+    } else {
+      traverseWithParent(file, value, parent, key, enter);
+    }
   }
 }
