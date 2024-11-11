@@ -1,5 +1,11 @@
 # @marko/compat-utils
 
+## 1.0.3
+
+### Patch Changes
+
+- [#26](https://github.com/marko-js/compat/pull/26) [`a62ac60e574c1de9dc191932a60dfe10436250b7`](https://github.com/marko-js/compat/commit/a62ac60e574c1de9dc191932a60dfe10436250b7) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Improve handling of non standard template literals.
+
 ## 1.0.2
 
 ### Patch Changes
