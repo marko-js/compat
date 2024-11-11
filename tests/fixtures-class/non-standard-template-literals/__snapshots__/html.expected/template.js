@@ -53,11 +53,14 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   out.w("${abc}");
   out.w("</div>");
   out.w(`<div${_marko_merge_attrs(a, {
-    "id": "c"
+    "id": "k"
   })}></div>`);
   out.w(`<div${_marko_merge_attrs(d, {
-    "id": "c"
+    "id": "l"
   })}></div>`);
+  out.w("<div id=m>");
+  out.w(_marko_escapeXml(a));
+  out.w("</div>");
   const handler = console.log;
   out.w("<button></button>");
 }, {

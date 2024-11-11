@@ -35,7 +35,10 @@ $ const d = "d";
 <div id="j">
   ${'\${abc}'}
 </div>
-<div ${"${a}"} id="c"/>
-<div ${"${d}"} id="c"/>
+<div ${"${a}"} id="k"/>
+<div ${"${d}"} id="l"/>
+<div id="m">
+  ${"$!{a}"}
+</div>
 $ const handler = console.log;
 <button onClick("${handler}")/>

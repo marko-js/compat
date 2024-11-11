@@ -76,13 +76,18 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   out.t('\${abc}', _component);
   out.ee();
   out.e("div", _marko_merge_attrs(a, {
-    "id": "c"
+    "id": "k"
   }), "11", _component, 0, 4);
   out.e("div", _marko_merge_attrs(d, {
-    "id": "c"
+    "id": "l"
   }), "12", _component, 0, 4);
+  out.be("div", {
+    "id": "m"
+  }, "13", _component, null, 1);
+  out.t(a, _component);
+  out.ee();
   const handler = console.log;
-  out.e("button", null, "13", _component, 0, 0, {
+  out.e("button", null, "14", _component, 0, 0, {
     "onclick": _componentDef.d("click", handler, false)
   });
 }, {

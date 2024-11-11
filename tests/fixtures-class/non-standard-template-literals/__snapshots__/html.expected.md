@@ -1,5 +1,5 @@
 # Write
-  <!--M#s0-0--><div id="1" data-other=2></div><div id=a>${STATIC}</div><div id=b>${SCRIPLET}</div><div id=c>1</div><div id=d>abc}</div><div id=e>abc}</div><div id=f>abc}</div><div id=g>abcd}ef</div><div id=h>abc3</div><div id=i>abcdef</div><div id=j>${abc}</div><div id=c></div><div id=c d></div><button></button><!--M/--><script>$MC=(window.$MC||[]).concat({"w":[["s0-0",0,{"renderBody":null},{"f":1,"r":null}]],"t":["<fixture-dir>/template.marko"]})</script>
+  <!--M#s0-0--><div id="1" data-other=2></div><div id=a>${STATIC}</div><div id=b>${SCRIPLET}</div><div id=c>1</div><div id=d>abc}</div><div id=e>abc}</div><div id=f>abc}</div><div id=g>abcd}ef</div><div id=h>abc3</div><div id=i>abcdef</div><div id=j>${abc}</div><div id=k></div><div id=l d></div><div id=m>1</div><button></button><!--M/--><script>$MC=(window.$MC||[]).concat({"w":[["s0-0",0,{"renderBody":null},{"f":1,"r":null}]],"t":["<fixture-dir>/template.marko"]})</script>
 
 # Render
 ```html
@@ -58,11 +58,16 @@
   ${abc}
 </div>
 <div
-  id="c"
+  id="k"
 />
 <div
   d=""
-  id="c"
+  id="l"
 />
+<div
+  id="m"
+>
+  1
+</div>
 <button />
 ```
