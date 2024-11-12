@@ -61,6 +61,9 @@ export default {
               tagNameExpression,
               exprToAttrs(inputExpression).concat(tag.node.attributes),
               tag.node.body,
+              undefined,
+              undefined,
+              tag.node.attributeTags,
             ),
           );
         } else {
@@ -85,6 +88,9 @@ export default {
                   tagNameExpression,
                   exprToAttrs(inputExpression).concat(tag.node.attributes),
                   tag.node.body,
+                  undefined,
+                  undefined,
+                  tag.node.attributeTags,
                 ),
               ]),
             ),

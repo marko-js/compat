@@ -35,7 +35,16 @@ export default {
       label:
         "The <layout-use> tag is deprecated. Please use a combination of the <${dynamic}> tag and imports instead. See: https://github.com/marko-js/marko/wiki/Deprecation:-layout-tag",
       fix() {
-        tag.replaceWith(t.markoTag(tagNameExpression, attributes, node.body));
+        tag.replaceWith(
+          t.markoTag(
+            tagNameExpression,
+            attributes,
+            node.body,
+            undefined,
+            undefined,
+            node.attributeTags,
+          ),
+        );
       },
     });
   },

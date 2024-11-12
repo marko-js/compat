@@ -163,10 +163,10 @@ export default {
           );
         }
 
-        const rootChildren: t.MarkoTagBody["body"] = [];
+        const rootAttrTags: t.MarkoTag["attributeTags"] = [];
 
         if (thenChildren.length) {
-          rootChildren.push(
+          rootAttrTags.push(
             t.markoTag(
               t.stringLiteral("@then"),
               [],
@@ -176,7 +176,7 @@ export default {
         }
 
         if (placeholderChildren.length) {
-          rootChildren.push(
+          rootAttrTags.push(
             t.markoTag(
               t.stringLiteral("@placeholder"),
               [],
@@ -198,7 +198,7 @@ export default {
               ),
             ],
           );
-          rootChildren.push(
+          rootAttrTags.push(
             t.markoTag(
               t.stringLiteral("@catch"),
               [],
@@ -218,7 +218,7 @@ export default {
             ),
           );
         } else if (errorChildren.length) {
-          rootChildren.push(
+          rootAttrTags.push(
             t.markoTag(
               t.stringLiteral("@catch"),
               [],
@@ -227,14 +227,27 @@ export default {
           );
         }
 
-        tag.replaceWith(
-          t.markoTag(
-            t.stringLiteral("await"),
-            tag.node.attributes,
-            t.markoTagBody(rootChildren),
-            [providerExpression],
-          ),
-        );
+        if (tag.node.attributeTags) {
+          tag.replaceWith(
+            t.markoTag(
+              t.stringLiteral("await"),
+              tag.node.attributes,
+              t.markoTagBody([]),
+              [providerExpression],
+              undefined,
+              rootAttrTags,
+            ),
+          );
+        } else {
+          tag.replaceWith(
+            t.markoTag(
+              t.stringLiteral("await"),
+              tag.node.attributes,
+              t.markoTagBody(rootAttrTags),
+              [providerExpression],
+            ),
+          );
+        }
       },
     });
   },

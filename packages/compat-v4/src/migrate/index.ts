@@ -11,6 +11,7 @@ import keyModifier from "./key-modifier";
 import refAttribute from "./ref-attribute";
 import nativeTagNamespacedAttribute from "./native-tag-namespaced-attribute";
 import tagArguments from "./tag-arguments";
+import hoistAttrTags from "./hoist-attr-tags";
 
 export default [
   ifDirective,
@@ -25,4 +26,5 @@ export default [
   nonStandardTemplateLiterals,
   nativeTagNamespacedAttribute,
   tagArguments,
+  hoistAttrTags,
 ] satisfies Visitor[];
