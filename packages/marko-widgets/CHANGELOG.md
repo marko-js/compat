@@ -1,5 +1,14 @@
 # marko-widgets
 
+## 8.0.16
+
+### Patch Changes
+
+- [#28](https://github.com/marko-js/compat/pull/28) [`81a9316`](https://github.com/marko-js/compat/commit/81a9316bbdd2e175f84a55997fef2fa6db12a334) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Fix compat with latest @marko/compiler attribute tags changes.
+
+- Updated dependencies [[`81a9316`](https://github.com/marko-js/compat/commit/81a9316bbdd2e175f84a55997fef2fa6db12a334)]:
+  - @marko/compat-v4@1.0.11
+
 ## 8.0.15
 
 ### Patch Changes
