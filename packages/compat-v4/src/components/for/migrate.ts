@@ -273,7 +273,7 @@ export default {
               t.markoTag(
                 t.stringLiteral("for"),
                 [t.markoAttribute(valueAttr, inExpression!)],
-                t.markoTagBody(node.body.body, params),
+                markoTagBody(node.body.body, params, node.body.attributeTags),
               ),
             );
           },
@@ -384,7 +384,7 @@ export default {
               t.markoTag(
                 t.stringLiteral("for"),
                 attrs,
-                t.markoTagBody(node.body.body, params),
+                markoTagBody(node.body.body, params, node.body.attributeTags),
               ),
             );
           },
@@ -471,7 +471,11 @@ export default {
                   t.markoTag(
                     t.stringLiteral("for"),
                     attrs,
-                    t.markoTagBody(node.body.body, [forRange.varName]),
+                    markoTagBody(
+                      node.body.body,
+                      [forRange.varName],
+                      node.body.attributeTags,
+                    ),
                   ),
                 );
             } else {
@@ -479,10 +483,12 @@ export default {
                 t.stringLiteral("while"),
                 [],
                 updateNode
-                  ? t.markoTagBody(
+                  ? markoTagBody(
                       node.body.body.concat(
                         t.markoScriptlet([t.expressionStatement(updateNode)]),
                       ),
+                      undefined,
+                      node.body.attributeTags,
                     )
                   : node.body,
                 [testNode || t.booleanLiteral(true)],
@@ -597,6 +603,19 @@ function forInitToRange(
     to: to,
     step: step,
   };
+}
+
+function markoTagBody(
+  body: t.MarkoTagBody["body"],
+  params?: t.MarkoTagBody["params"],
+  attributeTags?: t.MarkoTagBody["attributeTags"],
+) {
+  const node = t.markoTagBody(body, params);
+  if (attributeTags) {
+    node.attributeTags = true;
+  }
+
+  return node;
 }
 
 function isIdentifierNamed(node: t.Node, name: string) {

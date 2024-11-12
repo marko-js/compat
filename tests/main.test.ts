@@ -37,7 +37,9 @@ export type FixtureConfig = {
   hasRuntimeErrors?: boolean;
 };
 
+const cache = new Map<unknown, unknown>();
 const baseConfig: compiler.Config = {
+  cache,
   babelConfig: {
     babelrc: false,
     configFile: false,
@@ -93,6 +95,8 @@ for (const api of ["class", "widget"]) {
           const resolved = resolve("test.ts");
           return fs.existsSync(resolved) ? require(resolved).default : {};
         })();
+
+        afterEach(() => cache.clear());
 
         describe("compile", () => {
           const testMigrate = hasCompileErrors ? it.skip : it;

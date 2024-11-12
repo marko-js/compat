@@ -58,6 +58,7 @@ export default {
               node.body,
               node.arguments,
               node.var,
+              node.attributeTags,
             ),
           );
         },

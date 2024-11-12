@@ -1,5 +1,5 @@
 import { types as t } from "@marko/compiler";
-import { diagnosticDeprecate } from "@marko/babel-utils";
+import { diagnosticDeprecate, isAttributeTag } from "@marko/babel-utils";
 import { willMigrateAllAttrs } from "@marko/compat-utils";
 
 export default {
@@ -44,14 +44,9 @@ export default {
       label: `The "${name}" directive is deprecated. Please use "<${name}>" tag instead. See: https://github.com/marko-js/marko/wiki/Deprecation:-control-flow-attributes`,
       fix() {
         attr.remove();
-        tag.replaceWith(
-          t.markoTag(
-            t.stringLiteral(name),
-            [],
-            t.markoTagBody([tag.node]),
-            args,
-          ),
-        );
+        const body = t.markoTagBody([tag.node]);
+        if (isAttributeTag(tag)) body.attributeTags = true;
+        tag.replaceWith(t.markoTag(t.stringLiteral(name), [], body, args));
       },
     });
   },
