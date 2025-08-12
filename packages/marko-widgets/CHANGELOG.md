@@ -1,5 +1,14 @@
 # marko-widgets
 
+## 8.0.17
+
+### Patch Changes
+
+- [#30](https://github.com/marko-js/compat/pull/30) [`85a1ba7`](https://github.com/marko-js/compat/commit/85a1ba7be0e628da7616f0873ed3a349d65bc135) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Ensure legacy attribute tags are added to correct ast location.
+
+- Updated dependencies [[`85a1ba7`](https://github.com/marko-js/compat/commit/85a1ba7be0e628da7616f0873ed3a349d65bc135)]:
+  - @marko/compat-v4@1.0.12
+
 ## 8.0.16
 
 ### Patch Changes
