@@ -51,16 +51,21 @@ export default {
             );
           }
 
-          tag.replaceWith(
-            t.markoTag(
-              attrTagNameLiteral,
-              node.attributes,
-              node.body,
-              node.arguments,
-              node.var,
-              node.attributeTags,
-            ),
+          const replacement = t.markoTag(
+            attrTagNameLiteral,
+            node.attributes,
+            node.body,
+            node.arguments,
+            node.var,
+            node.attributeTags,
           );
+
+          if (tag.node.attributeTags) {
+            tag.remove();
+            findParentTag(tag)!.pushContainer("attributeTags", replacement);
+          } else {
+            tag.replaceWith(replacement);
+          }
         },
       });
     }

@@ -8,7 +8,6 @@ function _toString(value) {
 const fromStatic = "${STATIC}";
 import _marko_class_merge from "marko/src/runtime/helpers/class-value.js";
 import _marko_attr from "marko/src/runtime/html/helpers/attr.js";
-import { d as _marko_escape_double_quotes } from "marko/src/runtime/html/helpers/escape-quotes.js";
 import { x as _marko_escapeXml } from "marko/src/runtime/html/helpers/escape-xml.js";
 import _marko_merge_attrs from "marko/src/runtime/html/helpers/merge-attrs.js";
 import _marko_renderer from "marko/src/runtime/components/renderer.js";
@@ -19,7 +18,7 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   const b = 2;
   const c = 3;
   const d = "d";
-  out.w(`<div${_marko_attr("class", _marko_class_merge(a))} id="${_marko_escape_double_quotes(a)}"${_marko_attr("data-other", b)}></div>`);
+  out.w(`<div${_marko_attr("class", _marko_class_merge(a))} id="${_marko_attr.d(a)}"${_marko_attr("data-other", b)}></div>`);
   out.w("<div id=a>");
   out.w(_marko_escapeXml(fromStatic));
   out.w("</div>");

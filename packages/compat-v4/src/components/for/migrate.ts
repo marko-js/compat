@@ -465,7 +465,7 @@ export default {
                 attrs.push(t.markoAttribute("step", forRange.step));
               }
 
-              t.markoAttribute("from", forRange.from),
+              (t.markoAttribute("from", forRange.from),
                 t.markoAttribute("to", forRange.to),
                 tag.replaceWith(
                   t.markoTag(
@@ -477,7 +477,7 @@ export default {
                       node.body.attributeTags,
                     ),
                   ),
-                );
+                ));
             } else {
               const whileTag = t.markoTag(
                 t.stringLiteral("while"),
@@ -534,7 +534,7 @@ function forInitToRange(
     init.declarations.length === 1
   ) {
     const declarator = init.declarations[0];
-    varName = declarator.id;
+    varName = declarator.id as t.LVal;
     from = declarator.init;
   } else if (init.type === "AssignmentExpression" && init.operator === "=") {
     varName = init.left as t.LVal;
