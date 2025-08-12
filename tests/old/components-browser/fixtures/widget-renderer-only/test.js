@@ -7,5 +7,3 @@ module.exports = function (helpers) {
   var targetEl = helpers.targetEl;
   expect(targetEl.innerHTML).to.equal("Hello Frank!");
 };
-
-module.exports.fails_hydrate = true;

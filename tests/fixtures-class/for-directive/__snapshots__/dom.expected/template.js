@@ -61,9 +61,9 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     "class": "array-separator"
   }, "6", _component, null, 1);
   {
-    let _index10 = 0;
+    let _index0 = 0;
     for (const color of _of_fallback(colorsArray || [])) {
-      let _index = _index10++;
+      let _index = _index0++;
       const _keyScope3 = `[${_index}]`;
       out.t(_index ? ", " : "", _component);
       out.be("div", null, "7" + _keyScope3, _component, null, 0);
@@ -78,10 +78,10 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     "class": "array-status-var"
   }, "9", _component, null, 1);
   {
-    let _index11 = 0;
+    let _index1 = 0;
     const _all = colorsArray || [];
     for (const color of _all) {
-      let _index2 = _index11++;
+      let _index2 = _index1++;
       const _keyScope4 = `[${_index2}]`;
       const loop = {
         getIndex() {
@@ -123,13 +123,13 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     "class": "array-iterator-and-status-var"
   }, "12", _component, null, 1);
   {
-    let _index12 = 0;
+    let _index10 = 0;
     for (const color of _of_fallback((() => {
       const _result2 = [];
       evenItemsIterator(colorsArray || [], color => _result2.push(color));
       return _result2;
     })())) {
-      let _index3 = _index12++;
+      let _index3 = _index10++;
       const _keyScope5 = `[${_index3}]`;
       out.t(_index3 ? ", " : "", _component);
       out.be("div", null, "13" + _keyScope5, _component, null, 0);
@@ -144,14 +144,14 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     "class": "array-status-var-and-iterator"
   }, "15", _component, null, 1);
   {
-    let _index13 = 0;
+    let _index11 = 0;
     const _all2 = (() => {
       const _result3 = [];
       evenItemsIterator(colorsArray || [], color => _result3.push(color));
       return _result3;
     })();
     for (const color of _all2) {
-      let _index4 = _index13++;
+      let _index4 = _index11++;
       const _keyScope6 = `[${_index4}]`;
       const loop = {
         getIndex() {
@@ -186,10 +186,10 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     "class": "array-status-var-and-separator"
   }, "17", _component, null, 1);
   {
-    let _index14 = 0;
+    let _index12 = 0;
     const _all3 = colorsArray || [];
     for (const color of _all3) {
-      let _index5 = _index14++;
+      let _index5 = _index12++;
       const _keyScope7 = `[${_index5}]`;
       const loop = {
         getIndex() {
@@ -225,14 +225,14 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     "class": "array-status-var-and-iterator-and-separator"
   }, "19", _component, null, 1);
   {
-    let _index15 = 0;
+    let _index13 = 0;
     const _all4 = (() => {
       const _result4 = [];
       evenItemsIterator(colorsArray || [], color => _result4.push(color));
       return _result4;
     })();
     for (const color of _all4) {
-      let _index6 = _index15++;
+      let _index6 = _index13++;
       const _keyScope8 = `[${_index6}]`;
       const loop = {
         getIndex() {
@@ -283,13 +283,13 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     "class": "props-separator"
   }, "24", _component, null, 1);
   {
-    let _index16 = 0;
+    let _index14 = 0;
     for (const [color, code] of _of_fallback(Object.entries(colorCodes))) {
-      let _index7 = _index16++;
-      const _keyScope10 = `[${_index7}]`;
+      let _index7 = _index14++;
+      const _keyScope0 = `[${_index7}]`;
       out.t(_index7 ? ", " : "", _component);
-      out.be("div", null, "25" + _keyScope10, _component, null, 0);
-      out.be("li", null, "26" + _keyScope10, _component, null, 0);
+      out.be("div", null, "25" + _keyScope0, _component, null, 0);
+      out.be("li", null, "26" + _keyScope0, _component, null, 0);
       out.t(color, _component);
       out.t(": #", _component);
       out.t(code, _component);
@@ -302,11 +302,11 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     "class": "props-status-var"
   }, "27", _component, null, 1);
   {
-    let _index17 = 0;
+    let _index15 = 0;
     const _all5 = Object.entries(colorCodes);
     for (const [color, code] of _all5) {
-      let _index8 = _index17++;
-      const _keyScope11 = `[${_index8}]`;
+      let _index8 = _index15++;
+      const _keyScope1 = `[${_index8}]`;
       const loop = {
         getIndex() {
           return _index8;
@@ -321,8 +321,8 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
           return _index8 === _all5.length - 1;
         }
       };
-      out.be("div", null, "28" + _keyScope11, _component, null, 0);
-      out.be("li", null, "29" + _keyScope11, _component, null, 0);
+      out.be("div", null, "28" + _keyScope1, _component, null, 0);
+      out.be("li", null, "29" + _keyScope1, _component, null, 0);
       out.t(color, _component);
       out.t(": #", _component);
       out.t(code, _component);
@@ -344,11 +344,11 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     "class": "props-status-var-and-separator"
   }, "30", _component, null, 1);
   {
-    let _index18 = 0;
+    let _index16 = 0;
     const _all6 = Object.entries(colorCodes);
     for (const [color, code] of _all6) {
-      let _index9 = _index18++;
-      const _keyScope12 = `[${_index9}]`;
+      let _index9 = _index16++;
+      const _keyScope10 = `[${_index9}]`;
       const loop = {
         getIndex() {
           return _index9;
@@ -364,8 +364,8 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
         }
       };
       out.t(_index9 ? ", " : "", _component);
-      out.be("div", null, "31" + _keyScope12, _component, null, 0);
-      out.be("li", null, "32" + _keyScope12, _component, null, 0);
+      out.be("div", null, "31" + _keyScope10, _component, null, 0);
+      out.be("li", null, "32" + _keyScope10, _component, null, 0);
       out.t(color, _component);
       out.t(": #", _component);
       out.t(code, _component);
@@ -388,9 +388,9 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   }, "33", _component, null, 1);
   for (let _steps = (10 - 0) / 1, _step = 0; _step <= _steps; _step++) {
     const i = 0 + _step * 1;
-    const _keyScope13 = `[${i}]`;
-    out.be("div", null, "34" + _keyScope13, _component, null, 0);
-    out.be("li", null, "35" + _keyScope13, _component, null, 0);
+    const _keyScope11 = `[${i}]`;
+    out.be("div", null, "34" + _keyScope11, _component, null, 0);
+    out.be("li", null, "35" + _keyScope11, _component, null, 0);
     out.t(i, _component);
     out.ee();
     out.ee();
@@ -401,8 +401,8 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   }, "36", _component, null, 1);
   for (let _steps2 = (colorsArray.length - 1 - 0) / 1, _step2 = 0; _step2 <= _steps2; _step2++) {
     const i = 0 + _step2 * 1;
-    const _keyScope14 = `[${i}]`;
-    out.be("div", null, "37" + _keyScope14, _component, null, 0);
+    const _keyScope12 = `[${i}]`;
+    out.be("div", null, "37" + _keyScope12, _component, null, 0);
     out.t(i, _component);
     out.ee();
   }
@@ -412,8 +412,8 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   }, "38", _component, null, 1);
   for (let _steps3 = (listSize - 0) / 2, _step3 = 0; _step3 <= _steps3; _step3++) {
     const i = 0 + _step3 * 2;
-    const _keyScope15 = `[${i}]`;
-    out.be("div", null, "39" + _keyScope15, _component, null, 0);
+    const _keyScope13 = `[${i}]`;
+    out.be("div", null, "39" + _keyScope13, _component, null, 0);
     out.t(i, _component);
     out.ee();
   }
@@ -425,8 +425,8 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     let i;
     for (let _steps4 = (listSize - 0) / 2, _step4 = 0; _step4 <= _steps4; _step4++) {
       const i = 0 + _step4 * 2;
-      const _keyScope16 = `[${i}]`;
-      out.be("div", null, "41" + _keyScope16, _component, null, 0);
+      const _keyScope14 = `[${i}]`;
+      out.be("div", null, "41" + _keyScope14, _component, null, 0);
       out.t(i, _component);
       out.ee();
     }
@@ -439,8 +439,8 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     var i = 0;
     let _keyValue3 = 0;
     while (colorsArray.length >= i) {
-      const _keyScope17 = `[${_keyValue3++}]`;
-      out.be("div", null, "43" + _keyScope17, _component, null, 0);
+      const _keyScope15 = `[${_keyValue3++}]`;
+      out.be("div", null, "43" + _keyScope15, _component, null, 0);
       out.t(i, _component);
       out.ee();
       i++;
@@ -454,8 +454,8 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     var i = colorsArray.length;
     let _keyValue4 = 0;
     while (i >= 0) {
-      const _keyScope18 = `[${_keyValue4++}]`;
-      out.be("div", null, "45" + _keyScope18, _component, null, 0);
+      const _keyScope16 = `[${_keyValue4++}]`;
+      out.be("div", null, "45" + _keyScope16, _component, null, 0);
       out.t(i, _component);
       out.ee();
       i--;
@@ -469,8 +469,8 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     var i = listSize;
     let _keyValue5 = 0;
     while (i > 0) {
-      const _keyScope19 = `[${_keyValue5++}]`;
-      out.be("div", null, "47" + _keyScope19, _component, null, 0);
+      const _keyScope17 = `[${_keyValue5++}]`;
+      out.be("div", null, "47" + _keyScope17, _component, null, 0);
       out.t(i, _component);
       out.ee();
       i -= 2;
@@ -485,8 +485,8 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
       x = 2;
     let _keyValue6 = 0;
     while (i < listSize) {
-      const _keyScope20 = `[${_keyValue6++}]`;
-      out.be("div", null, "49" + _keyScope20, _component, null, 0);
+      const _keyScope18 = `[${_keyValue6++}]`;
+      out.be("div", null, "49" + _keyScope18, _component, null, 0);
       out.t(i, _component);
       out.t(" ", _component);
       out.t(x, _component);
@@ -503,8 +503,8 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     noop();
     let _keyValue7 = 0;
     while (i < listSize) {
-      const _keyScope21 = `[${_keyValue7++}]`;
-      out.be("div", null, "51" + _keyScope21, _component, null, 0);
+      const _keyScope19 = `[${_keyValue7++}]`;
+      out.be("div", null, "51" + _keyScope19, _component, null, 0);
       out.t(i, _component);
       out.ee();
       i++;
@@ -518,8 +518,8 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     var i = 0;
     let _keyValue8 = 0;
     while (noop()) {
-      const _keyScope22 = `[${_keyValue8++}]`;
-      out.be("div", null, "53" + _keyScope22, _component, null, 0);
+      const _keyScope20 = `[${_keyValue8++}]`;
+      out.be("div", null, "53" + _keyScope20, _component, null, 0);
       out.t(i, _component);
       out.ee();
       i++;
@@ -533,8 +533,8 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
     var i = 0;
     let _keyValue9 = 0;
     while (i < listSize) {
-      const _keyScope23 = `[${_keyValue9++}]`;
-      out.be("div", null, "55" + _keyScope23, _component, null, 0);
+      const _keyScope21 = `[${_keyValue9++}]`;
+      out.be("div", null, "55" + _keyScope21, _component, null, 0);
       i++;
       out.t(i, _component);
       out.ee();
@@ -547,10 +547,10 @@ _marko_template._ = _marko_renderer(function (input, out, _componentDef, _compon
   }, "56", _component, null, 1);
   {
     let i = listSize;
-    let _keyValue10 = 0;
+    let _keyValue0 = 0;
     while (i--) {
-      const _keyScope24 = `[${_keyValue10++}]`;
-      out.be("div", null, "57" + _keyScope24, _component, null, 0);
+      const _keyScope22 = `[${_keyValue0++}]`;
+      out.be("div", null, "57" + _keyScope22, _component, null, 0);
       out.t(i, _component);
       out.ee();
     }
