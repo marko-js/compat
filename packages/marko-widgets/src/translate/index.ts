@@ -15,10 +15,10 @@ export default {
     if (!widgetBind) return;
     const wBindAttr = getAttribute(tag, "w-bind");
     if (!wBindAttr) return;
+    const componentDefIdentifier = (file as any)
+      ._componentDefIdentifier as t.Identifier;
 
     if (typeof widgetBind === "object") {
-      const componentDefIdentifier = (file as any)
-        ._componentDefIdentifier as t.Identifier;
       const componentInstanceIdentifier = (file as any)
         ._componentInstanceIdentifier as t.Identifier;
       const widgetTypesIdentifier = (file as any)
@@ -84,7 +84,10 @@ export default {
     } else {
       wBindAttr.replaceWithMultiple([
         t.markoAttribute("key", t.stringLiteral("_wbind")),
-        t.markoAttribute("id", t.stringLiteral("_wbind"), "scoped"),
+        t.markoAttribute(
+          "id",
+          t.memberExpression(componentDefIdentifier, t.identifier("id")),
+        ),
       ]);
     }
   },
