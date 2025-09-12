@@ -1,5 +1,11 @@
 # marko-widgets
 
+## 8.0.18
+
+### Patch Changes
+
+- [#32](https://github.com/marko-js/compat/pull/32) [`0824d42`](https://github.com/marko-js/compat/commit/0824d42d29219ce7d11c8296fe1d781daf0b2296) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Make generated widget ids the same as tey were in v4.
+
 ## 8.0.17
 
 ### Patch Changes
