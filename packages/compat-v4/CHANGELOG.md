@@ -1,5 +1,11 @@
 # @marko/compat-v4
 
+## 1.0.13
+
+### Patch Changes
+
+- [#34](https://github.com/marko-js/compat/pull/34) [`71fff41`](https://github.com/marko-js/compat/commit/71fff418f07cd089cb13b2ea7bcc42810d8bce17) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Fix issue with migrating unused macro params.
+
 ## 1.0.12
 
 ### Patch Changes
