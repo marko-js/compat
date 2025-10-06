@@ -83,7 +83,11 @@ export default {
             childTag.arguments
           ) {
             // Update all references to this macro that are using the arguments syntax and migrate those also to use attributes.
-            for (let i = 0; i < childTag.arguments.length; i++) {
+            for (
+              let i = 0;
+              i < childTag.arguments.length && i < params.length;
+              i++
+            ) {
               const arg = childTag.arguments[i];
               if (arg.type === "SpreadElement") {
                 diagnosticError(tag, {
